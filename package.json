@@ -2,6 +2,7 @@
   "name": "mbt-company-website",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "MBT — AI software house marketing site + admin CMS + first-party visitor intelligence. Next.js 16 · Firebase (admin-SDK only) · Netlify · GSAP/R3F.",
   "scripts": {
     "dev": "next dev",
