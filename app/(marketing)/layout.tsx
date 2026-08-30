@@ -5,6 +5,7 @@ import { SiteNav } from "@/components/marketing/SiteNav";
 import { SiteFooter } from "@/components/marketing/SiteFooter";
 import { StickyCta } from "@/components/marketing/StickyCta";
 import { ExitIntent } from "@/components/marketing/ExitIntent";
+import { Analytics } from "@/components/marketing/Analytics";
 import { getSiteSettings } from "@/lib/data/content";
 
 /**
@@ -38,6 +39,7 @@ export default async function MarketingLayout({ children }: { children: ReactNod
       <SiteFooter settings={settings} />
       <StickyCta ctaHref={ctaHref} />
       <ExitIntent ctaHref={ctaHref} />
+      <Analytics />
     </MotionProvider>
   );
 }

@@ -8,7 +8,12 @@ import { AnalyticsDashboard } from "@/components/admin/analytics/AnalyticsDashbo
 
 export const metadata: Metadata = { title: "Dashboard" };
 
-export default async function AdminDashboardPage() {
+export default async function AdminDashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ range?: string }>;
+}) {
+  const { range } = await searchParams;
   const [counts, leads] = await Promise.all([adminCounts(), adminListLeads(6)]);
 
   return (
@@ -24,7 +29,7 @@ export default async function AdminDashboardPage() {
         </div>
       </header>
 
-      <AnalyticsDashboard />
+      <AnalyticsDashboard range={range} />
 
       <AdminCard
         title="Latest leads"
