@@ -112,7 +112,7 @@ export default async function CaseStudyPage({
         </Reveal>
 
         <Reveal y={40} delay={0.25} className="mt-14">
-          <div className="rounded-[2rem] bg-white/5 p-1.5 ring-1 ring-white/10">
+          <div className="rounded-[2rem] bg-bezel p-1.5 ring-1 ring-hairline">
             <ParallaxMedia className="aspect-[16/8] rounded-[calc(2rem-0.375rem)]">
               <ProjectCover
                 project={project}
@@ -125,7 +125,7 @@ export default async function CaseStudyPage({
         </Reveal>
 
         <Reveal className="mt-10">
-          <dl className="grid grid-cols-2 gap-6 rounded-[1.6rem] bg-white/[0.03] p-7 ring-1 ring-white/8 md:grid-cols-4">
+          <dl className="grid grid-cols-2 gap-6 rounded-[1.6rem] bg-white/[0.03] p-7 ring-1 ring-hairline md:grid-cols-4">
           {facts.map((fact) => (
             <div key={fact.label}>
               <dt className="font-mono text-[0.62rem] uppercase tracking-[0.22em] text-ink-faint">
@@ -146,7 +146,7 @@ export default async function CaseStudyPage({
               {project.metrics.map((metric) => (
                 <div
                   key={metric.label}
-                  className="rounded-[1.6rem] bg-gradient-to-b from-white/[0.06] to-white/[0.02] p-8 ring-1 ring-white/10"
+                  className="rounded-[1.6rem] bg-gradient-to-b from-bezel to-transparent p-8 ring-1 ring-hairline"
                 >
                   <p className="font-mono text-4xl tracking-tight text-gradient-aurora">
                     {metric.value}
@@ -163,7 +163,7 @@ export default async function CaseStudyPage({
         {project.gallery.length > 0 && (
           <Reveal stagger={0.1} className="mt-20 grid gap-5 md:grid-cols-2">
             {project.gallery.map((item) => (
-              <div key={item.url} className="rounded-[1.6rem] bg-white/5 p-1.5 ring-1 ring-white/10">
+              <div key={item.url} className="rounded-[1.6rem] bg-bezel p-1.5 ring-1 ring-hairline">
                 <div className="relative aspect-[16/10] overflow-hidden rounded-[calc(1.6rem-0.375rem)]">
                   <Image
                     src={item.url}
@@ -187,7 +187,7 @@ export default async function CaseStudyPage({
               {project.stack.map((tech) => (
                 <li
                   key={tech}
-                  className="rounded-full bg-white/[0.04] px-4 py-2 text-sm text-ink-muted ring-1 ring-white/10"
+                  className="rounded-full bg-white/[0.04] px-4 py-2 text-sm text-ink-muted ring-1 ring-hairline"
                 >
                   {tech}
                 </li>
@@ -202,7 +202,7 @@ export default async function CaseStudyPage({
               href={`/work/${next.slug}`}
               className={cn(
                 "group flex items-center justify-between gap-6 rounded-[2rem] bg-white/[0.03] p-8",
-                "ring-1 ring-white/8 transition-colors duration-400 ease-swift hover:bg-white/[0.06] md:p-12",
+                "ring-1 ring-hairline transition-colors duration-400 ease-swift hover:bg-white/[0.06] md:p-12",
               )}
             >
               <div>
@@ -213,7 +213,7 @@ export default async function CaseStudyPage({
                   {next.title}
                 </p>
               </div>
-              <span className="grid size-14 shrink-0 place-items-center rounded-full ring-1 ring-white/12 transition-all duration-400 ease-swift group-hover:bg-white/5">
+              <span className="grid size-14 shrink-0 place-items-center rounded-full ring-1 ring-hairline-strong transition-all duration-400 ease-swift group-hover:bg-bezel">
                 <ArrowUpRight weight="light" className="size-6" aria-hidden="true" />
               </span>
             </Link>

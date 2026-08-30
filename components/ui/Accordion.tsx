@@ -23,7 +23,7 @@ export function Accordion({
   const baseId = useId();
 
   return (
-    <div className={cn("divide-y divide-white/8 border-y border-white/8", className)}>
+    <div className={cn("divide-y divide-hairline border-y border-hairline", className)}>
       {items.map((item, i) => {
         const isOpen = open === i;
         const panelId = `${baseId}-panel-${i}`;
@@ -43,9 +43,9 @@ export function Accordion({
                 </span>
                 <span
                   className={cn(
-                    "grid size-9 shrink-0 place-items-center rounded-full ring-1 ring-white/12",
+                    "grid size-9 shrink-0 place-items-center rounded-full ring-1 ring-hairline-strong",
                     "transition-transform duration-400 ease-swift",
-                    isOpen && "rotate-45 bg-white/5",
+                    isOpen && "rotate-45 bg-bezel",
                   )}
                   aria-hidden="true"
                 >

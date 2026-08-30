@@ -78,7 +78,7 @@ export default async function AboutPage() {
         <Reveal stagger={0.1} className="mt-12 grid gap-5 md:grid-cols-3">
           {VALUES.map((value) => (
             <Bezel key={value.title} glow innerClassName="h-full p-8">
-              <span className="grid size-11 place-items-center rounded-xl bg-white/[0.05] ring-1 ring-white/10">
+              <span className="grid size-11 place-items-center rounded-xl bg-white/[0.05] ring-1 ring-hairline">
                 <value.icon weight="light" className="size-5 text-aurora-teal" aria-hidden="true" />
               </span>
               <h3 className="mt-5 font-display text-xl font-medium">{value.title}</h3>
@@ -118,7 +118,7 @@ export default async function AboutPage() {
                         rel="noopener noreferrer"
                         aria-label={`${member.name} on LinkedIn`}
                         data-track-outbound
-                        className="grid size-8 place-items-center rounded-full ring-1 ring-white/12 transition-colors hover:text-aurora-teal"
+                        className="grid size-8 place-items-center rounded-full ring-1 ring-hairline-strong transition-colors hover:text-aurora-teal"
                       >
                         <LinkedinLogo weight="light" className="size-4" />
                       </a>
@@ -132,7 +132,7 @@ export default async function AboutPage() {
                         rel="noopener noreferrer"
                         aria-label={`${member.name} on GitHub`}
                         data-track-outbound
-                        className="grid size-8 place-items-center rounded-full ring-1 ring-white/12 transition-colors hover:text-aurora-teal"
+                        className="grid size-8 place-items-center rounded-full ring-1 ring-hairline-strong transition-colors hover:text-aurora-teal"
                       >
                         <GithubLogo weight="light" className="size-4" />
                       </a>
@@ -146,7 +146,7 @@ export default async function AboutPage() {
                         rel="noopener noreferrer"
                         aria-label={`${member.name} on X`}
                         data-track-outbound
-                        className="grid size-8 place-items-center rounded-full ring-1 ring-white/12 transition-colors hover:text-aurora-teal"
+                        className="grid size-8 place-items-center rounded-full ring-1 ring-hairline-strong transition-colors hover:text-aurora-teal"
                       >
                         <XLogo weight="light" className="size-4" />
                       </a>
@@ -161,7 +161,7 @@ export default async function AboutPage() {
 
       <section className="mx-auto w-full max-w-7xl px-4 py-16 md:px-8" aria-label="Culture">
         <Reveal>
-          <div className="rounded-[2rem] bg-gradient-to-br from-white/[0.06] via-white/[0.02] to-transparent p-10 ring-1 ring-white/10 md:p-16">
+          <div className="rounded-[2rem] bg-gradient-to-br from-bezel via-transparent to-transparent p-10 ring-1 ring-hairline md:p-16">
             <p className="max-w-3xl font-display text-2xl font-medium leading-snug tracking-tight md:text-3xl">
               “We run {settings.name} the way we build products: small autonomous teams, written
               decisions, evals over opinions, and demos every Friday. Clients feel it as

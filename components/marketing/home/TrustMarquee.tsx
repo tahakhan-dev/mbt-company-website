@@ -9,7 +9,7 @@ import Image from "next/image";
 export function TrustMarquee({ logos, label }: { logos: LogoDoc[]; label: string }) {
   if (logos.length === 0) return null;
   return (
-    <section className="relative border-y border-white/8 py-10" aria-label="Technologies and clients">
+    <section className="relative border-y border-hairline py-10" aria-label="Technologies and clients">
       <p className="mb-7 text-center font-mono text-[0.65rem] uppercase tracking-[0.28em] text-ink-faint">
         {label}
       </p>

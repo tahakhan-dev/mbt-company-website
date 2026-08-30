@@ -115,7 +115,7 @@ export default async function ServiceDetailPage({
             <Reveal stagger={0.08} className="mt-12 grid gap-5 md:grid-cols-2">
               {service.offerings.map((offering) => (
                 <Bezel key={offering.title} glow innerClassName="h-full p-7">
-                  <span className="grid size-10 place-items-center rounded-xl bg-white/[0.05] ring-1 ring-white/10">
+                  <span className="grid size-10 place-items-center rounded-xl bg-white/[0.05] ring-1 ring-hairline">
                     <ServiceIcon iconKey={service.iconKey} className="size-5" />
                   </span>
                   <h3 className="mt-5 font-display text-xl font-medium">{offering.title}</h3>
@@ -131,7 +131,7 @@ export default async function ServiceDetailPage({
             <SectionHeading eyebrow="How it runs" title="From first call to production." />
             <Reveal stagger={0.1} className="mt-12 grid gap-5 md:grid-cols-3">
               {service.process.map((step, i) => (
-                <div key={step.title} className="rounded-[1.6rem] bg-white/[0.03] p-7 ring-1 ring-white/8">
+                <div key={step.title} className="rounded-[1.6rem] bg-white/[0.03] p-7 ring-1 ring-hairline">
                   <p
                     className="font-mono text-3xl"
                     style={{ color: "rgba(129,140,248,0.55)" }}
@@ -192,7 +192,7 @@ export default async function ServiceDetailPage({
                 {service.stack.map((tech) => (
                   <li
                     key={tech}
-                    className="rounded-full bg-white/[0.04] px-4 py-2 text-sm text-ink-muted ring-1 ring-white/10"
+                    className="rounded-full bg-white/[0.04] px-4 py-2 text-sm text-ink-muted ring-1 ring-hairline"
                   >
                     {tech}
                   </li>

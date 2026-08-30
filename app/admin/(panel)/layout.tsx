@@ -13,7 +13,8 @@ export default async function AdminPanelLayout({ children }: { children: ReactNo
   const identity = await requireAdminPage();
 
   return (
-    <div className="flex min-h-[100dvh] bg-void text-ink">
+    // Hard `dark` scope: the admin never theme-switches (DESIGN-SPEC-V2 §2)
+    <div className="dark flex min-h-[100dvh] bg-void text-ink">
       <AdminNav />
       <div className="flex min-w-0 flex-1 flex-col">
         <AdminTopBar email={identity.email} />

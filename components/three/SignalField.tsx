@@ -1,9 +1,11 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { useTheme } from "next-themes";
 import { fieldState } from "@/lib/three/field-state";
+import { FIELD_PALETTES, type FieldPalette } from "@/lib/three/field-palette";
 
 /**
  * "Signal Field" — a living neural constellation. ~1.4k GPU points with
@@ -56,18 +58,19 @@ const POINT_VERT = /* glsl */ `
 `;
 
 const POINT_FRAG = /* glsl */ `
+  uniform vec3 uColA;
+  uniform vec3 uColB;
+  uniform vec3 uColC;
+  uniform float uPointAlpha;
   varying float vSeed;
   varying float vGlow;
   void main() {
     vec2 uv = gl_PointCoord - 0.5;
     float r = length(uv);
     float alpha = smoothstep(0.5, 0.08, r);
-    vec3 cyan = vec3(0.133, 0.827, 0.933);
-    vec3 violet = vec3(0.506, 0.549, 0.973);
-    vec3 teal = vec3(0.369, 0.918, 0.831);
-    vec3 col = mix(cyan, violet, vSeed);
-    col = mix(col, teal, vGlow * 0.7);
-    gl_FragColor = vec4(col, alpha * (0.5 + vSeed * 0.35 + vGlow * 0.4));
+    vec3 col = mix(uColA, uColB, vSeed);
+    col = mix(col, uColC, vGlow * 0.7);
+    gl_FragColor = vec4(col, alpha * (0.5 + vSeed * 0.35 + vGlow * 0.4) * uPointAlpha);
   }
 `;
 
@@ -85,12 +88,13 @@ const LINE_VERT = /* glsl */ `
 
 const LINE_FRAG = /* glsl */ `
   uniform float uProgress;
+  uniform vec3 uColA;
+  uniform vec3 uColB;
+  uniform float uLineAlpha;
   varying float vSeed;
   void main() {
-    vec3 cyan = vec3(0.133, 0.827, 0.933);
-    vec3 violet = vec3(0.506, 0.549, 0.973);
-    vec3 col = mix(cyan, violet, vSeed);
-    gl_FragColor = vec4(col, 0.10 + uProgress * 0.08);
+    vec3 col = mix(uColA, uColB, vSeed);
+    gl_FragColor = vec4(col, uLineAlpha + uProgress * 0.08);
   }
 `;
 
@@ -172,15 +176,20 @@ function buildField(): FieldData {
   return { chaos, lattice, seeds, lineChaos, lineLattice, lineSeeds };
 }
 
-function makeUniforms() {
+function makeUniforms(palette: FieldPalette) {
   return {
     uTime: { value: 0 },
     uProgress: { value: 0 },
     uPointer: { value: new THREE.Vector3(0, 0, 40) },
+    uColA: { value: new THREE.Vector3(...palette.a) },
+    uColB: { value: new THREE.Vector3(...palette.b) },
+    uColC: { value: new THREE.Vector3(...palette.c) },
+    uPointAlpha: { value: palette.pointAlpha },
+    uLineAlpha: { value: palette.lineAlpha },
   };
 }
 
-function FieldScene() {
+function FieldScene({ palette }: { palette: FieldPalette }) {
   const data = useMemo(() => buildField(), []);
   const pointsMat = useRef<THREE.ShaderMaterial>(null);
   const linesMat = useRef<THREE.ShaderMaterial>(null);
@@ -188,6 +197,24 @@ function FieldScene() {
   const target = useRef(new THREE.Vector3(0, 0, 40));
   const progress = useRef(0);
   const { camera, pointer } = useThree();
+
+  // Re-grade materials when the theme flips (uniform + blending mutation via
+  // refs — no geometry rebuild, no per-frame cost).
+  useEffect(() => {
+    const blending = palette.additive ? THREE.AdditiveBlending : THREE.NormalBlending;
+    for (const mat of [pointsMat.current, linesMat.current]) {
+      if (!mat) continue;
+      (mat.uniforms.uColA!.value as THREE.Vector3).set(...palette.a);
+      (mat.uniforms.uColB!.value as THREE.Vector3).set(...palette.b);
+      (mat.uniforms.uColC?.value as THREE.Vector3 | undefined)?.set(...palette.c);
+      if (mat.uniforms.uPointAlpha) mat.uniforms.uPointAlpha.value = palette.pointAlpha;
+      if (mat.uniforms.uLineAlpha) mat.uniforms.uLineAlpha.value = palette.lineAlpha;
+      if (mat.blending !== blending) {
+        mat.blending = blending;
+        mat.needsUpdate = true;
+      }
+    }
+  }, [palette]);
 
   useFrame((_, delta) => {
     // Scroll morph with easing lag.
@@ -220,10 +247,10 @@ function FieldScene() {
           ref={pointsMat}
           vertexShader={POINT_VERT}
           fragmentShader={POINT_FRAG}
-          uniforms={makeUniforms()}
+          uniforms={makeUniforms(palette)}
           transparent
           depthWrite={false}
-          blending={THREE.AdditiveBlending}
+          blending={palette.additive ? THREE.AdditiveBlending : THREE.NormalBlending}
         />
       </points>
       <lineSegments frustumCulled={false}>
@@ -236,10 +263,10 @@ function FieldScene() {
           ref={linesMat}
           vertexShader={LINE_VERT}
           fragmentShader={LINE_FRAG}
-          uniforms={makeUniforms()}
+          uniforms={makeUniforms(palette)}
           transparent
           depthWrite={false}
-          blending={THREE.AdditiveBlending}
+          blending={palette.additive ? THREE.AdditiveBlending : THREE.NormalBlending}
         />
       </lineSegments>
     </group>
@@ -253,17 +280,21 @@ export default function SignalField({
   active: boolean;
   onReady?: () => void;
 }) {
+  // Theme is read OUTSIDE the Canvas (R3F runs its own reconciler root, so
+  // outer context isn't bridged) and passed down as a prop.
+  const { resolvedTheme } = useTheme();
+  const palette = FIELD_PALETTES[resolvedTheme === "light" ? "light" : "dark"];
   return (
     <Canvas
       aria-hidden="true"
       frameloop={active ? "always" : "never"}
-      dpr={[1, 1.75]}
+      dpr={[1, 1.5]}
       camera={{ position: [0, 0, 26], fov: 55, near: 0.1, far: 120 }}
       gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       style={{ position: "absolute", inset: 0 }}
       onCreated={() => onReady?.()}
     >
-      <FieldScene />
+      <FieldScene palette={palette} />
     </Canvas>
   );
 }

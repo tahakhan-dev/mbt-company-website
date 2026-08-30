@@ -35,7 +35,7 @@ export function WorkGrid({
       "rounded-full px-4 py-2 text-sm ring-1 transition-all duration-300 ease-swift",
       active
         ? "bg-aurora-teal/15 text-aurora-teal ring-aurora-teal/50"
-        : "text-ink-muted ring-white/12 hover:bg-white/5 hover:text-ink",
+        : "text-ink-muted ring-hairline-strong hover:bg-bezel hover:text-ink",
     );
 
   return (
@@ -82,7 +82,7 @@ export function WorkGrid({
       ) : (
         <Reveal stagger={0.08} className="mt-12 grid gap-6 md:grid-cols-2">
           {visible.map((project) => (
-            <article key={project.id} className="group rounded-[2rem] bg-white/5 p-1.5 ring-1 ring-white/10">
+            <article key={project.id} className="group rounded-[2rem] bg-bezel p-1.5 ring-1 ring-hairline">
               <Link
                 href={`/work/${project.slug}`}
                 className="block overflow-hidden rounded-[calc(2rem-0.375rem)] bg-surface inner-glow"

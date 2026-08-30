@@ -37,7 +37,7 @@ export default async function ServicesPage() {
                   className="group grid items-start gap-6 md:grid-cols-12"
                 >
                   <div className="flex items-center gap-5 md:col-span-5">
-                    <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-white/[0.05] ring-1 ring-white/10">
+                    <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-white/[0.05] ring-1 ring-hairline">
                       <ServiceIcon iconKey={service.iconKey} />
                     </span>
                     <div>
@@ -54,7 +54,7 @@ export default async function ServicesPage() {
                     <span className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-ink-faint transition-colors duration-300 group-hover:text-aurora-teal">
                       Explore
                     </span>
-                    <span className="grid size-9 place-items-center rounded-full ring-1 ring-white/12 transition-all duration-400 ease-swift group-hover:bg-white/5">
+                    <span className="grid size-9 place-items-center rounded-full ring-1 ring-hairline-strong transition-all duration-400 ease-swift group-hover:bg-bezel">
                       <ArrowUpRight weight="light" className="size-4" aria-hidden="true" />
                     </span>
                   </div>

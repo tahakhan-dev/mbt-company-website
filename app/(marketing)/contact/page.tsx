@@ -49,7 +49,7 @@ export default async function ContactPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   data-cta="contact-calendly"
-                  className="flex items-center gap-4 rounded-2xl bg-white/[0.04] p-4 ring-1 ring-white/10 transition-colors duration-300 hover:bg-white/[0.07]"
+                  className="flex items-center gap-4 rounded-2xl bg-white/[0.04] p-4 ring-1 ring-hairline transition-colors duration-300 hover:bg-white/[0.07]"
                 >
                   <span className="grid size-11 place-items-center rounded-xl bg-cta/15 ring-1 ring-cta/30">
                     <CalendarCheck weight="light" className="size-5 text-cta" aria-hidden="true" />
@@ -63,7 +63,7 @@ export default async function ContactPage() {
               <a
                 href={`mailto:${settings.contactEmail}`}
                 data-track-outbound
-                className="flex items-center gap-4 rounded-2xl bg-white/[0.04] p-4 ring-1 ring-white/10 transition-colors duration-300 hover:bg-white/[0.07]"
+                className="flex items-center gap-4 rounded-2xl bg-white/[0.04] p-4 ring-1 ring-hairline transition-colors duration-300 hover:bg-white/[0.07]"
               >
                 <span className="grid size-11 place-items-center rounded-xl bg-aurora-teal/10 ring-1 ring-aurora-teal/25">
                   <EnvelopeSimple weight="light" className="size-5 text-aurora-teal" aria-hidden="true" />
@@ -79,7 +79,7 @@ export default async function ContactPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   data-track-outbound
-                  className="flex items-center gap-4 rounded-2xl bg-white/[0.04] p-4 ring-1 ring-white/10 transition-colors duration-300 hover:bg-white/[0.07]"
+                  className="flex items-center gap-4 rounded-2xl bg-white/[0.04] p-4 ring-1 ring-hairline transition-colors duration-300 hover:bg-white/[0.07]"
                 >
                   <span className="grid size-11 place-items-center rounded-xl bg-aurora-teal/10 ring-1 ring-aurora-teal/25">
                     <WhatsappLogo weight="light" className="size-5 text-aurora-teal" aria-hidden="true" />

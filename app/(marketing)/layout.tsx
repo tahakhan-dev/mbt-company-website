@@ -21,7 +21,7 @@ export default async function MarketingLayout({ children }: { children: ReactNod
     <MotionProvider>
       <a
         href="#main"
-        className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-raised px-4 py-2 text-sm ring-1 ring-white/15 transition-transform focus:translate-y-0"
+        className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-full bg-raised px-4 py-2 text-sm ring-1 ring-hairline-strong transition-transform focus:translate-y-0"
       >
         Skip to content
       </a>
@@ -31,7 +31,7 @@ export default async function MarketingLayout({ children }: { children: ReactNod
         <div className="fixed inset-x-0 bottom-0 z-30 hidden justify-center pb-3 md:flex">
           <Link
             href={settings.announcement.href || "/contact"}
-            className="pointer-events-auto rounded-full bg-raised px-5 py-2 font-mono text-xs uppercase tracking-[0.16em] text-ink-muted ring-1 ring-white/12 transition-colors hover:text-ink"
+            className="pointer-events-auto rounded-full bg-raised px-5 py-2 font-mono text-xs uppercase tracking-[0.16em] text-ink-muted ring-1 ring-hairline-strong transition-colors hover:text-ink"
           >
             {settings.announcement.text}
           </Link>

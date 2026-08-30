@@ -122,7 +122,7 @@ export function ProcessStory() {
               exists, what is next, and what it costs.
             </p>
             <div className="mt-10 hidden gap-4 lg:flex" aria-hidden="true">
-              <div className="relative h-40 w-px overflow-hidden bg-white/10">
+              <div className="relative h-40 w-px overflow-hidden bg-bezel-hover">
                 <div
                   ref={lineRef}
                   className="absolute inset-0 origin-top scale-y-0 bg-gradient-to-b from-aurora-cyan to-aurora-violet"
@@ -161,7 +161,7 @@ export function ProcessStory() {
                       key={d}
                       className={cn(
                         "rounded-full bg-white/[0.04] px-3 py-1.5 font-mono text-[0.68rem]",
-                        "uppercase tracking-[0.14em] text-ink-muted ring-1 ring-white/10",
+                        "uppercase tracking-[0.14em] text-ink-muted ring-1 ring-hairline",
                       )}
                     >
                       {d}

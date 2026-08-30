@@ -32,11 +32,11 @@ export function ServicesBento({ services }: { services: ServiceDoc[] }) {
               >
                 <div>
                   <div className="flex items-start justify-between gap-4">
-                    <span className="grid size-12 place-items-center rounded-2xl bg-white/[0.05] ring-1 ring-white/10">
+                    <span className="grid size-12 place-items-center rounded-2xl bg-white/[0.05] ring-1 ring-hairline">
                       <ServiceIcon iconKey={service.iconKey} />
                     </span>
                     <span
-                      className="grid size-9 place-items-center rounded-full ring-1 ring-white/12 opacity-0 transition-all duration-400 ease-swift group-hover/card:opacity-100"
+                      className="grid size-9 place-items-center rounded-full ring-1 ring-hairline-strong opacity-0 transition-all duration-400 ease-swift group-hover/card:opacity-100"
                       aria-hidden="true"
                     >
                       <ArrowUpRight weight="light" className="size-4" />
@@ -64,7 +64,7 @@ export function ServicesBento({ services }: { services: ServiceDoc[] }) {
                     {service.offerings.slice(0, 5).map((o) => (
                       <li
                         key={o.title}
-                        className="rounded-full bg-white/[0.04] px-3 py-1.5 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-ink-muted ring-1 ring-white/10"
+                        className="rounded-full bg-white/[0.04] px-3 py-1.5 font-mono text-[0.66rem] uppercase tracking-[0.14em] text-ink-muted ring-1 ring-hairline"
                       >
                         {o.title}
                       </li>

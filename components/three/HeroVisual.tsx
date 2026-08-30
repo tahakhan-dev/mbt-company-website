@@ -41,13 +41,13 @@ export function HeroPoster({ className }: { className?: string }) {
               y1={`${d.y}%`}
               x2={`${m.x}%`}
               y2={`${m.y}%`}
-              stroke="#22d3ee"
+              stroke="var(--field-accent)"
               strokeOpacity="0.08"
             />
           );
         })}
         {dots.map((d, i) => (
-          <circle key={i} cx={`${d.x}%`} cy={`${d.y}%`} r={d.r} fill="#5eead4" fillOpacity={d.o * 0.5} />
+          <circle key={i} cx={`${d.x}%`} cy={`${d.y}%`} r={d.r} fill="var(--field-accent)" fillOpacity={d.o * 0.5} />
         ))}
       </svg>
     </div>

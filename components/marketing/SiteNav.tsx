@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Wordmark } from "@/components/marketing/Wordmark";
 import { Button } from "@/components/ui/Button";
+import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { useScrollLock } from "@/components/motion/MotionProvider";
 import { cn } from "@/lib/utils/format";
 
@@ -92,8 +93,8 @@ export function SiteNav({ siteName, ctaHref }: { siteName: string; ctaHref: stri
             "pointer-events-auto flex w-max items-center gap-1 rounded-full py-2 pl-5 pr-2",
             "ring-1 backdrop-blur-xl transition-[background-color,box-shadow] duration-500 ease-swift",
             scrolled || open
-              ? "bg-void/80 ring-white/12 shadow-[0_12px_40px_-16px_rgba(0,0,0,0.8)]"
-              : "bg-void/45 ring-white/8",
+              ? "bg-void/80 ring-hairline-strong soft-shadow"
+              : "bg-void/45 ring-hairline",
           )}
         >
           <Wordmark name={siteName} />
@@ -108,7 +109,7 @@ export function SiteNav({ siteName, ctaHref }: { siteName: string; ctaHref: stri
                     aria-current={active ? "page" : undefined}
                     className={cn(
                       "rounded-full px-3.5 py-2 text-sm transition-colors duration-300 ease-swift",
-                      active ? "bg-white/8 text-ink" : "text-ink-muted hover:text-ink",
+                      active ? "bg-bezel-hover text-ink" : "text-ink-muted hover:text-ink",
                     )}
                   >
                     {link.label}
@@ -118,9 +119,12 @@ export function SiteNav({ siteName, ctaHref }: { siteName: string; ctaHref: stri
             })}
           </ul>
 
+          <ThemeToggle />
+
+          {/* Ghost in the nav — the page's single warm CTA lives in the acts */}
           <div className="hidden md:block">
-            <Button href={ctaHref} size="sm" magnetic={false} cta="nav">
-              Book a call
+            <Button href={ctaHref} size="sm" variant="ghost" magnetic={false} cta="nav">
+              Book a 5-minute growth call
             </Button>
           </div>
 
@@ -131,7 +135,7 @@ export function SiteNav({ siteName, ctaHref }: { siteName: string; ctaHref: stri
             aria-controls="site-menu"
             aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => setOpen((v) => !v)}
-            className="ml-2 grid size-10 place-items-center rounded-full ring-1 ring-white/12 transition-colors duration-300 ease-swift hover:bg-white/5 md:hidden"
+            className="ml-2 grid size-10 place-items-center rounded-full ring-1 ring-hairline-strong transition-colors duration-300 ease-swift hover:bg-bezel md:hidden"
           >
             <span className="relative block h-3 w-4.5" aria-hidden="true">
               <span
@@ -206,7 +210,7 @@ export function SiteNav({ siteName, ctaHref }: { siteName: string; ctaHref: stri
         >
           {open && (
             <Button href={ctaHref} size="lg" magnetic={false} className="w-full justify-between" cta="menu">
-              Book a free AI strategy call
+              Book a 5-minute growth call
             </Button>
           )}
         </div>

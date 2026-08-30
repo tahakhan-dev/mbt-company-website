@@ -78,7 +78,7 @@ function LoginForm() {
 
 export default function AdminLoginPage() {
   return (
-    <main className="grid min-h-[100dvh] place-items-center bg-void px-4">
+    <main className="dark grid min-h-[100dvh] place-items-center bg-void px-4">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center gap-2 text-center">
           <Wordmark name="Admin" asLink={false} />

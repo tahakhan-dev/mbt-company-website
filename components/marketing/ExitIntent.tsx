@@ -68,14 +68,14 @@ export function ExitIntent({ ctaHref }: { ctaHref: string }) {
             exit={{ y: 20, opacity: 0 }}
             transition={{ duration: 0.45, ease: EASE }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-md rounded-[2rem] bg-white/5 p-1.5 ring-1 ring-white/12"
+            className="relative w-full max-w-md rounded-[2rem] bg-bezel p-1.5 ring-1 ring-hairline-strong"
           >
             <div className="rounded-[calc(2rem-0.375rem)] bg-surface p-8 inner-glow">
               <button
                 ref={closeRef}
                 onClick={() => setOpen(false)}
                 aria-label="Close"
-                className="absolute right-5 top-5 grid size-9 place-items-center rounded-full ring-1 ring-white/12 transition-colors hover:bg-white/5"
+                className="absolute right-5 top-5 grid size-9 place-items-center rounded-full ring-1 ring-hairline-strong transition-colors hover:bg-bezel"
               >
                 <X weight="light" className="size-4" aria-hidden="true" />
               </button>

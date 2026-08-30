@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { fontClassNames } from "@/lib/fonts";
+import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import "./globals.css";
 
 const siteName = process.env.NEXT_PUBLIC_SITE_NAME ?? "MBT";
@@ -16,18 +17,25 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#05070C",
-  colorScheme: "dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#05070c" },
+    { media: "(prefers-color-scheme: light)", color: "#f7f7f4" },
+  ],
+  colorScheme: "light dark",
 };
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={fontClassNames}>
+    // suppressHydrationWarning: next-themes stamps the resolved theme class on
+    // <html> before hydration (its inline script) — expected server/client diff.
+    <html lang="en" className={fontClassNames} suppressHydrationWarning>
       <body>
-        {children}
-        <div className="noise-overlay" aria-hidden="true" />
+        <ThemeProvider>
+          {children}
+          <div className="noise-overlay" aria-hidden="true" />
+        </ThemeProvider>
       </body>
     </html>
   );

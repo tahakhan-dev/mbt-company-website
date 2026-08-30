@@ -76,7 +76,7 @@ export default function StyleguidePage() {
 
         <section className="space-y-6">
           <Eyebrow>Marquee</Eyebrow>
-          <Marquee className="border-y border-white/8 py-6">
+          <Marquee className="border-y border-hairline py-6">
             {["Claude", "Next.js", "PostgreSQL", "Terraform", "Flutter", "BigQuery"].map((n) => (
               <span key={n} className="font-display text-2xl font-medium text-ink-faint">
                 {n}

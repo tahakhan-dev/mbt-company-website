@@ -15,7 +15,7 @@ export function Eyebrow({
     <span
       className={cn(
         "inline-flex items-center gap-2 rounded-full bg-white/[0.04] px-3.5 py-1.5",
-        "font-mono text-[0.68rem] uppercase tracking-[0.2em] text-ink-muted ring-1 ring-white/10",
+        "font-mono text-[0.68rem] uppercase tracking-[0.2em] text-ink-muted ring-1 ring-hairline",
         className,
       )}
     >

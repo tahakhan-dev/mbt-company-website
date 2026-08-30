@@ -1,30 +1,147 @@
 @import "tailwindcss";
 
+/* Class-driven dark variant (next-themes sets .dark on <html>; the admin
+   subtree is wrapped in a hard .dark scope) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ------------------------------------------------------------------ */
-/*  Aurora Obsidian — design tokens (the only source of truth)         */
+/*  Dual-theme tokens — the only source of truth                       */
+/*  Light  = "Porcelain Editorial"  (:root)                            */
+/*  Dark   = "Aurora Obsidian"      (.dark — set by next-themes)       */
+/*  Admin is wrapped in a hard `.dark` scope and never theme-switches. */
 /* ------------------------------------------------------------------ */
 
-@theme {
+:root {
+  color-scheme: light;
+
   /* Surfaces */
-  --color-void: #05070c;
-  --color-surface: #0b0e16;
-  --color-raised: #111624;
-  --color-overlay: #0a0d15;
+  --void: #f7f7f4;
+  --surface: #ffffff;
+  --raised: #ffffff;
+  --lift: #f2f1ec;
+  --overlay: #fdfdfb;
 
   /* Ink */
-  --color-ink: #eef2f8;
-  --color-ink-muted: #9aa6b8;
-  --color-ink-faint: #76839b;
+  --ink: #0b0e16;
+  --ink-muted: #55607a;
+  --ink-faint: #6b7690;
 
-  /* Aurora accents — glows, orbs, gradient strokes. Never flat fills. */
-  --color-aurora-cyan: #22d3ee;
-  --color-aurora-teal: #5eead4;
-  --color-aurora-violet: #818cf8;
+  /* Aurora accents — deepened for light so they hold ≥4.5:1 as text */
+  --aurora-cyan: #0e7490;
+  --aurora-teal: #0f766e;
+  --aurora-violet: #4f46e5;
 
-  /* The one warm signal — primary CTA only */
-  --color-cta: #f5b14c;
-  --color-cta-bright: #ffc46a;
+  /* The one warm signal */
+  --cta: #b45309;
+  --cta-hover: #92400e;
+  --cta-ink: #ffffff;
+  --cta-glow: rgba(180, 83, 9, 0.28);
 
+  /* Structure */
+  --hairline: rgba(11, 14, 22, 0.08);
+  --hairline-strong: rgba(11, 14, 22, 0.15);
+  --bezel: rgba(11, 14, 22, 0.035);
+  --bezel-hover: rgba(11, 14, 22, 0.06);
+
+  /* Depth: porcelain uses ultra-diffused shadows instead of inset light */
+  --card-shadow:
+    0 1px 2px rgba(11, 14, 22, 0.04),
+    0 16px 48px -16px rgba(11, 14, 22, 0.12);
+  --inner-glow-shadow: inset 0 0 0 1px rgba(11, 14, 22, 0.05);
+  --bezel-glow-shadow:
+    inset 0 0 0 1px rgba(14, 116, 144, 0.18),
+    0 20px 60px -24px rgba(14, 116, 144, 0.25);
+
+  /* Signal Field (WebGL) palette */
+  --field-point: #33415e;
+  --field-accent: #0e7490;
+  --field-line: rgba(30, 41, 66, 0.16);
+  --field-glow: rgba(14, 116, 144, 0.35);
+
+  /* Form validation */
+  --error: #b3261e;
+  --error-surface: rgba(179, 38, 30, 0.08);
+
+  --grain-opacity: 0.02;
+}
+
+.dark {
+  color-scheme: dark;
+
+  --void: #05070c;
+  --surface: #0b0e16;
+  --raised: #111624;
+  --lift: #161d2f;
+  --overlay: #0a0d15;
+
+  --ink: #eef2f8;
+  --ink-muted: #9aa6b8;
+  --ink-faint: #76839b;
+
+  --aurora-cyan: #22d3ee;
+  --aurora-teal: #5eead4;
+  --aurora-violet: #818cf8;
+
+  --cta: #f5b14c;
+  --cta-hover: #ffc46a;
+  --cta-ink: #05070c;
+  --cta-glow: rgba(245, 177, 76, 0.5);
+
+  --hairline: rgba(255, 255, 255, 0.08);
+  --hairline-strong: rgba(255, 255, 255, 0.13);
+  --bezel: rgba(255, 255, 255, 0.05);
+  --bezel-hover: rgba(255, 255, 255, 0.09);
+
+  --card-shadow: 0 24px 64px -32px rgba(0, 0, 0, 0.55);
+  --inner-glow-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --bezel-glow-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.14),
+    inset 0 0 60px -24px rgba(34, 211, 238, 0.35);
+
+  --field-point: #7dd3fc;
+  --field-accent: #5eead4;
+  --field-line: rgba(125, 211, 252, 0.14);
+  --field-glow: rgba(34, 211, 238, 0.5);
+
+  --error: #ff9d9d;
+  --error-surface: rgba(58, 20, 32, 0.6);
+
+  --grain-opacity: 0.03;
+}
+
+/* Runtime-mapped color utilities (bg-void, text-ink, ring-hairline, …) */
+@theme inline {
+  --color-void: var(--void);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-lift: var(--lift);
+  --color-overlay: var(--overlay);
+
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+
+  --color-aurora-cyan: var(--aurora-cyan);
+  --color-aurora-teal: var(--aurora-teal);
+  --color-aurora-violet: var(--aurora-violet);
+
+  --color-cta: var(--cta);
+  --color-cta-hover: var(--cta-hover);
+  --color-cta-ink: var(--cta-ink);
+
+  --color-hairline: var(--hairline);
+  --color-hairline-strong: var(--hairline-strong);
+  --color-bezel: var(--bezel);
+  --color-bezel-hover: var(--bezel-hover);
+
+  --color-error: var(--error);
+  --color-error-surface: var(--error-surface);
+}
+
+/* Static tokens */
+@theme {
   /* Type */
   --font-display: var(--font-display-face), var(--font-sans-face), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-sans-face), ui-sans-serif, system-ui, sans-serif;
@@ -35,22 +152,29 @@
   --ease-swift: cubic-bezier(0.32, 0.72, 0, 1);
   --ease-spring: cubic-bezier(0.34, 1.4, 0.4, 1);
 
-  /* Fluid display scale */
-  --text-hero: clamp(2.6rem, 1.1rem + 5.2vw, 5.5rem);
-  --text-hero--line-height: 1;
-  --text-hero--letter-spacing: -0.035em;
-  --text-display: clamp(2.25rem, 1rem + 4.6vw, 4.75rem);
-  --text-display--line-height: 1.02;
-  --text-display--letter-spacing: -0.03em;
-  --text-title: clamp(1.6rem, 1rem + 2vw, 2.6rem);
-  --text-title--line-height: 1.08;
-  --text-title--letter-spacing: -0.02em;
+  /* Fluid display scale (DESIGN-SPEC-V2 §3) */
+  --text-hero: clamp(3.2rem, 1.4rem + 7.2vw, 7.75rem);
+  --text-hero--line-height: 0.98;
+  --text-hero--letter-spacing: -0.045em;
+  --text-display: clamp(2.4rem, 1.2rem + 4.4vw, 5rem);
+  --text-display--line-height: 1.04;
+  --text-display--letter-spacing: -0.035em;
+  --text-manifesto: clamp(1.75rem, 1rem + 2.6vw, 3.25rem);
+  --text-manifesto--line-height: 1.22;
+  --text-manifesto--letter-spacing: -0.02em;
+  --text-title: clamp(1.35rem, 1.05rem + 1vw, 1.9rem);
+  --text-title--line-height: 1.15;
+  --text-title--letter-spacing: -0.015em;
+  --text-stat: clamp(2.2rem, 1rem + 3.4vw, 4rem);
+  --text-stat--line-height: 1;
+  --text-stat--letter-spacing: -0.02em;
 
   /* Motion primitives available as animate-* utilities */
   --animate-marquee: marquee var(--marquee-duration, 42s) linear infinite;
   --animate-orb: orb-breathe 9s var(--ease-swift) infinite alternate;
   --animate-aurora: aurora-drift 26s var(--ease-swift) infinite alternate;
   --animate-pulse-dot: pulse-dot 2.4s var(--ease-swift) infinite;
+  --animate-field-breathe: field-breathe 8s var(--ease-swift) infinite alternate;
 }
 
 /* Keyframes (marquee runs linear by design: constant velocity, not a transition) */
@@ -71,6 +195,10 @@
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.45; transform: scale(0.8); }
 }
+@keyframes field-breathe {
+  from { opacity: 0.5; }
+  to { opacity: 0.68; }
+}
 
 /* ------------------------------------------------------------------ */
 /*  Base                                                               */
@@ -79,12 +207,12 @@
 @layer base {
   html {
     scrollbar-gutter: stable;
-    background-color: var(--color-void);
+    background-color: var(--void);
   }
 
   body {
-    background-color: var(--color-void);
-    color: var(--color-ink);
+    background-color: var(--void);
+    color: var(--ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -92,12 +220,12 @@
   }
 
   ::selection {
-    background: color-mix(in oklab, var(--color-aurora-cyan) 30%, transparent);
-    color: var(--color-ink);
+    background: color-mix(in oklab, var(--aurora-cyan) 30%, transparent);
+    color: var(--ink);
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-aurora-cyan);
+    outline: 2px solid var(--aurora-cyan);
     outline-offset: 3px;
     border-radius: 2px;
   }
@@ -105,8 +233,24 @@
   /* Thin, brand-tinted scrollbar */
   * {
     scrollbar-width: thin;
-    scrollbar-color: color-mix(in oklab, var(--color-ink-faint) 55%, transparent) transparent;
+    scrollbar-color: color-mix(in oklab, var(--ink-faint) 55%, transparent) transparent;
   }
+}
+
+/* ~250ms global token crossfade while the theme toggles.
+   Applied transiently via a `theme-fade` class on <html>; the properties here
+   are NOT scroll-animated (V2 motion law) — this runs once per toggle. */
+.theme-fade,
+.theme-fade *,
+.theme-fade *::before,
+.theme-fade *::after {
+  transition:
+    background-color 0.25s var(--ease-swift),
+    color 0.25s var(--ease-swift),
+    border-color 0.25s var(--ease-swift),
+    fill 0.25s var(--ease-swift),
+    stroke 0.25s var(--ease-swift),
+    box-shadow 0.25s var(--ease-swift) !important;
 }
 
 /* ------------------------------------------------------------------ */
@@ -116,9 +260,9 @@
 @utility text-gradient-aurora {
   background-image: linear-gradient(
     100deg,
-    var(--color-aurora-cyan) 0%,
-    var(--color-aurora-teal) 45%,
-    var(--color-aurora-violet) 100%
+    var(--aurora-cyan) 0%,
+    var(--aurora-teal) 45%,
+    var(--aurora-violet) 100%
   );
   -webkit-background-clip: text;
   background-clip: text;
@@ -126,14 +270,29 @@
 }
 
 @utility hairline {
-  box-shadow: inset 0 0 0 1px color-mix(in oklab, white 9%, transparent);
+  box-shadow: inset 0 0 0 1px var(--hairline);
 }
 
-/* Inset top highlight for inner card cores */
+/* Inner card core: inset top highlight (dark) / hairline+diffused shadow (light) */
 @utility inner-glow {
-  box-shadow:
-    inset 0 1px 0 0 color-mix(in oklab, white 10%, transparent),
-    inset 0 0 0 1px color-mix(in oklab, white 5%, transparent);
+  box-shadow: var(--inner-glow-shadow);
+}
+
+/* Raised-card depth for the current theme */
+@utility soft-shadow {
+  box-shadow: var(--card-shadow);
+}
+
+/* Blueprint dot grid — engineering stage texture (T30) */
+@utility blueprint-grid {
+  background-image: radial-gradient(var(--hairline-strong) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+/* Below-fold rendering containment (non-pinned acts only) */
+@utility cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
 }
 
 /* Full-page fixed grain (mounted once in the root layout) */
@@ -142,12 +301,13 @@
   inset: 0;
   z-index: 90;
   pointer-events: none;
-  opacity: 0.03;
+  opacity: var(--grain-opacity);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 160px 160px;
 }
 
-/* Aurora orb building block (backgrounds/CTA band) */
+/* Aurora orb building block (backgrounds/CTA band). filter is static —
+   only transform/opacity ever animate on it. */
 .aurora-orb {
   position: absolute;
   border-radius: 9999px;
@@ -166,20 +326,20 @@
 
 /* Rich text (Tiptap JSON rendered server-side) */
 .rich-text {
-  color: var(--color-ink-muted);
+  color: var(--ink-muted);
   font-size: 1.0625rem;
   line-height: 1.75;
 }
 .rich-text > * + * { margin-top: 1.1em; }
-.rich-text strong { color: var(--color-ink); font-weight: 600; }
+.rich-text strong { color: var(--ink); font-weight: 600; }
 .rich-text a {
-  color: var(--color-aurora-teal);
+  color: var(--aurora-teal);
   text-decoration: underline;
   text-underline-offset: 3px;
-  text-decoration-color: color-mix(in oklab, var(--color-aurora-teal) 40%, transparent);
+  text-decoration-color: color-mix(in oklab, var(--aurora-teal) 40%, transparent);
 }
 .rich-text h3, .rich-text h2 {
-  color: var(--color-ink);
+  color: var(--ink);
   font-family: var(--font-display);
   font-size: 1.35rem;
   letter-spacing: -0.015em;
@@ -195,19 +355,19 @@
   top: 0.68em;
   width: 0.45em;
   height: 1px;
-  background: var(--color-aurora-teal);
+  background: var(--aurora-teal);
 }
 .rich-text ol { list-style: decimal; }
 .rich-text blockquote {
-  border-left: 1px solid color-mix(in oklab, var(--color-aurora-violet) 55%, transparent);
+  border-left: 1px solid color-mix(in oklab, var(--aurora-violet) 55%, transparent);
   padding-left: 1.1em;
-  color: var(--color-ink);
+  color: var(--ink);
   font-style: italic;
 }
 .rich-text code {
   font-family: var(--font-mono);
   font-size: 0.9em;
-  background: color-mix(in oklab, white 6%, transparent);
+  background: var(--bezel);
   padding: 0.15em 0.4em;
   border-radius: 0.35em;
 }

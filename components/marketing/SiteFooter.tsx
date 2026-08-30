@@ -25,7 +25,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
   ].filter((s) => s.href);
 
   return (
-    <footer className="relative mt-32 border-t border-white/8">
+    <footer className="relative mt-32 border-t border-hairline">
       <div className="mx-auto w-full max-w-7xl px-4 py-16 md:px-8 md:py-20">
         <div className="flex flex-col gap-12 md:flex-row md:items-start md:justify-between">
           <div className="max-w-sm space-y-4">
@@ -87,7 +87,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
                         rel="noopener noreferrer"
                         aria-label={label}
                         data-track-outbound
-                        className="grid size-9 place-items-center rounded-full ring-1 ring-white/12 transition-colors duration-300 ease-swift hover:bg-white/5 hover:text-aurora-teal"
+                        className="grid size-9 place-items-center rounded-full ring-1 ring-hairline-strong transition-colors duration-300 ease-swift hover:bg-bezel hover:text-aurora-teal"
                       >
                         <Icon weight="light" className="size-4.5" />
                       </a>
@@ -99,7 +99,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-white/8 pt-8 text-xs text-ink-faint md:flex-row md:items-center">
+        <div className="mt-16 flex flex-col items-start justify-between gap-4 border-t border-hairline pt-8 text-xs text-ink-faint md:flex-row md:items-center">
           <p>
             © {new Date().getFullYear()} {settings.name}. All rights reserved.
           </p>

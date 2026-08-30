@@ -25,7 +25,7 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 const inputClass = cn(
-  "w-full rounded-2xl bg-white/[0.04] px-5 py-3.5 text-ink ring-1 ring-white/12",
+  "w-full rounded-2xl bg-white/[0.04] px-5 py-3.5 text-ink ring-1 ring-hairline-strong",
   "placeholder:text-ink-faint transition-shadow duration-300 ease-swift",
   "focus:outline-none focus:ring-2 focus:ring-aurora-cyan/60",
 );
@@ -146,7 +146,7 @@ export function LeadForm({
             key={i}
             className={cn(
               "h-1 flex-1 rounded-full transition-colors duration-400 ease-swift",
-              i <= step ? "bg-gradient-to-r from-aurora-cyan to-aurora-violet" : "bg-white/10",
+              i <= step ? "bg-gradient-to-r from-aurora-cyan to-aurora-violet" : "bg-bezel-hover",
             )}
           />
         ))}
@@ -171,7 +171,7 @@ export function LeadForm({
               {...register("name")}
             />
             {errors.name && (
-              <p id="lead-name-error" className="mt-2 text-sm text-[#ff9d9d]" role="alert">
+              <p id="lead-name-error" className="mt-2 text-sm text-error" role="alert">
                 {errors.name.message}
               </p>
             )}
@@ -191,7 +191,7 @@ export function LeadForm({
               {...register("email")}
             />
             {errors.email && (
-              <p id="lead-email-error" className="mt-2 text-sm text-[#ff9d9d]" role="alert">
+              <p id="lead-email-error" className="mt-2 text-sm text-error" role="alert">
                 {errors.email.message}
               </p>
             )}
@@ -227,7 +227,7 @@ export function LeadForm({
                       "rounded-full px-4 py-2 text-sm ring-1 transition-all duration-300 ease-swift",
                       active
                         ? "bg-aurora-teal/15 text-aurora-teal ring-aurora-teal/50"
-                        : "text-ink-muted ring-white/12 hover:bg-white/5 hover:text-ink",
+                        : "text-ink-muted ring-hairline-strong hover:bg-bezel hover:text-ink",
                     )}
                   >
                     {s.name}
@@ -270,14 +270,14 @@ export function LeadForm({
               {...register("message")}
             />
             {errors.message && (
-              <p id="lead-message-error" className="mt-2 text-sm text-[#ff9d9d]" role="alert">
+              <p id="lead-message-error" className="mt-2 text-sm text-error" role="alert">
                 {errors.message.message}
               </p>
             )}
           </div>
 
           {serverError && (
-            <p className="rounded-xl bg-[#3a1420]/60 px-4 py-3 text-sm text-[#ff9d9d] ring-1 ring-[#ff9d9d]/25" role="alert">
+            <p className="rounded-xl bg-error-surface px-4 py-3 text-sm text-error ring-1 ring-error/25" role="alert">
               {serverError}
             </p>
           )}

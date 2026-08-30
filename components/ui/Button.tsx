@@ -52,10 +52,10 @@ export function Button({
     size === "md" && "px-6 py-3 text-[0.95rem]",
     size === "sm" && "px-4 py-2 text-sm",
     variant === "primary" &&
-      "bg-cta text-void shadow-[0_0_28px_-8px_rgba(245,177,76,0.55)] hover:bg-cta-bright",
+      "bg-cta text-cta-ink shadow-[0_0_28px_-8px_var(--cta-glow)] hover:bg-cta-hover",
     variant === "ghost" &&
-      "text-ink ring-1 ring-white/15 hover:bg-white/5 hover:ring-white/25",
-    variant === "surface" && "bg-raised text-ink inner-glow hover:bg-[#161c2e]",
+      "text-ink ring-1 ring-hairline-strong hover:bg-bezel hover:ring-[color:color-mix(in_oklab,var(--hairline-strong)_130%,transparent)]",
+    variant === "surface" && "bg-raised text-ink inner-glow soft-shadow hover:bg-lift",
     className,
   );
 
@@ -63,7 +63,7 @@ export function Button({
     "grid size-6 place-items-center rounded-full transition-transform duration-300 ease-swift",
     size === "lg" && "size-7",
     size === "sm" && "size-5",
-    variant === "primary" ? "bg-void/15" : "bg-white/10",
+    variant === "primary" ? "bg-cta-ink/15" : "bg-bezel-hover",
   );
 
   const inner = (

@@ -45,7 +45,7 @@ export function FeaturedWork({ projects }: { projects: ProjectDoc[] }) {
                       i % 2 === 1 && "md:order-2",
                     )}
                   >
-                    <div className="rounded-[2rem] bg-white/5 p-1.5 ring-1 ring-white/10">
+                    <div className="rounded-[2rem] bg-bezel p-1.5 ring-1 ring-hairline">
                       <ParallaxMedia className="aspect-[16/10] rounded-[calc(2rem-0.375rem)]">
                         <ProjectCover
                           project={project}
@@ -56,7 +56,7 @@ export function FeaturedWork({ projects }: { projects: ProjectDoc[] }) {
                     <span
                       className={cn(
                         "pointer-events-none absolute bottom-6 left-6 inline-flex translate-y-3 items-center gap-2 rounded-full",
-                        "bg-void/80 px-4 py-2 text-sm opacity-0 ring-1 ring-white/15 backdrop-blur-md",
+                        "bg-void/80 px-4 py-2 text-sm opacity-0 ring-1 ring-hairline-strong backdrop-blur-md",
                         "transition-all duration-400 ease-swift group-hover:translate-y-0 group-hover:opacity-100",
                       )}
                     >
