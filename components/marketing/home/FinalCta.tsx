@@ -9,10 +9,14 @@ export function FinalCta({
   ctaHref,
   contactEmail,
   responsePromise,
+  title = "Let’s build the thing your users are waiting for.",
+  lede = "A 30-minute strategy call. You leave with an honest read on feasibility, a rough budget, and a suggested first release — whether or not we work together.",
 }: {
   ctaHref: string;
   contactEmail: string;
   responsePromise: string;
+  title?: string;
+  lede?: string;
 }) {
   return (
     <section className="relative overflow-hidden py-32 md:py-44" aria-label="Get in touch">
@@ -25,13 +29,10 @@ export function FinalCta({
           as="h2"
           className="mt-6 font-display text-hero font-medium text-balance"
         >
-          Let’s build the thing your users are waiting for.
+          {title}
         </SplitReveal>
         <Reveal y={32} delay={0.2}>
-          <p className="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-ink-muted">
-            A 30-minute strategy call. You leave with an honest read on feasibility, a rough
-            budget, and a suggested first release — whether or not we work together.
-          </p>
+          <p className="mx-auto mt-7 max-w-xl text-lg leading-relaxed text-ink-muted">{lede}</p>
         </Reveal>
         <Reveal y={32} delay={0.35}>
           <div className="mt-10 flex flex-col items-center gap-5">

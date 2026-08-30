@@ -32,7 +32,10 @@ function getAdminApp(): App {
   });
   try {
     // REST transport: faster cold starts in serverless functions than gRPC.
-    initializeFirestore(app, { preferRest: true });
+    // ignoreUndefinedProperties: optional fields (budget, attribution bits)
+    // are simply omitted instead of throwing.
+    const db = initializeFirestore(app, { preferRest: true });
+    db.settings({ ignoreUndefinedProperties: true });
   } catch {
     // Already initialized elsewhere in this runtime — fine.
   }
