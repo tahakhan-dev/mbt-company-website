@@ -8,7 +8,7 @@ import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { CheckCircle, ArrowRight, ArrowLeft } from "@phosphor-icons/react/dist/ssr";
+import { CheckCircle, ArrowLeft } from "@phosphor-icons/react/dist/ssr";
 import { submitLead } from "@/app/actions/lead";
 import { budgetLabels, budgetOptions, leadInputSchema } from "@/lib/schemas/lead";
 import { readAttribution } from "@/lib/analytics/client-ids";
