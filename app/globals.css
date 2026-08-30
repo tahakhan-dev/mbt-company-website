@@ -311,14 +311,18 @@
   background-size: 160px 160px;
 }
 
-/* Aurora orb building block (backgrounds/CTA band). filter is static —
-   only transform/opacity ever animate on it. */
+/* Aurora orb building block (backgrounds/CTA band). Softness is baked into
+   the radial gradient itself — a filter here would force continuous
+   re-raster while the orb drifts (AUDIT-V1 §1 class of cost). Callers pass
+   `background: radial-gradient(circle, <tint>, transparent 65%)`; the mask
+   below feathers the edge. */
 .aurora-orb {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(70px);
   pointer-events: none;
   will-change: transform;
+  -webkit-mask-image: radial-gradient(circle, black 30%, transparent 72%);
+  mask-image: radial-gradient(circle, black 30%, transparent 72%);
 }
 
 /* SplitText line masking */

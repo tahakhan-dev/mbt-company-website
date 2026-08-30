@@ -39,7 +39,7 @@ export function Act5Proof({
       data-act="5"
       data-act-label="Proof"
       aria-label="Proof — recent case studies"
-      className="relative z-10 cv-auto px-5 py-28 md:px-10 md:py-40 lg:px-16"
+      className="relative z-10 px-5 py-28 md:px-10 md:py-40 lg:px-16"
     >
       <div className="mx-auto max-w-7xl">
         <Reveal className="flex flex-wrap items-end justify-between gap-6">

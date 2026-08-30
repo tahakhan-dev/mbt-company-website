@@ -28,6 +28,12 @@ export function FieldStage() {
   const [enabled, setEnabled] = useState(false);
   const [canvasReady, setCanvasReady] = useState(false);
   const [pageVisible, setPageVisible] = useState(true);
+  // The field only RENDERS while it is narratively alive (Act 1's morph and
+  // Act 7's wake-up). Dimmed behind Acts 2–6 it pauses and its last frame
+  // stays as the static backdrop — indistinguishable at 0.12 opacity, and it
+  // keeps the whole scroll inside the frame budget on weak GPUs (Gate S).
+  const [fieldLive, setFieldLive] = useState(true);
+  const liveActs = useRef({ act1: true, act7: false });
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -38,6 +44,16 @@ export function FieldStage() {
       const canvas = document.createElement("canvas");
       const gl = canvas.getContext("webgl2") ?? canvas.getContext("webgl");
       if (!gl) return;
+      // Software rasterizers (SwiftShader/llvmpipe) burn CPU the page needs
+      // for scroll — those visitors get the designed poster instead. The
+      // localStorage override exists for screenshot/QA harnesses only.
+      const dbg = gl.getExtension("WEBGL_debug_renderer_info");
+      const renderer = dbg ? String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL)) : "";
+      let forceGl = false;
+      try {
+        forceGl = localStorage.getItem("mbt_force_gl") === "1";
+      } catch {}
+      if (!forceGl && /swiftshader|llvmpipe|software|basic render/i.test(renderer)) return;
     } catch {
       return;
     }
@@ -52,13 +68,38 @@ export function FieldStage() {
     return () => document.removeEventListener("visibilitychange", onVisibility);
   }, []);
 
-  // Act-keyed intensity: 1 → 0.16 across Act 2's entry; 0.16 → 0.55 into Act 7.
+  // Act-keyed intensity: 1 → 0.12 across Act 2's entry; 0.12 → 0.5 into Act 7.
   useGSAP(
     () => {
       if (reduced || !rootRef.current) return;
       const stage = rootRef.current;
+      const act1 = document.querySelector("[data-act='1']");
       const act2 = document.querySelector("[data-act='2']");
       const act7 = document.querySelector("[data-act='7']");
+
+      const syncLive = () => setFieldLive(liveActs.current.act1 || liveActs.current.act7);
+      const liveTriggers = [
+        act1 &&
+          ScrollTrigger.create({
+            trigger: act1,
+            start: "top bottom",
+            end: "bottom 40%",
+            onToggle: (self) => {
+              liveActs.current.act1 = self.isActive;
+              syncLive();
+            },
+          }),
+        act7 &&
+          ScrollTrigger.create({
+            trigger: act7,
+            start: "top 90%",
+            end: "max",
+            onToggle: (self) => {
+              liveActs.current.act7 = self.isActive;
+              syncLive();
+            },
+          }),
+      ].filter(Boolean) as ScrollTrigger[];
       if (act2) {
         gsap.fromTo(
           stage,
@@ -83,6 +124,7 @@ export function FieldStage() {
         );
       }
       return () => {
+        liveTriggers.forEach((st) => st.kill());
         ScrollTrigger.getAll().forEach((st) => {
           if (st.trigger === act2 || st.trigger === act7) st.kill();
         });
@@ -107,12 +149,15 @@ export function FieldStage() {
       {enabled && (
         <div
           className={cn(
-            "absolute inset-0 transition-opacity duration-1000 ease-swift",
-            canvasReady ? "opacity-100" : "opacity-0",
+            // visibility rides the opacity transition so the GL layer leaves
+            // the compositor entirely mid-acts (the poster carries the dim
+            // backdrop); it fades back in for Act 7's wake-up.
+            "absolute inset-0 transition-[opacity,visibility] duration-1000 ease-swift",
+            canvasReady && fieldLive ? "visible opacity-100" : "invisible opacity-0",
           )}
         >
           <SignalField
-            active={pageVisible}
+            active={pageVisible && fieldLive}
             trackDocument
             onReady={() => setCanvasReady(true)}
           />

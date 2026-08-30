@@ -1,0 +1,16 @@
+{
+  "url": "http://localhost:3111/",
+  "theme": "dark",
+  "cpuThrottle": "4x",
+  "viewport": "1440x900",
+  "scrolledToPx": 16523,
+  "longTaskCount": 0,
+  "longTasksTotalMs": 0,
+  "worst": [],
+  "frames": {
+    "sampled": 986,
+    "avgIntervalMs": 18.7,
+    "droppedPct": 5.6,
+    "severePct": 0.5
+  }
+}

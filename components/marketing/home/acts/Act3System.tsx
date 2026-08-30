@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { gsap, useGSAP } from "@/lib/gsap";
@@ -31,7 +31,8 @@ export function Act3System({ services }: { services: Act3Service[] }) {
   const sectionRef = useRef<HTMLElement>(null);
   const deckRef = useRef<HTMLDivElement>(null);
   const fillRef = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
+  const readoutRef = useRef<HTMLDivElement>(null);
+  const activeRef = useRef(0);
   const reduced = useReducedMotion();
   const scrollTo = useScrollTo();
   const count = services.length;
@@ -52,8 +53,34 @@ export function Act3System({ services }: { services: Act3Service[] }) {
             autoAlpha: i === 0 ? 1 : i === 1 ? 0.85 : i === 2 ? 0.5 : 0,
             zIndex: count - i,
             transformOrigin: "50% 100%",
+            pointerEvents: i === 0 ? "auto" : "none",
           });
         });
+
+        // Scrub-driven UI updates go straight to the DOM — a React re-render
+        // of the ten-card deck per index change caused 200ms+ style-recalc
+        // storms at 4× CPU (Gate S bisect).
+        const readout = readoutRef.current;
+        const idxEl = readout?.querySelector<HTMLElement>("[data-readout-idx]");
+        const shortEl = readout?.querySelector<HTMLElement>("[data-readout-short]");
+        const metricEl = readout?.querySelector<HTMLElement>("[data-readout-metric]");
+        const ticks = gsap.utils.toArray<HTMLElement>("[data-rail-tick]", sectionRef.current!);
+
+        const applyActive = (idx: number) => {
+          if (activeRef.current === idx) return;
+          activeRef.current = idx;
+          const s = services[idx]!;
+          if (idxEl) idxEl.textContent = `${String(idx + 1).padStart(2, "0")} / ${String(count).padStart(2, "0")}`;
+          if (shortEl) shortEl.textContent = s.short;
+          if (metricEl) metricEl.textContent = s.metric;
+          if (readout) {
+            gsap.fromTo(readout, { autoAlpha: 0.4, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.35, ease: "power2.out" });
+          }
+          cards.forEach((card, i) => {
+            card.style.pointerEvents = i === idx ? "auto" : "none";
+          });
+          ticks.forEach((tick, i) => tick.classList.toggle("bg-aurora-teal", i <= idx));
+        };
 
         const tl = gsap.timeline({
           defaults: { ease: "power2.inOut", duration: 0.85 },
@@ -63,8 +90,7 @@ export function Act3System({ services }: { services: Act3Service[] }) {
             end: "bottom bottom",
             scrub: 0.75,
             onUpdate: (self) => {
-              const idx = Math.min(count - 1, Math.round(self.progress * (count - 1)));
-              setActive((prev) => (prev === idx ? prev : idx));
+              applyActive(Math.min(count - 1, Math.round(self.progress * (count - 1))));
             },
           },
         });
@@ -95,7 +121,7 @@ export function Act3System({ services }: { services: Act3Service[] }) {
     scrollTo(top + (i / Math.max(1, count - 1)) * scrollable + 2);
   }
 
-  const current = services[Math.min(active, count - 1)];
+  const first = services[0];
 
   return (
     <section
@@ -118,20 +144,28 @@ export function Act3System({ services }: { services: Act3Service[] }) {
               return hours first and compound from there.
             </p>
 
-            {/* Live readout — desktop deck only */}
-            {!reduced && current && (
-              <div className="mt-10 hidden md:block" aria-live="polite">
-                <div key={current.slug} className="animate-rise-in">
-                  <p className="font-mono text-sm tabular-nums tracking-[0.2em] text-ink-faint">
-                    {String(active + 1).padStart(2, "0")}&thinsp;/&thinsp;{String(count).padStart(2, "0")}
-                  </p>
-                  <p className="mt-3 max-w-sm text-[0.95rem] leading-relaxed text-ink-muted">
-                    {current.short}
-                  </p>
-                  <p className="mt-3 font-mono text-[0.8125rem] uppercase tracking-[0.14em] text-aurora-teal">
-                    {current.metric}
-                  </p>
-                </div>
+            {/* Live readout — desktop deck only; content mutated via refs
+                during the scrub (never a React re-render per frame) */}
+            {!reduced && first && (
+              <div ref={readoutRef} className="mt-10 hidden md:block">
+                <p
+                  data-readout-idx
+                  className="font-mono text-sm tabular-nums tracking-[0.2em] text-ink-faint"
+                >
+                  01 / {String(count).padStart(2, "0")}
+                </p>
+                <p
+                  data-readout-short
+                  className="mt-3 max-w-sm text-[0.95rem] leading-relaxed text-ink-muted"
+                >
+                  {first.short}
+                </p>
+                <p
+                  data-readout-metric
+                  className="mt-3 font-mono text-[0.8125rem] uppercase tracking-[0.14em] text-aurora-teal"
+                >
+                  {first.metric}
+                </p>
               </div>
             )}
           </div>
@@ -153,11 +187,12 @@ export function Act3System({ services }: { services: Act3Service[] }) {
                     <button
                       key={s.slug}
                       type="button"
+                      data-rail-tick
                       onClick={() => jumpTo(i)}
                       aria-label={`Go to service ${i + 1}: ${s.name}`}
                       className={cn(
-                        "size-[9px] rounded-full ring-1 ring-hairline-strong transition-colors duration-300 ease-swift",
-                        i <= active ? "bg-aurora-teal" : "bg-transparent hover:bg-bezel-hover",
+                        "size-[9px] rounded-full ring-1 ring-hairline-strong transition-colors duration-300 ease-swift hover:bg-bezel-hover",
+                        i === 0 && "bg-aurora-teal",
                       )}
                     />
                   ))}
@@ -176,7 +211,6 @@ export function Act3System({ services }: { services: Act3Service[] }) {
                 <article
                   key={s.slug}
                   data-deck-card
-                  style={!reduced ? { pointerEvents: i === active ? "auto" : "none" } : undefined}
                   className={cn(
                     "bg-bezel p-1.5 ring-1 ring-hairline soft-shadow rounded-[2rem]",
                     "max-md:mb-4",

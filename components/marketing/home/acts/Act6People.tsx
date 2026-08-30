@@ -19,7 +19,7 @@ export function Act6People({ team }: { team: TeamMemberDoc[] }) {
       data-act="6"
       data-act-label="The people"
       aria-label="The team"
-      className="relative z-10 cv-auto px-5 py-28 md:px-10 md:py-40 lg:px-16"
+      className="relative z-10 px-5 py-28 md:px-10 md:py-40 lg:px-16"
     >
       <div className="mx-auto grid max-w-7xl gap-14 md:grid-cols-2 md:gap-20">
         <div className="flex flex-col justify-center">
