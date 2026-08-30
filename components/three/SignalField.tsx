@@ -22,12 +22,13 @@ const LINK_DIST = 2.35;
 const DISPLACE = /* glsl */ `
   uniform float uTime;
   uniform float uProgress;
+  uniform float uEnergy;
   uniform vec3 uPointer;
 
   vec3 displace(vec3 chaos, vec3 lattice, float seed) {
     vec3 base = mix(chaos, lattice, smoothstep(0.0, 1.0, uProgress));
     float t = uTime * 0.35 + seed * 6.2831;
-    float amp = mix(0.55, 0.16, uProgress);
+    float amp = mix(0.55, 0.16, uProgress) * (1.0 + uEnergy * 1.1);
     base.x += sin(t + base.y * 0.35) * amp;
     base.y += cos(t * 0.8 + base.z * 0.4 + seed * 3.0) * amp * 0.8;
     base.z += sin(t * 0.6 + base.x * 0.3) * amp * 0.6;
@@ -180,6 +181,7 @@ function makeUniforms(palette: FieldPalette) {
   return {
     uTime: { value: 0 },
     uProgress: { value: 0 },
+    uEnergy: { value: 0 },
     uPointer: { value: new THREE.Vector3(0, 0, 40) },
     uColA: { value: new THREE.Vector3(...palette.a) },
     uColB: { value: new THREE.Vector3(...palette.b) },
@@ -216,9 +218,16 @@ function FieldScene({ palette }: { palette: FieldPalette }) {
     }
   }, [palette]);
 
+  const energy = useRef(0);
+
   useFrame((_, delta) => {
     // Scroll morph with easing lag.
     progress.current += (fieldState.progress - progress.current) * Math.min(1, delta * 4);
+
+    // Velocity-reactive turbulence (T8): chase the live scroll energy, and
+    // decay the source so the field settles when scrolling stops.
+    energy.current += (fieldState.velocity - energy.current) * Math.min(1, delta * 3);
+    fieldState.velocity = Math.max(0, fieldState.velocity - delta * 1.6 * fieldState.velocity);
 
     // Pointer: NDC ray → z=0 plane, with inertia.
     const ndc = new THREE.Vector3(pointer.x, pointer.y, 0.5).unproject(camera);
@@ -231,6 +240,7 @@ function FieldScene({ palette }: { palette: FieldPalette }) {
       if (!mat) continue;
       mat.uniforms.uTime!.value += delta;
       mat.uniforms.uProgress!.value = progress.current;
+      mat.uniforms.uEnergy!.value = energy.current;
       (mat.uniforms.uPointer!.value as THREE.Vector3).copy(pointer3.current);
     }
   });

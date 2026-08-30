@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { MotionProvider } from "@/components/motion/MotionProvider";
+import { RouteTransition } from "@/components/motion/RouteTransition";
 import { SiteNav } from "@/components/marketing/SiteNav";
 import { SiteFooter } from "@/components/marketing/SiteFooter";
 import { StickyCta } from "@/components/marketing/StickyCta";
@@ -37,7 +38,9 @@ export default async function MarketingLayout({ children }: { children: ReactNod
           </Link>
         </div>
       )}
-      <main id="main">{children}</main>
+      <main id="main">
+        <RouteTransition>{children}</RouteTransition>
+      </main>
       <SiteFooter settings={settings} />
       <StickyCta ctaHref={ctaHref} />
       <DeferredExtras ctaHref={ctaHref} />
