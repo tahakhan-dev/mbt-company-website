@@ -94,6 +94,13 @@ export function SortableList<T extends { id: string }>({
   renderItem: (item: T) => ReactNode;
 }) {
   const [items, setItems] = useState(initial);
+  // Server refreshes (router.refresh after create/edit) hand down new props;
+  // resync local drag state whenever they change (render-time reset pattern).
+  const [prevInitial, setPrevInitial] = useState(initial);
+  if (prevInitial !== initial) {
+    setPrevInitial(initial);
+    setItems(initial);
+  }
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
