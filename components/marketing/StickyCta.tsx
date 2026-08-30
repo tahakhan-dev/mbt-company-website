@@ -52,7 +52,7 @@ export function StickyCta({ ctaHref }: { ctaHref: string }) {
           className="w-full justify-between"
           cta="sticky-mobile"
         >
-          Book a free AI strategy call
+          Book a 5-minute growth call
         </Button>
       </div>
     </>

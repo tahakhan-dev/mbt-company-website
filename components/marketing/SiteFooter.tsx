@@ -25,7 +25,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
   ].filter((s) => s.href);
 
   return (
-    <footer className="relative mt-32 border-t border-hairline">
+    <footer className="relative z-10 mt-32 border-t border-hairline bg-void">
       <div className="mx-auto w-full max-w-7xl px-4 py-16 md:px-8 md:py-20">
         <div className="flex flex-col gap-12 md:flex-row md:items-start md:justify-between">
           <div className="max-w-sm space-y-4">

@@ -91,7 +91,7 @@ export function ExitIntent({ ctaHref }: { ctaHref: string }) {
               </p>
               <div className="mt-6">
                 <Button href={ctaHref} magnetic={false} cta="exit-intent" onClick={() => setOpen(false)}>
-                  Book the strategy call
+                  Book the 5-minute call
                 </Button>
               </div>
             </div>

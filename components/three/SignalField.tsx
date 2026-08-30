@@ -286,9 +286,16 @@ function FieldScene({ palette }: { palette: FieldPalette }) {
 export default function SignalField({
   active,
   onReady,
+  trackDocument = false,
 }: {
   active: boolean;
   onReady?: () => void;
+  /**
+   * Track the pointer on the whole document instead of the canvas — used by
+   * the fixed FieldStage backdrop, which is pointer-events-none so the page
+   * above stays interactive.
+   */
+  trackDocument?: boolean;
 }) {
   // Theme is read OUTSIDE the Canvas (R3F runs its own reconciler root, so
   // outer context isn't bridged) and passed down as a prop.
@@ -303,6 +310,8 @@ export default function SignalField({
       gl={{ antialias: false, alpha: true, powerPreference: "high-performance" }}
       style={{ position: "absolute", inset: 0 }}
       onCreated={() => onReady?.()}
+      // This file only renders on the client (next/dynamic ssr:false).
+      eventSource={trackDocument ? document.documentElement : undefined}
     >
       <FieldScene palette={palette} />
     </Canvas>

@@ -175,6 +175,7 @@
   --animate-aurora: aurora-drift 26s var(--ease-swift) infinite alternate;
   --animate-pulse-dot: pulse-dot 2.4s var(--ease-swift) infinite;
   --animate-field-breathe: field-breathe 8s var(--ease-swift) infinite alternate;
+  --animate-rise-in: rise-in 0.4s var(--ease-swift) both;
 }
 
 /* Keyframes (marquee runs linear by design: constant velocity, not a transition) */
@@ -198,6 +199,10 @@
 @keyframes field-breathe {
   from { opacity: 0.5; }
   to { opacity: 0.68; }
+}
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 /* ------------------------------------------------------------------ */

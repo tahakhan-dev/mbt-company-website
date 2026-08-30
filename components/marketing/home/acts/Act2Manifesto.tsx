@@ -1,0 +1,121 @@
+"use client";
+
+import { useRef } from "react";
+import { gsap, useGSAP } from "@/lib/gsap";
+import { useReducedMotion } from "@/components/motion/MotionProvider";
+
+/**
+ * ACT 2 — WHY WE EXIST (02/07): type-only manifesto (T9). The panel enters
+ * as an angular clip-path wipe over the pinned hero (T1 — zentry grammar),
+ * then each line "illuminates" word by word as it crosses the read zone:
+ * a per-line scrub raising word opacity 0.22 → 1 with an overlapping stagger.
+ * Opacity floor 0.22 is decorative-scan-safe — illumination completes before
+ * the line reaches reading position (DESIGN-SPEC-V2 Act 2).
+ * Copy: COPY-V2 §3. Mobile/reduced: fully lit, no wipe — same words.
+ */
+const LINES: Array<Array<string | { gradient: string }>> = [
+  ["Every", "business", "we", "meet", "is", "busier", "than", "it", "should", "be."],
+  ["Not", "because", "the", "work", "is", "hard", "—", "because", "the", "work", "is", "manual."],
+  ["Software", "was", "supposed", "to", "fix", "this.", "Mostly,", "it", "added", "tabs."],
+  ["So", "we", "build", "systems", "that", "do", "the", "work:", "answer,", "route,", "reconcile,", "report."],
+  ["The", "hours", "come", "back.", { gradient: "The hours become growth." }],
+];
+
+export function Act2Manifesto() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const reduced = useReducedMotion();
+
+  useGSAP(
+    () => {
+      if (reduced || !sectionRef.current || !panelRef.current) return;
+      const mm = gsap.matchMedia();
+
+      mm.add("(min-width: 768px)", () => {
+        // T1 — angular wipe over the hero's final pinned frame.
+        gsap.fromTo(
+          panelRef.current,
+          { clipPath: "polygon(12% 0%, 76% 0%, 90% 92%, 0% 96%)" },
+          {
+            clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 96%",
+              end: "top 18%",
+              scrub: 0.7,
+            },
+          },
+        );
+      });
+
+      // Line illumination — all viewports except reduced motion; cheap
+      // (opacity-only) and the mobile narrative reads identically.
+      const lines = gsap.utils.toArray<HTMLElement>("[data-manifesto-line]", sectionRef.current);
+      for (const line of lines) {
+        const words = line.querySelectorAll<HTMLElement>("[data-word]");
+        gsap.fromTo(
+          words,
+          { opacity: 0.22 },
+          {
+            opacity: 1,
+            stagger: 0.06,
+            ease: "none",
+            scrollTrigger: { trigger: line, start: "top 82%", end: "top 46%", scrub: 0.6 },
+          },
+        );
+      }
+
+      return () => mm.revert();
+    },
+    { scope: sectionRef, dependencies: [reduced] },
+  );
+
+  return (
+    <section
+      ref={sectionRef}
+      data-act="2"
+      data-act-label="Why we exist"
+      aria-label="Why we exist"
+      className="relative z-20 md:-mt-[100dvh]"
+    >
+      <div
+        ref={panelRef}
+        className="bg-void px-5 py-32 ring-1 ring-hairline md:rounded-t-[3rem] md:px-10 md:py-44 lg:px-16"
+      >
+        <div className="mx-auto grid max-w-5xl gap-12 md:grid-cols-[auto_1fr] md:gap-16">
+          <div className="flex flex-row items-start gap-4 md:flex-col">
+            <span className="font-mono text-[0.8125rem] uppercase tracking-[0.2em] text-ink-faint">
+              02&thinsp;/&thinsp;07
+            </span>
+            <span className="hidden h-full w-px bg-hairline-strong md:block" aria-hidden="true" />
+            <span className="font-mono text-[0.8125rem] uppercase tracking-[0.2em] text-aurora-teal">
+              Why we exist
+            </span>
+          </div>
+          <div className="space-y-9">
+            {LINES.map((line, i) => (
+              <p
+                key={i}
+                data-manifesto-line
+                className="max-w-[26ch] font-display text-manifesto font-medium text-ink"
+              >
+                {line.map((word, j) =>
+                  typeof word === "string" ? (
+                    <span key={j} data-word className="inline">
+                      {word}{" "}
+                    </span>
+                  ) : (
+                    <span key={j} data-word className="text-gradient-aurora inline">
+                      {word.gradient}
+                    </span>
+                  ),
+                )}
+              </p>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
