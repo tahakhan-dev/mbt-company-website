@@ -19,11 +19,203 @@ type SeedService = Omit<Service, "createdAt" | "updatedAt">;
 
 export const services: SeedService[] = [
   {
+    name: "AI Chatbots & Customer Automation",
+    slug: "ai-chatbots-customer-automation",
+    iconKey: "chat",
+    status: "published",
+    order: 0,
+    short:
+      "Assistants that answer like your best rep — on your site, WhatsApp, and email — and hand the hard 20% to a human with full context.",
+    problem:
+      "Every unanswered message is a customer deciding you're slow. Inboxes open to forty threads, the same five questions eat the day, and after-hours leads buy from whoever replies first. We automate the conversations that don't need a human and speed up the ones that do.",
+    long: rt([
+      "We build customer-facing assistants grounded in your real knowledge — products, policies, availability — so they answer specifically, in your voice, with an audit trail. Not a widget with canned replies: a system wired into your calendar, order data, and CRM that can actually do things — book, reschedule, track, quote.",
+      "Escalation is designed, not bolted on. The assistant knows what it doesn't know: below a confidence threshold it hands off to your team with the conversation summarized and the customer never re-typing a word. Every thread is logged and measured, so 'is it helping?' is a dashboard, not a debate.",
+      "Deployment meets customers where they are: website, WhatsApp Business, Instagram DMs, email. One brain, every channel, consistent answers.",
+    ]),
+    offerings: [
+      { title: "Website & in-app assistants", detail: "Grounded in your content and live data, with citations, typed actions (book, quote, track), and your tone of voice enforced in evals." },
+      { title: "WhatsApp & social automation", detail: "WhatsApp Business API done properly: templates, session handling, opt-ins, and human takeover — where your customers actually message from." },
+      { title: "Email triage & drafting", detail: "Inbound email classified, routed, and answered — auto-send for the routine, reviewed drafts for the rest." },
+      { title: "Lead qualification & booking", detail: "Assistants that qualify, score, and book meetings straight into your calendar — with CRM records created and enriched automatically." },
+      { title: "Human-handoff design", detail: "Confidence thresholds, full-context escalation, and takeover UX so customers never feel passed around." },
+    ],
+    process: [
+      { title: "Conversation audit", detail: "1 week: we mine your real inbox/chat history for the automatable 80% and define escalation rules with your team." },
+      { title: "Assistant build", detail: "2–4 weeks: grounded assistant on your channels, wired to booking/CRM/order systems, gated by an evaluation set built from real conversations." },
+      { title: "Tune & expand", detail: "Weekly review of transcripts and scores; new intents and channels earn their way in with evidence." },
+    ],
+    stack: ["Claude", "OpenAI", "WhatsApp Business API", "Twilio", "pgvector", "Next.js", "n8n", "HubSpot"],
+    faqs: [
+      { question: "Will it sound like a robot?", answer: "It sounds like your best rep on a good day — because it's grounded in your actual answers and style guide, and evaluated against transcripts your team rates. Anything off-brand fails the eval before customers ever see it." },
+      { question: "What happens when it can't answer?", answer: "It says so and hands off — to your inbox, phone, or live chat — with the conversation summarized and the customer's details attached. The worst case is a fast, well-briefed human reply, never a hallucinated one." },
+      { question: "Which channels can it live on?", answer: "Web chat, WhatsApp Business, Instagram/Facebook Messenger, and email. One knowledge base and one set of rules drive all of them, so answers never drift between channels." },
+    ],
+    relatedProjectSlugs: ["whatsapp-concierge-clinics", "intake-automation-insurance", "support-copilot-fintech"],
+    transformation: {
+      before: [
+        "Support inbox opens to 40 unanswered threads every morning",
+        "The same five questions answered by hand, all day",
+        "Leads that message after 6pm buy elsewhere by 9am",
+      ],
+      after: [
+        "The assistant answers instantly on web, WhatsApp, and email — in your voice",
+        "The hard 20% reaches a human with full context attached",
+        "Every conversation logged, measured, and improving weekly",
+      ],
+      metric: "First reply: 6 hours → 8 seconds",
+    },
+  },
+  {
+    name: "Business Process Automation",
+    slug: "business-process-automation",
+    iconKey: "flow",
+    status: "published",
+    order: 1,
+    short:
+      "n8n, Zapier, and Make pipelines — plus custom glue where they end — that move data between your systems so people don't have to.",
+    problem:
+      "Somewhere in your company, a smart person is copy-pasting between a store, a spreadsheet, and an accounting tool — every day. That's not a job; that's a missing integration. We find those hours and give them back.",
+    long: rt([
+      "We map the manual loops in your operation — order handling, invoicing, onboarding, reporting, approvals — and rebuild them as monitored automations: n8n or Make where visual flows fit, Zapier where speed wins, custom code where the platforms run out of road.",
+      "Everything we ship is engineered, not duct-taped: idempotent runs, retries with backoff, exception queues that route edge cases to a human, and logs that answer 'what happened to order #4712?' in one search. Automations you can trust are automations your team actually turns on.",
+      "We start with the highest hour-count process, ship in days, and expand loop by loop — each one justified by the hours it returns.",
+    ]),
+    offerings: [
+      { title: "Process mapping & ROI audit", detail: "A one-week teardown of where the hours actually go, ranked by automation payoff — you keep the map either way." },
+      { title: "n8n / Zapier / Make pipelines", detail: "Visual, self-documenting flows your team can read — with version control, environments, and monitoring the platforms don't give you out of the box." },
+      { title: "Custom integration glue", detail: "Typed connectors for the systems without official integrations: legacy ERPs, local banks, niche vertical SaaS." },
+      { title: "Document & data workflows", detail: "Invoices parsed, POs matched, contracts extracted into fields — AI document processing with human review queues." },
+      { title: "Exception & alerting design", detail: "When an automation can't decide, a human gets one clear task — not a silent failure at month-end." },
+    ],
+    process: [
+      { title: "Process audit", detail: "1 week: shadow the workflows, measure the hours, rank the loops by payback." },
+      { title: "Automate the top loop", detail: "1–3 weeks: the biggest time sink rebuilt as a monitored pipeline, run in parallel with the manual process until trusted." },
+      { title: "Expand loop by loop", detail: "Each next automation ships with its own before/after hour count — the program funds itself." },
+    ],
+    stack: ["n8n", "Zapier", "Make", "TypeScript", "PostgreSQL", "Airtable", "QuickBooks", "Slack API"],
+    faqs: [
+      { question: "n8n, Zapier, or Make — which one?", answer: "Whichever fits the loop: Zapier for speed and breadth, Make for gnarly branching on a budget, n8n when you want self-hosting, versioning, and code steps. We're fluent in all three and hand over flows your team can maintain." },
+      { question: "What if the automation breaks?", answer: "It tells you. Every pipeline ships with run logs, retries, and an exception queue — a failed step becomes a human task with context, never a silent gap you discover at month-end." },
+      { question: "Is this safe for financial processes?", answer: "Yes, when engineered properly: idempotent runs (nothing double-invoices), approval checkpoints for money-moving steps, and full audit logs. We treat automations that touch money like the fintech systems we build." },
+    ],
+    relatedProjectSlugs: ["order-to-cash-automation", "intake-automation-insurance"],
+    transformation: {
+      before: [
+        "Orders copy-pasted between store, spreadsheet, and accounting",
+        "Invoices chased by hand — month-end eats two days",
+        "One sick day and nobody knows what shipped",
+      ],
+      after: [
+        "Order → invoice → fulfillment → ledger, untouched by hand",
+        "Month-end runs itself; exceptions land in one review queue",
+        "Every run logged, retried, and alerting when a human is needed",
+      ],
+      metric: "Invoice run: 2 days → 20 minutes",
+    },
+  },
+  {
+    name: "E-commerce Engineering",
+    slug: "ecommerce-engineering",
+    iconKey: "storefront",
+    status: "published",
+    order: 2,
+    short:
+      "Shopify, WooCommerce, and headless storefronts engineered for speed, conversion, and repeat purchase — not just launched.",
+    problem:
+      "Most stores don't have a traffic problem; they have a leak problem. Slow pages tax every ad dollar, clunky checkouts spill carts, and the merch team waits on developers for every change. We engineer the leaks shut.",
+    long: rt([
+      "We build and rebuild storefronts with an engineer's discipline: Core Web Vitals as a budget, checkout as a funnel to be instrumented and tested, and content modeling that lets your team ship campaigns without a developer in the loop.",
+      "On Shopify we go deep — theme architecture, Functions, checkout extensibility, and app integrations that don't drag performance. Where the catalog, market, or brand demands it, we go headless (Next.js storefronts on Shopify or your own backend) without the headless tax of broken previews and stalled merch teams.",
+      "Post-launch, the storefront becomes a growth machine: subscriptions, bundles, A/B-tested PDPs, and the analytics to know which change moved revenue.",
+    ]),
+    offerings: [
+      { title: "Shopify engineering", detail: "Theme architecture, Shopify Functions, checkout UI extensions, and integration work that keeps Lighthouse green." },
+      { title: "Headless storefronts", detail: "Next.js frontends over Shopify/Woo/custom backends — sub-second pages with previews and merch autonomy intact." },
+      { title: "Checkout & CRO engineering", detail: "Instrumented funnels, one-page checkouts, wallet payments, and a monthly test cadence with revenue readouts." },
+      { title: "Subscriptions & retention", detail: "Subscription flows, customer portals, and lifecycle automations that grow LTV instead of support tickets." },
+      { title: "Performance rescue", detail: "App audit, script diet, image/CDN strategy — most stores we touch drop 2+ seconds of LCP in the first month." },
+    ],
+    process: [
+      { title: "Store teardown", detail: "1 week: performance, funnel, and stack audit with a revenue-ranked fix list." },
+      { title: "Build / rebuild", detail: "3–8 weeks: the storefront or fixes shipped behind preview themes, measured against the baseline." },
+      { title: "Grow", detail: "Monthly CRO + performance cadence: test, measure, keep what pays." },
+    ],
+    stack: ["Shopify", "Hydrogen", "Next.js", "WooCommerce", "Klaviyo", "Stripe", "Sanity", "Vercel"],
+    faqs: [
+      { question: "Shopify theme or headless?", answer: "Theme until the numbers say otherwise. Headless pays when catalog complexity, internationalization, or brand experience outgrows Liquid — we'll show you the trade-offs with your own data before recommending the expensive path." },
+      { question: "Can you fix our slow store without a rebuild?", answer: "Usually, yes. The first month of a performance rescue — app diet, script deferral, image pipeline, critical CSS — typically recovers the majority of lost speed without touching your theme's look." },
+      { question: "Do you migrate stores?", answer: "Yes — Woo→Shopify, legacy→headless, platform consolidations — with SEO redirects mapped URL by URL, and revenue-critical flows (subscriptions, gift cards) tested before cutover." },
+    ],
+    relatedProjectSlugs: ["headless-shopify-fashion", "subscription-storefront-roaster"],
+    transformation: {
+      before: [
+        "3-second pages quietly taxing every paid click",
+        "Checkout leaks at every extra field and redirect",
+        "Merch team waits on a developer for every banner",
+      ],
+      after: [
+        "Sub-second storefront with Core Web Vitals in the green",
+        "One-page checkout with wallets — tested monthly, not guessed",
+        "Campaigns shipped by your team, no code, no waiting",
+      ],
+      metric: "Checkout conversion: 3.1% → 4.4%",
+    },
+  },
+  {
+    name: "WordPress & CMS Engineering",
+    slug: "wordpress-cms-engineering",
+    iconKey: "browser",
+    status: "published",
+    order: 3,
+    short:
+      "Editorial stacks your team can actually run — WordPress and modern headless CMS builds that are fast, secure, and unbreakable by design.",
+    problem:
+      "WordPress powers half the web and ruins half its Mondays: plugin roulette, mystery slowdowns, and layouts one update away from chaos. We engineer WordPress like software — locked dependencies, block systems editors can't break, and performance that holds.",
+    long: rt([
+      "For content-led organizations we build editorial platforms, not just websites: custom block libraries that make every page on-brand by construction, editorial workflows with roles and review states, and publishing that takes minutes instead of tickets.",
+      "Engineering discipline is the difference: version-controlled themes and config, a curated and locked plugin set, staged updates with automated visual regression, daily backups with tested restores, and a hardened hosting setup. The result is a WordPress that behaves like a product, not a liability.",
+      "Where headless fits better — multi-channel content, app + web, extreme performance — we pair WordPress or a modern CMS (Sanity, Payload) with a Next.js frontend, keeping editors happy and pages instant.",
+    ]),
+    offerings: [
+      { title: "Custom themes & block libraries", detail: "Gutenberg block systems built to your design tokens — editors compose freely, the brand stays intact." },
+      { title: "Headless WordPress / CMS builds", detail: "Next.js frontends over WordPress, Sanity, or Payload — sub-second pages with live preview editors trust." },
+      { title: "Performance & Core Web Vitals", detail: "Caching architecture, image pipelines, and script diets that hold 90+ scores under real traffic." },
+      { title: "Security & maintenance engineering", detail: "Locked dependencies, staged updates, automated backups with restore drills, uptime and integrity monitoring." },
+      { title: "Migrations & rescues", detail: "Page-builder swamps, hacked sites, and decade-old installs rebuilt into maintainable platforms — content preserved, SEO intact." },
+    ],
+    process: [
+      { title: "Platform audit", detail: "1 week: performance, security posture, plugin risk, and editorial pain — with a ranked plan." },
+      { title: "Build / rebuild", detail: "3–6 weeks: theme/blocks/hosting shipped with redirects mapped and editors trained." },
+      { title: "Steward", detail: "Monthly updates, monitoring, and small improvements — the site stays fast and boring." },
+    ],
+    stack: ["WordPress", "PHP", "Gutenberg", "Next.js", "Sanity", "Payload", "Cloudflare", "MySQL"],
+    faqs: [
+      { question: "Why is our WordPress site slow?", answer: "Almost always: too many plugins doing overlapping work, an unoptimized image pipeline, and no real caching strategy. Our audit names the culprits with numbers; the fix list usually recovers most of the speed without a redesign." },
+      { question: "Should we leave WordPress?", answer: "Only if the requirements say so. WordPress engineered properly serves most content organizations brilliantly. We recommend headless when multi-channel content, app parity, or extreme scale genuinely demand it — not as a fashion statement." },
+      { question: "Can you take over an existing site?", answer: "Yes. Takeovers start with a safety pass — backups, staging, dependency lock, monitoring — so we can work on a site that can't surprise us. Then improvements ship weekly." },
+    ],
+    relatedProjectSlugs: ["newsroom-cms-rebuild"],
+    transformation: {
+      before: [
+        "Publishing a landing page takes three days and a developer",
+        "Plugin roulette: every update risks the whole site",
+        "Scores stuck in the 40s cap what SEO can do",
+      ],
+      after: [
+        "Editors publish same-day with blocks that can't break the design",
+        "Locked dependencies, staged updates, tested backups",
+        "90+ Core Web Vitals with SEO structure baked in",
+      ],
+      metric: "Publish cycle: 3 days → same-day",
+    },
+  },
+  {
     name: "AI & Generative AI Solutions",
     slug: "ai-generative-ai",
     iconKey: "sparkle",
     status: "published",
-    order: 0,
+    order: 4,
     short:
       "LLM applications, AI agents, RAG systems, and copilots — evaluated, guarded, and shipped to production.",
     problem:
@@ -52,13 +244,26 @@ export const services: SeedService[] = [
       { question: "What if the AI is wrong?", answer: "We treat wrongness as an engineering problem: grounded retrieval with citations, confidence thresholds, human-in-the-loop for consequential actions, and eval suites that quantify error rates per release." },
     ],
     relatedProjectSlugs: ["support-copilot-fintech", "rag-knowledge-platform"],
+    transformation: {
+      before: [
+        "A demo that wowed the board and never reached users",
+        "No way to answer 'is the AI actually right?'",
+        "Costs unknown until the invoice arrives",
+      ],
+      after: [
+        "A production copilot with citations users can verify",
+        "An eval harness scoring every release before users see it",
+        "Token budgets enforced in code, cost per feature on a dashboard",
+      ],
+      metric: "Tier-1 tickets auto-resolved: 0% → 54%",
+    },
   },
   {
     name: "Data Engineering & Analytics",
     slug: "data-engineering",
     iconKey: "database",
     status: "published",
-    order: 1,
+    order: 5,
     short:
       "Pipelines, warehouses, and dashboards that turn scattered operational data into decisions — and into AI-ready fuel.",
     problem:
@@ -84,13 +289,26 @@ export const services: SeedService[] = [
       { question: "Can you work with our existing stack?", answer: "Yes — we extend before we replace. Most engagements start by making the current stack trustworthy (tests, lineage, alerts) and only migrate components with a measured payoff." },
     ],
     relatedProjectSlugs: ["ops-lakehouse-logistics", "rag-knowledge-platform"],
+    transformation: {
+      before: [
+        "Every report starts with a CSV export and a prayer",
+        "'Revenue' means three different numbers in three meetings",
+        "Decisions made on last month's data",
+      ],
+      after: [
+        "One governed warehouse; every metric has one owned definition",
+        "Dashboards leadership actually opens on Monday morning",
+        "Pipelines tested in CI and monitored for freshness",
+      ],
+      metric: "Reporting lag: 2 weeks → same-day",
+    },
   },
   {
     name: "Fintech Engineering",
     slug: "fintech-engineering",
     iconKey: "bank",
     status: "published",
-    order: 2,
+    order: 7,
     short:
       "Payments, wallets, and banking-grade apps — built with the controls, audit trails, and resilience regulators expect.",
     problem:
@@ -116,13 +334,26 @@ export const services: SeedService[] = [
       { question: "Can you integrate local payment rails?", answer: "Yes. We've integrated card networks, bank transfers, and regional rails and wallets; the orchestration layer we build treats each as a pluggable, reconciled provider." },
     ],
     relatedProjectSlugs: ["digital-wallet-platform", "support-copilot-fintech"],
+    transformation: {
+      before: [
+        "Reconciliation is a spreadsheet and a long Friday",
+        "Every incident is an all-hands panic",
+        "Auditors ask questions the system can't answer",
+      ],
+      after: [
+        "A double-entry ledger proves the books every night",
+        "Idempotent money movement with exception queues",
+        "Immutable audit trails that make audits boring",
+      ],
+      metric: "Reconciliation exceptions: weekly fire → zero since launch",
+    },
   },
   {
     name: "Product Engineering — Web & Mobile",
     slug: "product-engineering",
     iconKey: "devices",
     status: "published",
-    order: 3,
+    order: 6,
     short:
       "Next.js/React and Flutter products, APIs, and SaaS platforms — from first commit to scale, by one senior team.",
     problem:
@@ -148,13 +379,26 @@ export const services: SeedService[] = [
       { question: "What does a typical first release cost?", answer: "Most first releases land between the mid-five and low-six figures depending on surface area. The product sprint gives you a fixed number before you commit to anything bigger." },
     ],
     relatedProjectSlugs: ["b2b-saas-procurement", "digital-wallet-platform"],
+    transformation: {
+      before: [
+        "Nine months in and still nothing shippable",
+        "Every new feature breaks two old ones",
+        "Velocity dies when one engineer takes leave",
+      ],
+      after: [
+        "A thin, production-grade release inside the first quarter",
+        "Typed, tested code your next hire navigates on day one",
+        "Weekly demos — progress you can see, not status you're told",
+      ],
+      metric: "Idea → production: 9 months → 8 weeks",
+    },
   },
   {
     name: "Cloud & DevOps",
     slug: "cloud-devops",
     iconKey: "cloud",
     status: "published",
-    order: 4,
+    order: 8,
     short:
       "Architecture, CI/CD, observability, and cost control — infrastructure that lets a small team ship like a big one.",
     problem:
@@ -180,13 +424,26 @@ export const services: SeedService[] = [
       { question: "Do we need Kubernetes?", answer: "Probably later than you think. We choose the simplest platform that meets your reliability and scale needs — and write down the triggers that would justify the next step up." },
     ],
     relatedProjectSlugs: ["ops-lakehouse-logistics", "b2b-saas-procurement"],
+    transformation: {
+      before: [
+        "Deploys are a Friday-afternoon gamble",
+        "The cloud bill grows faster than revenue",
+        "One engineer holds the whole setup in their head",
+      ],
+      after: [
+        "One-click deploys with previews and instant rollback",
+        "Spend tagged, right-sized, reviewed — bills trend down",
+        "Infrastructure as code any senior engineer can run",
+      ],
+      metric: "Cloud spend: −38% in one quarter",
+    },
   },
   {
     name: "UI/UX & Product Design",
     slug: "ui-ux-design",
     iconKey: "pen-nib",
     status: "published",
-    order: 5,
+    order: 9,
     short:
       "Research, design systems, and high-fidelity prototypes — design that ships, because it's built next to the engineers.",
     problem:
@@ -211,6 +468,19 @@ export const services: SeedService[] = [
       { question: "Can you redesign without rebuilding?", answer: "Yes — we refactor UI in place behind a design-token layer, shipping improvements screen by screen without a risky big-bang rewrite." },
     ],
     relatedProjectSlugs: ["b2b-saas-procurement", "digital-wallet-platform"],
+    transformation: {
+      before: [
+        "Beautiful mockups that die in developer handoff",
+        "Users hesitate at every AI answer — no trust cues",
+        "Every screen invents its own patterns",
+      ],
+      after: [
+        "Tokens shared by Figma and code — what's approved is what ships",
+        "Trust states, citations, and recovery designed into every AI surface",
+        "A system that makes the tenth screen faster than the first",
+      ],
+      metric: "Trial → paid conversion: +31%",
+    },
   },
 ];
 
@@ -249,6 +519,7 @@ export const projects: SeedProject[] = [
     cover: { kind: "generated", seed: "support-copilot-fintech", url: "", alt: "Support copilot case study" },
     gallery: [],
     featured: true,
+    sample: true,
     status: "published",
     order: 0,
   },
@@ -281,6 +552,7 @@ export const projects: SeedProject[] = [
     cover: { kind: "generated", seed: "digital-wallet-platform", url: "", alt: "Digital wallet case study" },
     gallery: [],
     featured: true,
+    sample: true,
     status: "published",
     order: 1,
   },
@@ -312,6 +584,7 @@ export const projects: SeedProject[] = [
     cover: { kind: "generated", seed: "ops-lakehouse-logistics", url: "", alt: "Logistics lakehouse case study" },
     gallery: [],
     featured: true,
+    sample: true,
     status: "published",
     order: 2,
   },
@@ -343,6 +616,7 @@ export const projects: SeedProject[] = [
     cover: { kind: "generated", seed: "rag-knowledge-platform", url: "", alt: "Legal RAG platform case study" },
     gallery: [],
     featured: false,
+    sample: true,
     status: "published",
     order: 3,
   },
@@ -374,6 +648,7 @@ export const projects: SeedProject[] = [
     cover: { kind: "generated", seed: "b2b-saas-procurement", url: "", alt: "Procurement SaaS case study" },
     gallery: [],
     featured: false,
+    sample: true,
     status: "published",
     order: 4,
   },
@@ -405,8 +680,201 @@ export const projects: SeedProject[] = [
     cover: { kind: "generated", seed: "demand-forecasting-retail", url: "", alt: "Retail forecasting case study" },
     gallery: [],
     featured: false,
+    sample: true,
     status: "published",
     order: 5,
+  },
+  {
+    title: "WhatsApp concierge for a dental clinic group",
+    slug: "whatsapp-concierge-clinics",
+    client: "Confidential — dental clinic group",
+    industry: "Healthcare",
+    timeline: "4 weeks to first clinic, 7 to all nine",
+    serviceSlugs: ["ai-chatbots-customer-automation", "business-process-automation"],
+    summary:
+      "A WhatsApp assistant that books, reschedules, and answers treatment questions for nine clinics — after-hours patients stopped going to voicemail and started going into the calendar.",
+    challenge: rt([
+      "A nine-clinic dental group was losing patients at the front desk: phones rang out during treatments, WhatsApp messages sat unread overnight, and two full-time staff spent their days on reschedules and 'do you do X?' questions. Mystery-shopper tests showed a third of new-patient enquiries never got a reply at all.",
+    ]),
+    solution: rt([
+      "We built a WhatsApp Business assistant grounded in the group's treatments, prices, insurers, and each clinic's live calendar. It books and reschedules directly, answers coverage questions with citations into the policy sheet, and triages emergencies to the on-call line immediately.",
+      "Anything below the confidence threshold — or any upset patient — hands off to staff with the thread summarized. An n8n layer syncs conversations into the practice-management system, so the front desk sees one timeline per patient, not two inboxes.",
+    ]),
+    results: rt([
+      "After-hours enquiries went from voicemail to a 38% booked-appointment rate. Front-desk call volume dropped by more than half, no-shows fell 41% on the back of automated confirmations and easy rescheduling, and the two coordinators moved from message triage to treatment-plan follow-ups — revenue work.",
+    ]),
+    metrics: [
+      { label: "after-hours enquiries booked", value: "38%" },
+      { label: "no-shows", value: "-41%" },
+      { label: "front-desk calls", value: "-55%" },
+    ],
+    stack: ["Claude", "WhatsApp Business API", "n8n", "PostgreSQL", "Next.js"],
+    cover: { kind: "generated", seed: "whatsapp-concierge-clinics", url: "", alt: "Clinic WhatsApp assistant case study" },
+    gallery: [],
+    featured: false,
+    sample: true,
+    status: "published",
+    order: 6,
+  },
+  {
+    title: "Order-to-cash automation for a distributor",
+    slug: "order-to-cash-automation",
+    client: "Confidential — building-materials distributor",
+    industry: "Wholesale & Distribution",
+    timeline: "5 weeks, loop by loop",
+    serviceSlugs: ["business-process-automation", "data-engineering"],
+    summary:
+      "The order-to-cash cycle of a 60-person distributor — orders, fulfillment docs, invoicing, payment chasing — rebuilt as monitored n8n pipelines. Ninety hours of admin a month, returned.",
+    challenge: rt([
+      "Orders arrived by email, phone, and a web form; staff re-keyed them into the ERP, generated delivery notes by hand, invoiced at month-end in a two-day marathon, and chased payments from a spreadsheet. Error rate was human: wrong SKUs shipped weekly, and one missed invoice was found four months late.",
+    ]),
+    solution: rt([
+      "We rebuilt the cycle as five n8n pipelines with a shared order model: intake (email/form parsing with AI extraction and a human review queue for low-confidence fields), ERP entry, fulfillment docs, same-day invoicing on delivery confirmation, and a dunning ladder that escalates politely from reminder to statement to a human call task.",
+      "Every run is idempotent and logged; exceptions become one review queue with context. The manual process ran in parallel for two weeks until the numbers matched to the cent — then the team switched and didn't look back.",
+    ]),
+    results: rt([
+      "Month-end invoicing went from two days to twenty minutes of review. Mis-shipments from re-keying dropped to near zero, day-sales-outstanding improved by nine days thanks to same-day invoices and automatic follow-ups, and the operations lead reclaimed roughly ninety hours a month across the team — without replacing the ERP.",
+    ]),
+    metrics: [
+      { label: "admin hours returned", value: "90h/mo" },
+      { label: "invoice run", value: "2d → 20min" },
+      { label: "DSO", value: "-9 days" },
+    ],
+    stack: ["n8n", "TypeScript", "PostgreSQL", "QuickBooks", "Slack API"],
+    cover: { kind: "generated", seed: "order-to-cash-automation", url: "", alt: "Order-to-cash automation case study" },
+    gallery: [],
+    featured: false,
+    sample: true,
+    status: "published",
+    order: 7,
+  },
+  {
+    title: "Headless Shopify relaunch for a fashion brand",
+    slug: "headless-shopify-fashion",
+    client: "Confidential — DTC fashion brand",
+    industry: "E-commerce",
+    timeline: "8 weeks to relaunch",
+    serviceSlugs: ["ecommerce-engineering", "ui-ux-design"],
+    summary:
+      "A 4-second theme swamp rebuilt as a sub-second Next.js storefront on Shopify — checkout conversion up 42%, and the merch team shipping campaigns without tickets.",
+    challenge: rt([
+      "Years of app installs and theme patches had left a DTC fashion brand with 4.1-second pages, a checkout funnel leaking at every step, and a merchandising team that needed a developer for every homepage change. Paid acquisition was profitable on paper and marginal in practice — the site was taxing every click.",
+    ]),
+    solution: rt([
+      "We rebuilt the storefront headless: a Next.js frontend over Shopify with static product pages revalidated on catalog change, an image pipeline sized to the layout, and a 14-app diet down to four that earned their keep. Checkout moved to Shopify's extensible checkout with wallets first.",
+      "Merchandising got a visual page builder over structured content — campaign pages compose from designed sections with live preview, no code. SEO migration mapped every URL; rankings held through cutover.",
+    ]),
+    results: rt([
+      "LCP went from 4.1s to 0.9s on mobile. Checkout conversion rose 42% and returning-customer purchase rate 18% over the following quarter; the paid team re-opened two channels that had been unprofitable purely on landing speed. Campaign pages now ship the day they're designed.",
+    ]),
+    metrics: [
+      { label: "mobile LCP", value: "4.1s → 0.9s" },
+      { label: "checkout conversion", value: "+42%" },
+      { label: "campaign lead time", value: "1wk → 1d" },
+    ],
+    stack: ["Next.js", "Shopify", "Hydrogen", "Sanity", "Klaviyo", "Vercel"],
+    cover: { kind: "generated", seed: "headless-shopify-fashion", url: "", alt: "Headless Shopify case study" },
+    gallery: [],
+    featured: false,
+    sample: true,
+    status: "published",
+    order: 8,
+  },
+  {
+    title: "Editorial platform rebuild for a news publisher",
+    slug: "newsroom-cms-rebuild",
+    client: "Confidential — regional news publisher",
+    industry: "Media & Publishing",
+    timeline: "6 weeks to cutover",
+    serviceSlugs: ["wordpress-cms-engineering", "cloud-devops"],
+    summary:
+      "A decade-old WordPress install — 30 plugins, nightly outages, scores in the 40s — rebuilt into a locked, block-based editorial platform holding 90+ Core Web Vitals under real traffic.",
+    challenge: rt([
+      "A regional publisher's WordPress had grown for ten years: thirty active plugins with overlapping jobs, a page builder three majors behind, ad scripts fighting analytics scripts, and traffic spikes that took the site down on the stories that mattered most. Editors drafted in fear of breaking layout; Core Web Vitals capped their search visibility.",
+    ]),
+    solution: rt([
+      "We rebuilt the theme as a Gutenberg block library on design tokens — article, liveblog, gallery, and briefing formats editors compose freely without touching layout. The plugin set went from thirty to nine, locked and staged; caching moved to a proper edge architecture with stale-while-revalidate for spikes.",
+      "Updates now run through a staging pipeline with automated visual regression on the top templates; backups restore-drill monthly. The newsroom got publishing checklists in the editor itself — SEO fields, image crops, and fact-box prompts where the work happens.",
+    ]),
+    results: rt([
+      "Core Web Vitals went from the low 40s to 90+ on article pages and held through two election-night traffic spikes. Organic sessions grew 64% over two quarters as rankings recovered, publish cycles for special formats went from days to same-day, and the site's last unplanned outage was the week before cutover.",
+    ]),
+    metrics: [
+      { label: "Core Web Vitals", value: "40s → 90+" },
+      { label: "organic sessions", value: "+64%" },
+      { label: "unplanned outages", value: "0 since launch" },
+    ],
+    stack: ["WordPress", "Gutenberg", "PHP", "Cloudflare", "MySQL", "GitHub Actions"],
+    cover: { kind: "generated", seed: "newsroom-cms-rebuild", url: "", alt: "News publisher CMS case study" },
+    gallery: [],
+    featured: false,
+    sample: true,
+    status: "published",
+    order: 9,
+  },
+  {
+    title: "Intake-to-quote automation for an insurance broker",
+    slug: "intake-automation-insurance",
+    client: "Confidential — commercial insurance broker",
+    industry: "Insurance",
+    timeline: "6 weeks to full intake coverage",
+    serviceSlugs: ["business-process-automation", "ai-chatbots-customer-automation"],
+    summary:
+      "Submission intake for a commercial broker — emails, PDFs, broker portals — parsed, structured, and quoted in hours instead of days, with an assistant that chases missing documents itself.",
+    challenge: rt([
+      "A commercial broker's growth was capped by intake: every submission arrived as an email thread with PDFs, took 45 minutes of re-keying into the management system, and waited days while staff chased missing documents. Producers spent selling hours on data entry; quote turnaround averaged three days and lost deals to faster brokers.",
+    ]),
+    solution: rt([
+      "We built an intake pipeline that parses submissions on arrival — AI extraction of insured details, schedules, and loss runs into typed fields, with a review queue showing confidence per field rather than making staff re-read whole PDFs. Complete submissions flow straight into rating; incomplete ones trigger an assistant that emails the producer or insured for exactly the missing items and files the replies.",
+      "Every submission gets a live status page, so 'where's my quote?' became a link instead of a phone call. The management system stayed; we automated around it.",
+    ]),
+    results: rt([
+      "Quote turnaround dropped from three days to four hours median. Intake capacity grew 2.1× with the same staff, document chase-ups run themselves with a full audit trail, and producers report their first week ever with zero re-keying. The broker now advertises same-day quotes — as a feature.",
+    ]),
+    metrics: [
+      { label: "quote turnaround", value: "3d → 4h" },
+      { label: "intake capacity", value: "2.1×" },
+      { label: "re-keying time", value: "0 min" },
+    ],
+    stack: ["Claude", "n8n", "TypeScript", "PostgreSQL", "SendGrid"],
+    cover: { kind: "generated", seed: "intake-automation-insurance", url: "", alt: "Insurance intake automation case study" },
+    gallery: [],
+    featured: false,
+    sample: true,
+    status: "published",
+    order: 10,
+  },
+  {
+    title: "Subscription storefront for a coffee roaster",
+    slug: "subscription-storefront-roaster",
+    client: "Confidential — specialty coffee roaster",
+    industry: "Food & Beverage",
+    timeline: "7 weeks to relaunch",
+    serviceSlugs: ["ecommerce-engineering", "product-engineering"],
+    summary:
+      "A subscription-first storefront and customer portal for a specialty roaster — pause, swap, and gift flows that cut churn 22% and pushed subscriptions to nearly half of revenue.",
+    challenge: rt([
+      "A roaster with a loyal customer base ran subscriptions through a plugin that fought their theme: customers couldn't pause or swap without emailing support, failed payments quietly cancelled plans, and the subscription P&L was invisible. Churn was blamed on the coffee; it was the software.",
+    ]),
+    solution: rt([
+      "We rebuilt the storefront subscription-first on Shopify with a custom customer portal: pause, skip, swap roast, change cadence, and gift — all self-serve, all one tap from the account page. Failed payments enter a designed dunning flow with retries and empathetic emails rather than silent cancellation.",
+      "A lightweight subscription dashboard gives the founders cohort retention, pause-vs-cancel rates, and revenue by roast — the numbers that were invisible before. Post-purchase, an onboarding series times brewing tips to the first delivery.",
+    ]),
+    results: rt([
+      "Subscriber churn fell 22% in the first quarter — pauses now absorb most would-be cancellations. Failed-payment recovery went from 12% to 58%, average subscriber lifetime value rose 31%, and subscriptions reached 47% of total revenue, giving the roastery predictable production for the first time.",
+    ]),
+    metrics: [
+      { label: "subscriber churn", value: "-22%" },
+      { label: "payment recovery", value: "12% → 58%" },
+      { label: "revenue on subscription", value: "47%" },
+    ],
+    stack: ["Shopify", "Next.js", "TypeScript", "Stripe", "Klaviyo", "Vercel"],
+    cover: { kind: "generated", seed: "subscription-storefront-roaster", url: "", alt: "Coffee subscription storefront case study" },
+    gallery: [],
+    featured: false,
+    sample: true,
+    status: "published",
+    order: 11,
   },
 ];
 
@@ -515,12 +983,12 @@ export const logos: SeedLogo[] = [
 // ---------------------------------------------------------------------------
 export const settingsSeed = {
   name: process.env.NEXT_PUBLIC_SITE_NAME ?? "MBT",
-  tagline: "We build AI products that ship.",
-  heroEyebrow: "AI software house",
-  heroHeadline: "Ship AI products your users actually use.",
+  tagline: "Operational noise → growth.",
+  heroEyebrow: "AI systems studio",
+  heroHeadline: "Five minutes to a faster business.",
   heroSubline:
-    "Strategy, design, and engineering for LLM apps, data platforms, and fintech-grade software — delivered by one senior team.",
-  trustLine: "12+ products shipped · fintech-grade security · Global reach",
+    "Bring your bottleneck. Leave with a plan: which AI systems pay off first, what they cost, what they return.",
+  trustLine: "12+ systems shipped · 9 industries · fintech-grade security",
   contactEmail: "hello@example.com",
   whatsapp: "",
   calendlyUrl: "",
@@ -534,10 +1002,27 @@ export const settingsSeed = {
     ogImage: "",
   },
   metrics: [
-    { label: "Products shipped", value: "12", suffix: "+" },
-    { label: "Years building", value: "6", suffix: "" },
+    { label: "Systems shipped", value: "12", suffix: "+" },
     { label: "Industries served", value: "9", suffix: "" },
+    { label: "Partner score", value: "4.9", suffix: "/5" },
     { label: "Avg. weeks to v1", value: "8", suffix: "" },
+  ],
+  homeFaqs: [
+    {
+      question: "What actually happens on the 5-minute call?",
+      answer:
+        "You describe your worst bottleneck; we tell you which system removes it, roughly what it costs, and what it should return. You leave with a plan either way — no pitch, no deck.",
+    },
+    {
+      question: "What does an engagement cost?",
+      answer:
+        "Automation and assistant builds typically start in the four-to-five-figure range; product and platform builds are scoped in fixed releases. Every quote names deliverables, timeline, and what happens if scope changes.",
+    },
+    {
+      question: "How fast do we see results?",
+      answer:
+        "First automations ship in days; first production releases in 4–8 weeks. Everything we build is measured, so 'is it working?' is a number you can check, not a feeling.",
+    },
   ],
   announcement: { enabled: false, text: "", href: "" },
 };

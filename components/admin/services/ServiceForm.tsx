@@ -34,6 +34,7 @@ const emptyDraft: Draft = {
   stack: [],
   faqs: [],
   relatedProjectSlugs: [],
+  transformation: { before: [], after: [], metric: "" },
   status: "draft",
   order: 0,
 };
@@ -192,6 +193,35 @@ export function ServiceForm({
               value={draft.faqs}
               onChange={(rows) => set("faqs", rows as Draft["faqs"])}
             />
+          </div>
+          <div>
+            <AdminLabel hint="rendered as the Before → After block on the service page">
+              Transformation — life before
+            </AdminLabel>
+            <ChipsInput
+              id="s-before"
+              value={draft.transformation.before}
+              onChange={(v) => set("transformation", { ...draft.transformation, before: v })}
+              placeholder="Orders copy-pasted between systems…"
+            />
+            <div className="mt-3">
+              <AdminLabel>Transformation — life after</AdminLabel>
+              <ChipsInput
+                id="s-after"
+                value={draft.transformation.after}
+                onChange={(v) => set("transformation", { ...draft.transformation, after: v })}
+                placeholder="Order → invoice → ledger, untouched…"
+              />
+            </div>
+            <div className="mt-3">
+              <AdminLabel htmlFor="s-metric">Transformation headline metric</AdminLabel>
+              <AdminInput
+                id="s-metric"
+                value={draft.transformation.metric}
+                onChange={(e) => set("transformation", { ...draft.transformation, metric: e.target.value })}
+                placeholder="Invoice run: 2 days → 20 minutes"
+              />
+            </div>
           </div>
           <FieldRow>
             <div>

@@ -36,6 +36,7 @@ const emptyDraft: Draft = {
   cover: { kind: "generated", seed: "", url: "", alt: "" },
   gallery: [],
   featured: false,
+  sample: false,
   status: "draft",
   order: 0,
 };
@@ -172,6 +173,15 @@ export function ProjectForm({
                 className="size-4 accent-[#f5b14c]"
               />
               Featured on home page
+            </label>
+            <label className="flex items-center gap-2 text-sm text-ink-muted">
+              <input
+                type="checkbox"
+                checked={draft.sample}
+                onChange={(e) => set("sample", e.target.checked)}
+                className="size-4 accent-[#f5b14c]"
+              />
+              Sample content (badge in admin only)
             </label>
             <div className="flex items-center gap-2 text-sm text-ink-muted">
               Status:

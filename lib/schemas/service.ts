@@ -8,12 +8,25 @@ export const serviceIconKeys = [
   "devices",
   "cloud",
   "pen-nib",
+  "chat",
+  "flow",
+  "storefront",
+  "browser",
 ] as const;
 
 export const offeringSchema = z.object({
   title: z.string().min(1).max(80),
   detail: z.string().min(1).max(300),
 });
+
+/** Before→After framing rendered on every service page (V2 mandate). */
+export const transformationSchema = z
+  .object({
+    before: z.array(z.string().max(160)).max(4).default([]),
+    after: z.array(z.string().max(160)).max(4).default([]),
+    metric: z.string().max(80).default(""),
+  })
+  .default({ before: [], after: [], metric: "" });
 
 export const serviceSchema = baseDocSchema.extend({
   name: z.string().min(2).max(80),
@@ -30,6 +43,7 @@ export const serviceSchema = baseDocSchema.extend({
   stack: z.array(z.string().max(40)).max(24).default([]),
   faqs: z.array(faqItemSchema).max(10).default([]),
   relatedProjectSlugs: z.array(z.string().max(80)).max(6).default([]),
+  transformation: transformationSchema,
 });
 
 export type Service = z.infer<typeof serviceSchema>;

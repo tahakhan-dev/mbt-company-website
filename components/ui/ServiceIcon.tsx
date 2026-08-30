@@ -5,6 +5,10 @@ import {
   Devices,
   Cloud,
   PenNib,
+  ChatCircleDots,
+  FlowArrow,
+  Storefront,
+  Browser,
 } from "@phosphor-icons/react/dist/ssr";
 import type { Icon } from "@phosphor-icons/react";
 import type { serviceIconKeys } from "@/lib/schemas/service";
@@ -17,6 +21,10 @@ const ICONS: Record<(typeof serviceIconKeys)[number], Icon> = {
   devices: Devices,
   cloud: Cloud,
   "pen-nib": PenNib,
+  chat: ChatCircleDots,
+  flow: FlowArrow,
+  storefront: Storefront,
+  browser: Browser,
 };
 
 /** One icon family sitewide: Phosphor, light strokes, aurora tint. */

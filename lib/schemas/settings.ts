@@ -9,16 +9,16 @@ export const metricItemSchema = z.object({
 
 export const siteSettingsSchema = z.object({
   name: z.string().min(1).max(60).default("MBT"),
-  tagline: z.string().min(1).max(140).default("We build AI products that ship."),
-  heroEyebrow: z.string().max(80).default("AI software house"),
-  heroHeadline: z.string().max(160).default("Ship AI products your users actually use."),
+  tagline: z.string().min(1).max(140).default("Operational noise → growth."),
+  heroEyebrow: z.string().max(80).default("AI systems studio"),
+  heroHeadline: z.string().max(160).default("Five minutes to a faster business."),
   heroSubline: z
     .string()
     .max(300)
     .default(
-      "Strategy, design, and engineering for LLM apps, data platforms, and fintech-grade software — delivered by one senior team.",
+      "Bring your bottleneck. Leave with a plan: which AI systems pay off first, what they cost, what they return.",
     ),
-  trustLine: z.string().max(200).default("12+ products shipped · fintech-grade security · Global"),
+  trustLine: z.string().max(200).default("12+ systems shipped · 9 industries · fintech-grade security"),
   contactEmail: z.email().default("hello@example.com"),
   whatsapp: z.string().max(30).default(""),
   calendlyUrl: z.union([z.url(), z.literal("")]).default(""),

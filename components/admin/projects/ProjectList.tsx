@@ -24,6 +24,7 @@ export function ProjectList({ projects }: { projects: ProjectDoc[] }) {
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-2">
+            {project.sample && <Badge tone="neutral">Sample</Badge>}
             {project.featured && <Badge tone="amber">featured</Badge>}
             <Badge tone={project.status === "published" ? "green" : "neutral"}>
               {project.status}

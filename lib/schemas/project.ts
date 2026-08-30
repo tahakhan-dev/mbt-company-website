@@ -37,6 +37,11 @@ export const projectSchema = baseDocSchema.extend({
     .max(12)
     .default([]),
   featured: z.boolean().default(false),
+  /**
+   * Seeded demonstration content. Admin surfaces a "Sample" badge so the
+   * owner knows what to replace; the public site never reveals it.
+   */
+  sample: z.boolean().default(false),
 });
 
 export type Project = z.infer<typeof projectSchema>;
