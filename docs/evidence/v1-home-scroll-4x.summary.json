@@ -1,0 +1,89 @@
+{
+  "url": "http://localhost:3111/",
+  "theme": "dark",
+  "cpuThrottle": "4x",
+  "viewport": "1440x900",
+  "scrolledToPx": 11561,
+  "longTaskCount": 8,
+  "longTasksTotalMs": 430,
+  "worst": [
+    {
+      "atMs": 2246,
+      "durMs": 58,
+      "breakdown": [
+        "Commit 36ms",
+        "FunctionCall 10ms",
+        "FireAnimationFrame 8ms"
+      ]
+    },
+    {
+      "atMs": 2246,
+      "durMs": 58,
+      "breakdown": [
+        "Commit 36ms",
+        "FunctionCall 10ms",
+        "FireAnimationFrame 8ms"
+      ]
+    },
+    {
+      "atMs": 1968,
+      "durMs": 54,
+      "breakdown": [
+        "Commit 46ms",
+        "FunctionCall 4ms",
+        "FireAnimationFrame 2ms"
+      ]
+    },
+    {
+      "atMs": 1968,
+      "durMs": 54,
+      "breakdown": [
+        "Commit 46ms",
+        "FunctionCall 4ms",
+        "FireAnimationFrame 2ms"
+      ]
+    },
+    {
+      "atMs": 706,
+      "durMs": 52,
+      "breakdown": [
+        "Commit 43ms",
+        "FunctionCall 4ms",
+        "EventDispatch 3ms"
+      ]
+    },
+    {
+      "atMs": 706,
+      "durMs": 52,
+      "breakdown": [
+        "Commit 43ms",
+        "FunctionCall 4ms",
+        "EventDispatch 3ms"
+      ]
+    },
+    {
+      "atMs": 2032,
+      "durMs": 51,
+      "breakdown": [
+        "Commit 37ms",
+        "FunctionCall 5ms",
+        "EventDispatch 4ms"
+      ]
+    },
+    {
+      "atMs": 2032,
+      "durMs": 51,
+      "breakdown": [
+        "Commit 37ms",
+        "FunctionCall 5ms",
+        "EventDispatch 4ms"
+      ]
+    }
+  ],
+  "frames": {
+    "sampled": 892,
+    "avgIntervalMs": 22.9,
+    "droppedPct": 28.4,
+    "severePct": 2.9
+  }
+}
