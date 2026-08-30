@@ -1,0 +1,226 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/*  Aurora Obsidian — design tokens (the only source of truth)         */
+/* ------------------------------------------------------------------ */
+
+@theme {
+  /* Surfaces */
+  --color-void: #05070c;
+  --color-surface: #0b0e16;
+  --color-raised: #111624;
+  --color-overlay: #0a0d15;
+
+  /* Ink */
+  --color-ink: #eef2f8;
+  --color-ink-muted: #9aa6b8;
+  --color-ink-faint: #5c6778;
+
+  /* Aurora accents — glows, orbs, gradient strokes. Never flat fills. */
+  --color-aurora-cyan: #22d3ee;
+  --color-aurora-teal: #5eead4;
+  --color-aurora-violet: #818cf8;
+
+  /* The one warm signal — primary CTA only */
+  --color-cta: #f5b14c;
+  --color-cta-bright: #ffc46a;
+
+  /* Type */
+  --font-display: var(--font-display-face), var(--font-sans-face), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-sans-face), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  /* Easing — custom curves only; linear/ease-in-out are banned for transitions */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-swift: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.4, 1);
+
+  /* Fluid display scale */
+  --text-hero: clamp(2.75rem, 1.2rem + 7.2vw, 7rem);
+  --text-hero--line-height: 0.98;
+  --text-hero--letter-spacing: -0.035em;
+  --text-display: clamp(2.25rem, 1rem + 4.6vw, 4.75rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.03em;
+  --text-title: clamp(1.6rem, 1rem + 2vw, 2.6rem);
+  --text-title--line-height: 1.08;
+  --text-title--letter-spacing: -0.02em;
+
+  /* Motion primitives available as animate-* utilities */
+  --animate-marquee: marquee var(--marquee-duration, 42s) linear infinite;
+  --animate-orb: orb-breathe 9s var(--ease-swift) infinite alternate;
+  --animate-aurora: aurora-drift 26s var(--ease-swift) infinite alternate;
+  --animate-pulse-dot: pulse-dot 2.4s var(--ease-swift) infinite;
+}
+
+/* Keyframes (marquee runs linear by design: constant velocity, not a transition) */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes orb-breathe {
+  from { transform: scale(0.92) translateY(1.5%); opacity: 0.72; }
+  to { transform: scale(1.06) translateY(-1.5%); opacity: 1; }
+}
+@keyframes aurora-drift {
+  0% { transform: translate3d(-4%, -2%, 0) rotate(-2deg) scale(1); }
+  50% { transform: translate3d(3%, 2%, 0) rotate(1.5deg) scale(1.06); }
+  100% { transform: translate3d(-2%, 3%, 0) rotate(-1deg) scale(1.02); }
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.8); }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Base                                                               */
+/* ------------------------------------------------------------------ */
+
+@layer base {
+  html {
+    scrollbar-gutter: stable;
+    background-color: var(--color-void);
+  }
+
+  body {
+    background-color: var(--color-void);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-aurora-cyan) 30%, transparent);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-aurora-cyan);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Thin, brand-tinted scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in oklab, var(--color-ink-faint) 55%, transparent) transparent;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Utilities & component-level patterns used across the site          */
+/* ------------------------------------------------------------------ */
+
+@utility text-gradient-aurora {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-aurora-cyan) 0%,
+    var(--color-aurora-teal) 45%,
+    var(--color-aurora-violet) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility hairline {
+  box-shadow: inset 0 0 0 1px color-mix(in oklab, white 9%, transparent);
+}
+
+/* Inset top highlight for inner card cores */
+@utility inner-glow {
+  box-shadow:
+    inset 0 1px 0 0 color-mix(in oklab, white 10%, transparent),
+    inset 0 0 0 1px color-mix(in oklab, white 5%, transparent);
+}
+
+/* Full-page fixed grain (mounted once in the root layout) */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* Aurora orb building block (backgrounds/CTA band) */
+.aurora-orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* SplitText line masking */
+.split-line-mask {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.06em;
+  margin-block: -0.06em;
+}
+
+/* Rich text (Tiptap JSON rendered server-side) */
+.rich-text {
+  color: var(--color-ink-muted);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+}
+.rich-text > * + * { margin-top: 1.1em; }
+.rich-text strong { color: var(--color-ink); font-weight: 600; }
+.rich-text a {
+  color: var(--color-aurora-teal);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in oklab, var(--color-aurora-teal) 40%, transparent);
+}
+.rich-text h3, .rich-text h2 {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  letter-spacing: -0.015em;
+  margin-top: 1.8em;
+}
+.rich-text ul, .rich-text ol { padding-left: 1.2em; display: grid; gap: 0.45em; }
+.rich-text ul { list-style: none; }
+.rich-text ul > li { position: relative; padding-left: 1.1em; }
+.rich-text ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.68em;
+  width: 0.45em;
+  height: 1px;
+  background: var(--color-aurora-teal);
+}
+.rich-text ol { list-style: decimal; }
+.rich-text blockquote {
+  border-left: 1px solid color-mix(in oklab, var(--color-aurora-violet) 55%, transparent);
+  padding-left: 1.1em;
+  color: var(--color-ink);
+  font-style: italic;
+}
+.rich-text code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: color-mix(in oklab, white 6%, transparent);
+  padding: 0.15em 0.4em;
+  border-radius: 0.35em;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Reduced motion — first-class mode                                  */
+/* ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

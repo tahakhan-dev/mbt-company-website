@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // The entire security model: no client access, ever.
+    // All reads/writes flow through server code holding the Admin SDK
+    // (which bypasses rules); admin identity is enforced there via
+    // session-cookie verification + the `admin` custom claim.
+    match /{document=**} { allow read, write: if false; }
+  }
+}

@@ -1,0 +1,40 @@
+# Netlify configuration — Next.js 16 via the official OpenNext-based runtime.
+# Docs: https://docs.netlify.com/frameworks/next-js/overview/
+
+[build]
+  command = "npm run build"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Native functions live alongside the Next app: the analytics collector
+# (gets request geo via context.geo) and the nightly rollup job.
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+[functions."rollup-daily"]
+  # 03:10 UTC nightly: aggregate yesterday into daily_stats + purge >90d raw data.
+  schedule = "10 3 * * *"
+
+# The tracker always posts to /api/collect; in production we force-rewrite it
+# to the native function so enrichment uses Netlify's request geolocation.
+[[redirects]]
+  from = "/api/collect"
+  to = "/.netlify/functions/collect"
+  status = 200
+  force = true
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), browsing-topics=()"
+
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    Content-Security-Policy = "frame-ancestors 'none'"
+    X-Robots-Tag = "noindex, nofollow"
