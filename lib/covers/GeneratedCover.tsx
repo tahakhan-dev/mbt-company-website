@@ -24,9 +24,9 @@ export function GeneratedCover({
     const n = hashSeed(`${seed}:${i}`);
     return {
       x: 80 + (n % (W - 160)),
-      y: 80 + ((n >> 7) % (H - 160)),
-      r: 1.2 + ((n >> 13) % 22) / 10,
-      o: 0.25 + ((n >> 17) % 45) / 100,
+      y: 80 + ((n >>> 7) % (H - 160)),
+      r: 1.2 + ((n >>> 13) % 22) / 10,
+      o: 0.25 + ((n >>> 17) % 45) / 100,
     };
   });
   const links = nodes.slice(0, 9).map((n, i) => {

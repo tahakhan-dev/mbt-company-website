@@ -49,13 +49,17 @@ await page.waitForTimeout(wait);
 if (doScroll) {
   // Coarse scroll through the page to trigger reveals, capturing frames.
   const total = await page.evaluate(() => document.body.scrollHeight);
-  const steps = Math.min(8, Math.ceil(total / height));
+  const steps = Math.min(16, Math.ceil(total / height));
   for (let i = 1; i <= steps; i++) {
     await page.mouse.wheel(0, height * 0.9);
     await page.waitForTimeout(650);
     await page.screenshot({ path: `${prefix}-s${i}.png` });
   }
 } else {
+  if (flags.includes("--bottom")) {
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await page.waitForTimeout(1500);
+  }
   await page.screenshot({ path: `${prefix}.png`, fullPage: full });
 }
 

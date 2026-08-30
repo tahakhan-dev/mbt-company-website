@@ -43,10 +43,10 @@ export function coverPalette(seed: string): CoverPalette {
     orbB: duo[1],
     line: duo[0],
     angle: (h % 70) - 35,
-    ax: 0.18 + ((h >> 3) % 40) / 100,
-    ay: 0.15 + ((h >> 6) % 35) / 100,
-    bx: 0.55 + ((h >> 9) % 35) / 100,
-    by: 0.5 + ((h >> 12) % 40) / 100,
-    motif: motifs[(h >> 15) % motifs.length] ?? "arc",
+    ax: 0.18 + ((h >>> 3) % 40) / 100,
+    ay: 0.15 + ((h >>> 6) % 35) / 100,
+    bx: 0.55 + ((h >>> 9) % 35) / 100,
+    by: 0.5 + ((h >>> 12) % 40) / 100,
+    motif: motifs[(h >>> 15) % motifs.length] ?? "arc",
   };
 }

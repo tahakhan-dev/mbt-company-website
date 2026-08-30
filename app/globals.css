@@ -36,8 +36,8 @@
   --ease-spring: cubic-bezier(0.34, 1.4, 0.4, 1);
 
   /* Fluid display scale */
-  --text-hero: clamp(2.75rem, 1.2rem + 7.2vw, 7rem);
-  --text-hero--line-height: 0.98;
+  --text-hero: clamp(2.6rem, 1.1rem + 5.2vw, 5.5rem);
+  --text-hero--line-height: 1;
   --text-hero--letter-spacing: -0.035em;
   --text-display: clamp(2.25rem, 1rem + 4.6vw, 4.75rem);
   --text-display--line-height: 1.02;
