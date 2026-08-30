@@ -81,11 +81,12 @@ export function ProcessStory() {
         });
 
         for (const step of steps) {
+          // Blur + rise only — opacity stays 1 so every scrub state keeps
+          // WCAG contrast (audits sample mid-animation).
           gsap.fromTo(
             step,
-            { opacity: 0.18, y: 44, filter: "blur(3px)" },
+            { y: 44, filter: "blur(3px)" },
             {
-              opacity: 1,
               y: 0,
               filter: "blur(0px)",
               ease: "none",
@@ -140,11 +141,8 @@ export function ProcessStory() {
               <Bezel glow innerClassName="p-7 md:p-9">
                 <div className="flex items-baseline justify-between gap-4">
                   <span
-                    className="font-mono text-sm text-transparent"
-                    style={{
-                      WebkitTextStroke: "1px rgba(94,234,212,0.55)",
-                      fontSize: "2.4rem",
-                    }}
+                    className="font-mono"
+                    style={{ color: "rgba(94,234,212,0.5)", fontSize: "2.4rem" }}
                     aria-hidden="true"
                   >
                     {step.n}

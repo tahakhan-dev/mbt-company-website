@@ -9,6 +9,7 @@ import { ServiceIcon } from "@/components/ui/ServiceIcon";
 import { FinalCta } from "@/components/marketing/home/FinalCta";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/services" },
   title: "Services",
   description:
     "AI & generative AI, data engineering, fintech engineering, product engineering, cloud & DevOps, and product design — end to end, by one senior team.",

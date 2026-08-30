@@ -8,8 +8,8 @@ export default function NotFound() {
       <AuroraBackdrop intensity="soft" />
       <div className="relative mx-auto w-full max-w-3xl px-4 text-center md:px-8">
         <p
-          className="mx-auto font-mono text-[7rem] leading-none text-transparent md:text-[10rem]"
-          style={{ WebkitTextStroke: "1.5px rgba(94,234,212,0.5)" }}
+          className="mx-auto font-mono text-[7rem] leading-none md:text-[10rem]"
+          style={{ color: "rgba(94,234,212,0.4)" }}
           aria-hidden="true"
         >
           404

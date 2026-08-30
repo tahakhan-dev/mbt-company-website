@@ -17,6 +17,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { ParallaxMedia } from "@/components/motion/ParallaxMedia";
 import { ProjectCover } from "@/components/marketing/ProjectCover";
 import { FinalCta } from "@/components/marketing/home/FinalCta";
+import { BreadcrumbJsonLd } from "@/components/marketing/JsonLd";
 import { cn } from "@/lib/utils/format";
 
 export async function generateStaticParams() {
@@ -32,7 +33,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const project = await getProject(slug);
   if (!project) return { title: "Case study not found" };
-  return { title: `${project.title} — Case study`, description: project.summary };
+  return {
+    title: `${project.title} — Case study`,
+    description: project.summary,
+    alternates: { canonical: `/work/${project.slug}` },
+  };
 }
 
 function Chapter({
@@ -82,6 +87,13 @@ export default async function CaseStudyPage({
 
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Work", path: "/work" },
+          { name: project.title, path: `/work/${project.slug}` },
+        ]}
+      />
       <div className="mx-auto w-full max-w-7xl px-4 pb-24 pt-36 md:px-8 md:pt-44">
         <Reveal y={20}>
           <Eyebrow>Case study</Eyebrow>
@@ -112,7 +124,8 @@ export default async function CaseStudyPage({
           </div>
         </Reveal>
 
-        <Reveal className="mt-10 grid grid-cols-2 gap-6 rounded-[1.6rem] bg-white/[0.03] p-7 ring-1 ring-white/8 md:grid-cols-4">
+        <Reveal className="mt-10">
+          <dl className="grid grid-cols-2 gap-6 rounded-[1.6rem] bg-white/[0.03] p-7 ring-1 ring-white/8 md:grid-cols-4">
           {facts.map((fact) => (
             <div key={fact.label}>
               <dt className="font-mono text-[0.62rem] uppercase tracking-[0.22em] text-ink-faint">
@@ -121,6 +134,7 @@ export default async function CaseStudyPage({
               <dd className="mt-2 text-sm leading-snug text-ink">{fact.value}</dd>
             </div>
           ))}
+          </dl>
         </Reveal>
 
         <div className="mt-24 flex flex-col gap-20">

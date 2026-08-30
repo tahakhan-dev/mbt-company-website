@@ -15,12 +15,15 @@ export function SplitReveal({
   as = "h2",
   mode = "scroll",
   delay = 0,
+  disableBelow = 0,
 }: {
   children: ReactNode;
   className?: string;
   as?: "h1" | "h2" | "h3" | "p" | "span" | "div";
   mode?: "scroll" | "load";
   delay?: number;
+  /** Skip splitting under this viewport width (mobile LCP protection). */
+  disableBelow?: number;
 }) {
   const ref = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
@@ -29,6 +32,7 @@ export function SplitReveal({
     () => {
       const el = ref.current;
       if (reduced || !el) return;
+      if (disableBelow > 0 && window.innerWidth < disableBelow) return;
 
       const split = SplitText.create(el, {
         type: "lines",
@@ -50,7 +54,7 @@ export function SplitReveal({
       });
       return () => split.revert();
     },
-    { scope: ref, dependencies: [reduced, mode] },
+    { scope: ref, dependencies: [reduced, mode, disableBelow] },
   );
 
   const Tag = as;

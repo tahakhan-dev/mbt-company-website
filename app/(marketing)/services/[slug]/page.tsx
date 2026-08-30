@@ -12,6 +12,7 @@ import { Accordion } from "@/components/ui/Accordion";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ProjectCover } from "@/components/marketing/ProjectCover";
 import { FinalCta } from "@/components/marketing/home/FinalCta";
+import { BreadcrumbJsonLd, FaqJsonLd, ServiceJsonLd } from "@/components/marketing/JsonLd";
 
 export async function generateStaticParams() {
   const services = await getServices();
@@ -26,7 +27,11 @@ export async function generateMetadata({
   const { slug } = await params;
   const service = await getService(slug);
   if (!service) return { title: "Service not found" };
-  return { title: service.name, description: service.short };
+  return {
+    title: service.name,
+    description: service.short,
+    alternates: { canonical: `/services/${service.slug}` },
+  };
 }
 
 export default async function ServiceDetailPage({
@@ -53,6 +58,20 @@ export default async function ServiceDetailPage({
 
   return (
     <>
+      <ServiceJsonLd
+        name={service.name}
+        description={service.short}
+        slug={service.slug}
+        providerName={settings.name}
+      />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Services", path: "/services" },
+          { name: service.name, path: `/services/${service.slug}` },
+        ]}
+      />
+      <FaqJsonLd faqs={service.faqs} />
       <div className="mx-auto w-full max-w-7xl px-4 pb-24 pt-36 md:px-8 md:pt-44">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-7">
@@ -114,8 +133,8 @@ export default async function ServiceDetailPage({
               {service.process.map((step, i) => (
                 <div key={step.title} className="rounded-[1.6rem] bg-white/[0.03] p-7 ring-1 ring-white/8">
                   <p
-                    className="font-mono text-3xl text-transparent"
-                    style={{ WebkitTextStroke: "1px rgba(129,140,248,0.6)" }}
+                    className="font-mono text-3xl"
+                    style={{ color: "rgba(129,140,248,0.55)" }}
                     aria-hidden="true"
                   >
                     {String(i + 1).padStart(2, "0")}

@@ -87,6 +87,7 @@ export function Hero({ eyebrow, headline, subline, trustLine, ctaHref }: HeroPro
               as="h1"
               mode="load"
               delay={0.15}
+              disableBelow={768}
               className="mt-6 max-w-3xl font-display text-hero font-medium text-balance"
             >
               {headline}

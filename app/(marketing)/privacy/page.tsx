@@ -3,6 +3,7 @@ import { getSiteSettings } from "@/lib/data/content";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/privacy" },
   title: "Privacy Policy",
   description: "How this site handles data: cookie-less first-party analytics, no ad trackers, no data sales.",
 };

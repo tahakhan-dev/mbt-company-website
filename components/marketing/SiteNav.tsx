@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "motion/react";
 import { Wordmark } from "@/components/marketing/Wordmark";
 import { Button } from "@/components/ui/Button";
 import { useScrollLock } from "@/components/motion/MotionProvider";
@@ -15,8 +14,6 @@ const LINKS = [
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ] as const;
-
-const EASE = [0.32, 0.72, 0, 1] as const;
 
 /**
  * Floating island nav: detached glass pill, morphing hamburger, full-screen
@@ -160,55 +157,60 @@ export function SiteNav({ siteName, ctaHref }: { siteName: string; ctaHref: stri
         </nav>
       </header>
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            ref={menuRef}
-            id="site-menu"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Site menu"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0, transition: { duration: 0.3, ease: EASE } }}
-            transition={{ duration: 0.4, ease: EASE }}
-            className="fixed inset-0 z-40 flex flex-col justify-between bg-void/90 px-6 pb-10 pt-32 backdrop-blur-2xl"
-          >
-            <nav aria-label="Menu">
-              <ul className="flex flex-col gap-2">
-                {LINKS.map((link, i) => (
-                  <li key={link.href} className="overflow-hidden">
-                    <motion.div
-                      initial={{ y: "110%" }}
-                      animate={{ y: 0, transition: { delay: 0.08 + i * 0.07, duration: 0.6, ease: EASE } }}
-                      exit={{ y: "110%", transition: { duration: 0.25, ease: EASE } }}
-                    >
-                      <Link
-                        href={link.href}
-                        className={cn(
-                          "block font-display text-5xl font-medium tracking-tight transition-colors duration-300",
-                          pathname.startsWith(link.href) ? "text-gradient-aurora" : "text-ink hover:text-aurora-teal",
-                        )}
-                      >
-                        {link.label}
-                      </Link>
-                    </motion.div>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0, transition: { delay: 0.35, duration: 0.5, ease: EASE } }}
-              exit={{ opacity: 0, transition: { duration: 0.2 } }}
-            >
-              <Button href={ctaHref} size="lg" magnetic={false} className="w-full justify-between" cta="menu">
-                Book a free AI strategy call
-              </Button>
-            </motion.div>
-          </motion.div>
+      <div
+        ref={menuRef}
+        id="site-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site menu"
+        data-open={open || undefined}
+        className={cn(
+          "fixed inset-0 z-40 flex flex-col justify-between bg-void/90 px-6 pb-10 pt-32 backdrop-blur-2xl",
+          "transition-opacity duration-400 ease-swift",
+          open ? "opacity-100" : "pointer-events-none opacity-0",
         )}
-      </AnimatePresence>
+        aria-hidden={!open}
+      >
+        <nav aria-label="Menu">
+          <ul className="flex flex-col gap-2">
+            {LINKS.map((link, i) => (
+              <li key={link.href} className="overflow-hidden">
+                <div
+                  className={cn(
+                    "transition-transform duration-600 ease-swift",
+                    open ? "translate-y-0" : "translate-y-[110%]",
+                  )}
+                  style={{ transitionDelay: open ? `${80 + i * 70}ms` : "0ms" }}
+                >
+                  <Link
+                    href={link.href}
+                    tabIndex={open ? undefined : -1}
+                    className={cn(
+                      "block font-display text-5xl font-medium tracking-tight transition-colors duration-300",
+                      pathname.startsWith(link.href) ? "text-gradient-aurora" : "text-ink hover:text-aurora-teal",
+                    )}
+                  >
+                    {link.label}
+                  </Link>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <div
+          className={cn(
+            "transition-all duration-500 ease-swift",
+            open ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0",
+          )}
+          style={{ transitionDelay: open ? "350ms" : "0ms" }}
+        >
+          {open && (
+            <Button href={ctaHref} size="lg" magnetic={false} className="w-full justify-between" cta="menu">
+              Book a free AI strategy call
+            </Button>
+          )}
+        </div>
+      </div>
     </>
   );
 }

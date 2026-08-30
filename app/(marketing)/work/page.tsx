@@ -5,6 +5,7 @@ import { WorkGrid } from "@/components/marketing/work/WorkGrid";
 import { FinalCta } from "@/components/marketing/home/FinalCta";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/work" },
   title: "Work",
   description:
     "Case studies across AI, data, fintech, and product engineering — each with the measurable outcome it shipped.",

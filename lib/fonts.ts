@@ -16,16 +16,23 @@ export const displayFace = localFont({
 });
 
 export const sansFace = localFont({
-  src: [
-    { path: "../app/fonts/InstrumentSans-Variable.woff2", weight: "400 700", style: "normal" },
-    { path: "../app/fonts/InstrumentSans-Italic-Variable.woff2", weight: "400 700", style: "italic" },
-  ],
+  src: [{ path: "../app/fonts/InstrumentSans-Variable.woff2", weight: "400 700", style: "normal" }],
   variable: "--font-sans-face",
   display: "swap",
   preload: true,
 });
 
+/** Italic never renders above the fold — loaded without a preload hint. */
+export const sansItalicFace = localFont({
+  src: [
+    { path: "../app/fonts/InstrumentSans-Italic-Variable.woff2", weight: "400 700", style: "italic" },
+  ],
+  variable: "--font-sans-italic-face",
+  display: "swap",
+  preload: false,
+});
+
 /** Geist Mono ships its own variable (--font-geist-mono); we alias it below. */
 export const monoFace = GeistMono;
 
-export const fontClassNames = `${displayFace.variable} ${sansFace.variable} ${monoFace.variable}`;
+export const fontClassNames = `${displayFace.variable} ${sansFace.variable} ${sansItalicFace.variable} ${monoFace.variable}`;

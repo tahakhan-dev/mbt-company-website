@@ -4,8 +4,9 @@ import { MotionProvider } from "@/components/motion/MotionProvider";
 import { SiteNav } from "@/components/marketing/SiteNav";
 import { SiteFooter } from "@/components/marketing/SiteFooter";
 import { StickyCta } from "@/components/marketing/StickyCta";
-import { ExitIntent } from "@/components/marketing/ExitIntent";
+import { DeferredExtras } from "@/components/marketing/DeferredExtras";
 import { Analytics } from "@/components/marketing/Analytics";
+import { OrganizationJsonLd } from "@/components/marketing/JsonLd";
 import { getSiteSettings } from "@/lib/data/content";
 
 /**
@@ -24,6 +25,7 @@ export default async function MarketingLayout({ children }: { children: ReactNod
       >
         Skip to content
       </a>
+      <OrganizationJsonLd settings={settings} />
       <SiteNav siteName={settings.name} ctaHref={ctaHref} />
       {settings.announcement.enabled && settings.announcement.text && (
         <div className="fixed inset-x-0 bottom-0 z-30 hidden justify-center pb-3 md:flex">
@@ -38,7 +40,7 @@ export default async function MarketingLayout({ children }: { children: ReactNod
       <main id="main">{children}</main>
       <SiteFooter settings={settings} />
       <StickyCta ctaHref={ctaHref} />
-      <ExitIntent ctaHref={ctaHref} />
+      <DeferredExtras ctaHref={ctaHref} />
       <Analytics />
     </MotionProvider>
   );

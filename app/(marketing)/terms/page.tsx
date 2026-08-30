@@ -3,6 +3,7 @@ import { getSiteSettings } from "@/lib/data/content";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/terms" },
   title: "Terms of Use",
   description: "Terms governing the use of this website.",
 };

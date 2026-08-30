@@ -9,6 +9,7 @@ import { AuroraBackdrop } from "@/components/ui/AuroraBackdrop";
 import { LeadForm } from "@/components/marketing/contact/LeadForm";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/contact" },
   title: "Contact",
   description:
     "Book a free AI strategy call or send us your project. A senior engineer replies within one business day.",

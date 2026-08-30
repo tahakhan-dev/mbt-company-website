@@ -16,6 +16,9 @@ import { Testimonials } from "@/components/marketing/home/Testimonials";
 import { TeamPreview } from "@/components/marketing/home/TeamPreview";
 import { FaqStrip } from "@/components/marketing/home/FaqStrip";
 import { FinalCta } from "@/components/marketing/home/FinalCta";
+import { FaqJsonLd } from "@/components/marketing/JsonLd";
+
+export const metadata = { alternates: { canonical: "/" } };
 
 export default async function HomePage() {
   const [settings, services, projects, team, testimonials, logos] = await Promise.all([
@@ -45,6 +48,7 @@ export default async function HomePage() {
       <Testimonials testimonials={testimonials} />
       <TeamPreview team={team} />
       <FaqStrip faqs={settings.homeFaqs} />
+      <FaqJsonLd faqs={settings.homeFaqs} />
       <FinalCta
         ctaHref={ctaHref}
         contactEmail={settings.contactEmail}

@@ -37,7 +37,7 @@ export function StickyCta({ ctaHref }: { ctaHref: string }) {
     <>
       <div ref={sentinelRef} aria-hidden="true" className="absolute left-0 top-[92vh] h-px w-px" />
       <div
-        aria-hidden={!show}
+        inert={!show || undefined}
         className={cn(
           "fixed inset-x-0 bottom-0 z-40 px-4 pb-4 pt-8 md:hidden",
           "bg-gradient-to-t from-void via-void/85 to-transparent",

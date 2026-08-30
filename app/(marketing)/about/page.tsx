@@ -11,6 +11,7 @@ import { AuroraBackdrop } from "@/components/ui/AuroraBackdrop";
 import { FinalCta } from "@/components/marketing/home/FinalCta";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/about" },
   title: "About",
   description:
     "MBT is a senior AI software house: engineers, designers, and data specialists who ship production systems — not decks.",
