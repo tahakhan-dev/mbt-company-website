@@ -1,0 +1,29 @@
+---
+import AdminLayout from "~/layouts/AdminLayout.astro";
+import { getSettings } from "~/lib/content/queries";
+import { bust } from "~/lib/content/cache";
+
+bust("content:");
+const site = await getSettings();
+const saved = Astro.url.searchParams.get("saved") === "1";
+const error = Astro.url.searchParams.get("error") === "1";
+---
+
+<AdminLayout title="Settings">
+  <h1>Site settings</h1>
+  {saved && <p class="flash">Saved. The public site cache is refreshed.</p>}
+  {error && <p class="flash error">That change didn't validate — nothing was saved.</p>}
+
+  <form class="panel" method="post" action="/api/admin/settings">
+    <div class="grid2">
+      <label><span>Brand name</span><input name="name" value={site.name} required /></label>
+      <label><span>Contact email</span><input name="contactEmail" type="email" value={site.contactEmail} required /></label>
+    </div>
+    <label><span>Descriptor (hero eyebrow)</span><input name="descriptor" value={site.descriptor} required /></label>
+    <div class="grid2">
+      <label><span>Primary CTA label</span><input name="cta" value={site.cta} required /></label>
+      <label><span>Response expectation</span><input name="responseExpectation" value={site.responseExpectation} required /></label>
+    </div>
+    <button type="submit">Save settings</button>
+  </form>
+</AdminLayout>

@@ -1,0 +1,244 @@
+---
+interface Props {
+  title: string;
+  /** Hide chrome on the login screen. */
+  bare?: boolean;
+}
+const { title, bare = false } = Astro.props;
+const current = Astro.url.pathname;
+const links = [
+  { href: "/admin", label: "Dashboard" },
+  { href: "/admin/leads", label: "Leads" },
+  { href: "/admin/services", label: "Services" },
+  { href: "/admin/projects", label: "Projects" },
+  { href: "/admin/settings", label: "Settings" },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{`${title} · Aigenvora Admin`}</title>
+    <style is:global>
+      /* Admin is exempt from the cinematic system: clean, fast, dark neutral. */
+      :root {
+        --bg: #14161c;
+        --panel: #1c1f27;
+        --line: #2a2e3a;
+        --text: #e8eaf0;
+        --dim: #9aa1b2;
+        --accent: #6c7fff;
+        --warn: #ffb84d;
+        --danger: #ff7a6b;
+        --ok: #5fd39a;
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 400 14px/1.55 system-ui, -apple-system, sans-serif;
+      }
+      a {
+        color: var(--accent);
+      }
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .shell {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        min-height: 100vh;
+      }
+      aside {
+        border-right: 1px solid var(--line);
+        padding: 1.2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+      aside .mark {
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        font-size: 0.8rem;
+        margin-bottom: 1rem;
+      }
+      aside a {
+        color: var(--dim);
+        text-decoration: none;
+        padding: 0.45rem 0.6rem;
+        border-radius: 6px;
+      }
+      aside a:hover {
+        color: var(--text);
+        background: var(--panel);
+      }
+      aside a[aria-current="page"] {
+        color: var(--text);
+        background: var(--panel);
+      }
+      aside form {
+        margin-top: auto;
+      }
+      main {
+        padding: 1.6rem 2rem;
+        max-width: 1100px;
+      }
+      h1 {
+        font-size: 1.3rem;
+        margin: 0 0 1.2rem;
+      }
+      h2 {
+        font-size: 1rem;
+        margin: 1.6rem 0 0.6rem;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.86rem;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 0.55rem 0.7rem;
+        border-bottom: 1px solid var(--line);
+        vertical-align: top;
+      }
+      th {
+        color: var(--dim);
+        font-weight: 500;
+        font-size: 0.74rem;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 1.2rem;
+      }
+      label {
+        display: grid;
+        gap: 0.3rem;
+        margin-bottom: 0.9rem;
+      }
+      label span {
+        color: var(--dim);
+        font-size: 0.76rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      input,
+      select,
+      textarea {
+        background: var(--bg);
+        border: 1px solid var(--line);
+        color: var(--text);
+        border-radius: 6px;
+        padding: 0.5rem 0.65rem;
+        font: inherit;
+        width: 100%;
+      }
+      button,
+      .btn {
+        background: var(--accent);
+        color: #0d0f14;
+        font-weight: 600;
+        border: 0;
+        border-radius: 6px;
+        padding: 0.55rem 1rem;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 0.86rem;
+      }
+      button.ghost,
+      .btn.ghost {
+        background: transparent;
+        border: 1px solid var(--line);
+        color: var(--dim);
+      }
+      button.danger {
+        background: var(--danger);
+      }
+      .pill {
+        display: inline-block;
+        padding: 0.1rem 0.55rem;
+        border-radius: 99px;
+        font-size: 0.72rem;
+        border: 1px solid var(--line);
+        color: var(--dim);
+      }
+      .pill.new { color: var(--accent); border-color: var(--accent); }
+      .pill.won, .pill.published { color: var(--ok); border-color: var(--ok); }
+      .pill.spam, .pill.lost { color: var(--danger); border-color: var(--danger); }
+      .pill.draft { color: var(--warn); border-color: var(--warn); }
+      .flash {
+        border: 1px solid var(--ok);
+        color: var(--ok);
+        border-radius: 8px;
+        padding: 0.6rem 0.9rem;
+        margin-bottom: 1rem;
+        font-size: 0.86rem;
+      }
+      .flash.error {
+        border-color: var(--danger);
+        color: var(--danger);
+      }
+      .grid2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0 1.2rem;
+      }
+      @media (max-width: 760px) {
+        .shell {
+          grid-template-columns: 1fr;
+        }
+        aside {
+          flex-direction: row;
+          flex-wrap: wrap;
+          border-right: 0;
+          border-bottom: 1px solid var(--line);
+        }
+        aside form {
+          margin: 0;
+        }
+        .grid2 {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    {
+      bare ? (
+        <slot />
+      ) : (
+        <div class="shell">
+          <aside>
+            <span class="mark">AIGENVORA ADMIN</span>
+            {links.map((l) => (
+              <a href={l.href} aria-current={current === l.href ? "page" : undefined}>
+                {l.label}
+              </a>
+            ))}
+            <form method="post" action="/api/admin/session">
+              <input type="hidden" name="intent" value="logout" />
+              <button class="ghost" type="submit">Sign out</button>
+            </form>
+          </aside>
+          <main>
+            <slot />
+          </main>
+        </div>
+      )
+    }
+  </body>
+</html>

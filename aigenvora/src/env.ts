@@ -18,6 +18,10 @@ const envSchema = z.object({
     .optional()
     .transform((v) => (v ? v : "v3_")),
   PUBLIC_SITE_URL: z.url().default("https://aigenvora.com"),
+  /** Web API key for the Identity Toolkit REST sign-in (admin login). The
+   *  shared .env.local exposes it under the legacy NEXT_PUBLIC_ name. */
+  FIREBASE_API_KEY: z.string().min(1).optional(),
+  NEXT_PUBLIC_FIREBASE_API_KEY: z.string().min(1).optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;
@@ -30,6 +34,12 @@ if (!parsed.success) {
 }
 
 export const env: Env = parsed.data;
+
+export function firebaseApiKey(): string {
+  const key = env.FIREBASE_API_KEY ?? env.NEXT_PUBLIC_FIREBASE_API_KEY;
+  if (!key) throw new Error("FIREBASE_API_KEY is not configured.");
+  return key;
+}
 
 export function requireFirebaseEnv(): Required<
   Pick<Env, "FIREBASE_PROJECT_ID" | "FIREBASE_CLIENT_EMAIL" | "FIREBASE_PRIVATE_KEY">

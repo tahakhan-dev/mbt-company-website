@@ -1,0 +1,99 @@
+---
+import AdminLayout from "~/layouts/AdminLayout.astro";
+import { adminDb, col } from "~/lib/firebase/server";
+import { LEAD_STATUSES } from "~/lib/schemas/lead";
+
+const filter = Astro.url.searchParams.get("status") ?? "";
+const snap = await adminDb().collection(col("leads")).orderBy("createdAt", "desc").limit(100).get();
+const leads = snap.docs
+  .map((d) => {
+    const x = d.data();
+    const attribution = (x["attribution"] ?? {}) as Record<string, string>;
+    return {
+      id: d.id,
+      createdAt: String(x["createdAt"] ?? "").slice(0, 16).replace("T", " "),
+      name: String(x["name"] ?? ""),
+      email: String(x["email"] ?? ""),
+      company: String(x["company"] ?? ""),
+      projectType: String(x["projectType"] ?? ""),
+      budget: String(x["budget"] ?? ""),
+      message: String(x["message"] ?? ""),
+      status: String(x["status"] ?? "new"),
+      notes: String(x["notes"] ?? ""),
+      page: (attribution["page"] ?? "").replace(/^https?:\/\/[^/]+/, "") || "—",
+    };
+  })
+  .filter((l) => !filter || l.status === filter);
+---
+
+<AdminLayout title="Leads">
+  <h1>Leads</h1>
+  <p>
+    <a class="btn ghost" href="/admin/leads">All</a>
+    {LEAD_STATUSES.map((s) => <a class="btn ghost" href={`/admin/leads?status=${s}`}>{s}</a>)}
+    <a class="btn" href="/api/admin/leads">Export CSV</a>
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Received</th><th>Who</th><th>Message</th><th>Status / notes</th><th></th></tr>
+    </thead>
+    <tbody>
+      {
+        leads.map((l) => (
+          <tr>
+            <td>
+              {l.createdAt}
+              <br />
+              <span class="pill">{l.page}</span>
+            </td>
+            <td>
+              <b>{l.name}</b>
+              <br />
+              <a href={`mailto:${l.email}`}>{l.email}</a>
+              {l.company && <><br />{l.company}</>}
+              {l.projectType && <><br /><span class="pill">{l.projectType}</span></>}
+              {l.budget && <span class="pill">{l.budget}</span>}
+            </td>
+            <td class="msg">{l.message}</td>
+            <td>
+              <form method="post" action="/api/admin/leads">
+                <input type="hidden" name="id" value={l.id} />
+                <select name="status">
+                  {LEAD_STATUSES.map((s) => (
+                    <option value={s} selected={l.status === s}>{s}</option>
+                  ))}
+                </select>
+                <textarea name="notes" rows="2" placeholder="Notes">{l.notes}</textarea>
+                <button type="submit">Save</button>
+              </form>
+            </td>
+            <td>
+              <form method="post" action="/api/admin/leads" onsubmit="return confirm('Delete this lead permanently?')">
+                <input type="hidden" name="id" value={l.id} />
+                <input type="hidden" name="intent" value="delete" />
+                <button class="danger" type="submit">Delete</button>
+              </form>
+            </td>
+          </tr>
+        ))
+      }
+      {leads.length === 0 && <tr><td colspan="5">No leads{filter ? ` with status "${filter}"` : ""} yet.</td></tr>}
+    </tbody>
+  </table>
+
+  <style>
+    .msg {
+      max-width: 320px;
+      white-space: pre-wrap;
+    }
+    form {
+      display: grid;
+      gap: 0.4rem;
+      min-width: 170px;
+    }
+    p .btn {
+      margin-right: 0.4rem;
+    }
+  </style>
+</AdminLayout>

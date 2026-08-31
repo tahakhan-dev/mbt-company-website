@@ -1,0 +1,111 @@
+---
+import AdminLayout from "~/layouts/AdminLayout.astro";
+import { adminDb, col } from "~/lib/firebase/server";
+
+const snap = await adminDb().collection(col("projects")).orderBy("updatedAt", "desc").get();
+const projects = snap.docs.map((d) => ({ id: d.id, ...d.data() }) as Record<string, unknown> & { id: string });
+const saved = Astro.url.searchParams.get("saved");
+const error = Astro.url.searchParams.get("error");
+---
+
+<AdminLayout title="Projects">
+  <h1>Projects &amp; case studies</h1>
+  {saved && <p class="flash">Saved “{saved}”.</p>}
+  {
+    error === "verification" && (
+      <p class="flash error">
+        Publication blocked: a project can go public only with ownership verified, client
+        permission recorded, and Aigenvora's role stated. That gate is server-side and has no
+        override — it protects you from publicly falsifiable claims
+        (see docs/research/PORTFOLIO-SOURCE-LEDGER.md).
+      </p>
+    )
+  }
+  {error === "invalid" && <p class="flash error">That change didn't validate — nothing was saved.</p>}
+
+  <p>
+    Products enter as drafts. To publish one: confirm the engagement really was yours
+    (ownership), get the client's written OK (permission reference), state the role truthfully —
+    then switch status to published.
+  </p>
+
+  <h2>New / edit record</h2>
+  <form class="panel" method="post" action="/api/admin/projects">
+    <div class="grid2">
+      <label><span>Slug (id, kebab-case)</span><input name="slug" required pattern="[a-z0-9-]+" /></label>
+      <label><span>Name</span><input name="name" required maxlength="200" /></label>
+    </div>
+    <label><span>One-line outcome</span><input name="outcome" required maxlength="400" /></label>
+    <div class="grid2">
+      <label><span>Category</span><input name="category" required maxlength="120" /></label>
+      <label><span>Official URL (optional)</span><input name="officialUrl" type="url" /></label>
+    </div>
+    <div class="grid2">
+      <label><span>Aigenvora's role (truthful, required to publish)</span><input name="role" maxlength="300" /></label>
+      <label><span>Engagement model</span><input name="engagementModel" maxlength="200" placeholder="full build / subcontract / feature work / …" /></label>
+    </div>
+    <fieldset class="verify">
+      <legend>Verification gate</legend>
+      <label class="check"><input type="checkbox" name="ownershipVerified" /> Ownership verified (I confirm this engagement was ours)</label>
+      <label class="check"><input type="checkbox" name="clientPermission" /> Client permission recorded</label>
+      <div class="grid2">
+        <label><span>Verified by</span><input name="verifiedBy" maxlength="200" /></label>
+        <label><span>Permission reference (email/contract, private)</span><input name="permissionReference" maxlength="500" /></label>
+      </div>
+    </fieldset>
+    <label>
+      <span>Status</span>
+      <select name="status">
+        <option value="draft">draft</option>
+        <option value="published">published (requires the gate above)</option>
+        <option value="archived">archived</option>
+      </select>
+    </label>
+    <button type="submit">Save record</button>
+  </form>
+
+  <h2>Records</h2>
+  <table>
+    <thead><tr><th>Project</th><th>Status</th><th>Verified</th><th>Permission</th><th>Role</th><th>Updated</th></tr></thead>
+    <tbody>
+      {
+        projects.map((p) => (
+          <tr>
+            <td><b>{p["name"]}</b><br /><span class="pill">{p.id}</span></td>
+            <td><span class={`pill ${p["status"]}`}>{p["status"]}</span></td>
+            <td>{p["ownershipVerified"] ? "✓" : "—"}</td>
+            <td>{p["clientPermission"] ? "✓" : "—"}</td>
+            <td>{p["role"] || "—"}</td>
+            <td>{String(p["updatedAt"] ?? "").slice(0, 10)}</td>
+          </tr>
+        ))
+      }
+      {projects.length === 0 && <tr><td colspan="6">No records yet — the verification queue for the 13 candidate products is in docs/research/PORTFOLIO-SOURCE-LEDGER.md.</td></tr>}
+    </tbody>
+  </table>
+
+  <style>
+    fieldset.verify {
+      border: 1px solid var(--warn);
+      border-radius: 8px;
+      margin: 0 0 0.9rem;
+      padding: 0.9rem;
+    }
+    legend {
+      color: var(--warn);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0 0.4rem;
+    }
+    .check {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
+    .check input {
+      width: auto;
+    }
+  </style>
+</AdminLayout>

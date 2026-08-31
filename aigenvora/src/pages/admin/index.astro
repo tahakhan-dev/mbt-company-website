@@ -1,0 +1,76 @@
+---
+import AdminLayout from "~/layouts/AdminLayout.astro";
+import { adminDb, col } from "~/lib/firebase/server";
+
+const db = adminDb();
+const [leads, projects, auditSnap] = await Promise.all([
+  db.collection(col("leads")).get(),
+  db.collection(col("projects")).get(),
+  db.collection(col("adminAudit")).orderBy("at", "desc").limit(8).get(),
+]);
+const newLeads = leads.docs.filter((d) => d.data()["status"] === "new").length;
+const published = projects.docs.filter((d) => d.data()["status"] === "published").length;
+---
+
+<AdminLayout title="Dashboard">
+  <h1>Dashboard</h1>
+  <div class="cards">
+    <a class="panel stat" href="/admin/leads">
+      <span class="n">{newLeads}</span>
+      <span>new leads ({leads.size} total)</span>
+    </a>
+    <a class="panel stat" href="/admin/projects">
+      <span class="n">{published}</span>
+      <span>published projects ({projects.size} records)</span>
+    </a>
+    <a class="panel stat" href="/admin/services">
+      <span class="n">12</span>
+      <span>services (edit copy &amp; status)</span>
+    </a>
+  </div>
+
+  <h2>Recent activity</h2>
+  <table>
+    <thead><tr><th>When</th><th>Who</th><th>Action</th><th>Target</th></tr></thead>
+    <tbody>
+      {
+        auditSnap.docs.map((d) => {
+          const x = d.data();
+          return (
+            <tr>
+              <td>{String(x["at"]).slice(0, 16).replace("T", " ")}</td>
+              <td>{x["actor"]}</td>
+              <td>{x["action"]}</td>
+              <td>{x["target"]}</td>
+            </tr>
+          );
+        })
+      }
+      {auditSnap.empty && <tr><td colspan="4">No activity yet.</td></tr>}
+    </tbody>
+  </table>
+
+  <style>
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    .stat {
+      display: grid;
+      gap: 0.2rem;
+      text-decoration: none;
+      color: var(--dim);
+    }
+    .stat .n {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    @media (max-width: 760px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</AdminLayout>

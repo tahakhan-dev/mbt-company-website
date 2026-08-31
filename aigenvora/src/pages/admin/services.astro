@@ -1,0 +1,74 @@
+---
+import AdminLayout from "~/layouts/AdminLayout.astro";
+import { getServices } from "~/lib/content/queries";
+import { bust } from "~/lib/content/cache";
+
+// Admin always sees fresh state.
+bust("content:");
+const services = await getServices();
+const saved = Astro.url.searchParams.get("saved");
+const error = Astro.url.searchParams.get("error");
+---
+
+<AdminLayout title="Services">
+  <h1>Services</h1>
+  {saved && <p class="flash">Saved “{saved}”. The public site cache is refreshed.</p>}
+  {error && <p class="flash error">That change didn't validate — nothing was saved.</p>}
+  <p>
+    Copy overrides for the twelve service records. The order and slugs are fixed by the design
+    system; text and publication status are yours.
+  </p>
+
+  {
+    services.map((s) => (
+      <details class="panel" open={saved === s.slug}>
+        <summary>
+          <b>{String(s.order).padStart(2, "0")}</b> {s.name}
+          <span class={`pill ${s.status}`}>{s.status}</span>
+        </summary>
+        <form method="post" action="/api/admin/services">
+          <input type="hidden" name="slug" value={s.slug} />
+          <div class="grid2">
+            <label>
+              <span>Name</span>
+              <input name="name" value={s.name} required maxlength="200" />
+            </label>
+            <label>
+              <span>Status</span>
+              <select name="status">
+                <option value="published" selected={s.status === "published"}>published</option>
+                <option value="draft" selected={s.status === "draft"}>draft</option>
+                <option value="archived" selected={s.status === "archived"}>archived</option>
+              </select>
+            </label>
+          </div>
+          <label>
+            <span>Outcome line (the H1)</span>
+            <input name="outcome" value={s.outcome} required maxlength="300" />
+          </label>
+          <label>
+            <span>Intro paragraph</span>
+            <textarea name="description" rows="3" required maxlength="2000">{s.description}</textarea>
+          </label>
+          <button type="submit">Save</button>
+          <a class="btn ghost" href={`/services/${s.slug}`} target="_blank" rel="noopener">Preview →</a>
+        </form>
+      </details>
+    ))
+  }
+
+  <style>
+    details {
+      margin-bottom: 0.7rem;
+    }
+    summary {
+      cursor: pointer;
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+    }
+    form {
+      margin-top: 1rem;
+    }
+  </style>
+</AdminLayout>
