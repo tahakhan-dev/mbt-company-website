@@ -184,9 +184,10 @@ export function Act5Proof({
         <TrustMarquee logos={logos} label="Technology we ship with" />
       </div>
 
-      {/* Skewed seam into Act 6 (T28) */}
+      {/* Skewed seam into Act 6 (T28) — bleeds exactly the section padding
+          (a viewport-relative negative margin caused horizontal overflow) */}
       <div
-        className="mx-[-10vw] mt-20 h-14 -skew-y-2 border-y border-hairline bg-surface/50 md:mt-24"
+        className="-mx-5 mt-20 h-14 -skew-y-2 border-y border-hairline bg-surface/50 md:-mx-10 md:mt-24 lg:-mx-16"
         aria-hidden="true"
       />
     </section>

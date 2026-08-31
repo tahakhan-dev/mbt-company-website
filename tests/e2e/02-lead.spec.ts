@@ -58,7 +58,7 @@ test.describe("lead pipeline", () => {
     await page.getByLabel("About the project").fill("Gate B end-to-end lead submission test.");
     await page.waitForTimeout(2300);
     await page.getByRole("button", { name: "Send inquiry" }).click();
-    await expect(page.getByText("Got it — thank you.")).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByText("Got it. Thank you.")).toBeVisible({ timeout: 15_000 });
 
     const found = await fsQuery("e2e_leads", "email", EMAIL);
     expect(found.length).toBe(1);

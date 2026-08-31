@@ -36,6 +36,13 @@ test.describe("admin panel", () => {
     await expect(page.getByText("Created")).toBeVisible();
     await expect(page.getByText("E2E Author")).toBeVisible();
 
+    // The V2 home renders only the top TWO testimonials (act 5), so move the
+    // new one from the bottom (4th) into the top pair before asserting.
+    const item = page.getByRole("listitem").filter({ hasText: "E2E Author" });
+    await item.getByRole("button", { name: "Move up" }).click();
+    await item.getByRole("button", { name: "Move up" }).click();
+    await page.waitForTimeout(600);
+
     // Public site reflects immediately (tag revalidation)
     const pub = await page.context().newPage();
     await expect(async () => {
@@ -47,10 +54,14 @@ test.describe("admin panel", () => {
     await page.getByRole("listitem").filter({ hasText: "E2E Author" }).getByRole("button", { name: "Edit" }).click();
     await page.getByLabel("Author").fill("E2E Author Edited");
     await page.getByRole("button", { name: "Save", exact: true }).click();
-    await expect(page.getByText("Saved")).toBeVisible();
+    await expect(page.getByText("Saved", { exact: true })).toBeVisible();
     await expect(async () => {
       await pub.reload();
-      expect(await pub.locator("body").innerText()).toContain("E2E Author Edited");
+      // The act-5 attribution renders uppercase (text-transform reaches
+      // innerText), so compare case-insensitively.
+      expect((await pub.locator("body").innerText()).toLowerCase()).toContain(
+        "e2e author edited",
+      );
     }).toPass({ timeout: 15_000 });
 
     // Delete (confirm dialog names the item)
