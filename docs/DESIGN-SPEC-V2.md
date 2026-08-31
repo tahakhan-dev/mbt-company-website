@@ -110,7 +110,7 @@ route transitions own that API; two uses collide.) Persisted by next-themes
 | `--lift` | `#F2F1EC` | pressed/hover tint |
 | `--ink` | `#0B0E16` | 17.4:1 on base |
 | `--ink-mute` | `#55607A` | 6.6:1 |
-| `--ink-faint` | `#6B7690` | 4.9:1 (AA on #F7F7F4 and #FFF) |
+| `--ink-faint` | `#5F6A84` | 5.4:1 on #FFF, 5.0:1 on #F7F7F4 (AA, measured) |
 | `--hairline` | `rgba(11,14,22,.08)`; strong `.14` | |
 | aurora | cyan `#0E7490` / teal `#0F766E` / violet `#4F46E5` | 4.5:1+ as text on base |
 | `--cta` | `#B45309` (hover `#92400E`) | amber, 4.6:1 w/ white text |

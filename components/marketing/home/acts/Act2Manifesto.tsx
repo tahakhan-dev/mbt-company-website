@@ -49,14 +49,17 @@ export function Act2Manifesto() {
         );
       });
 
-      // Line illumination — all viewports except reduced motion; cheap
-      // (opacity-only) and the mobile narrative reads identically.
+      // Line illumination — all viewports except reduced motion. Two-layer
+      // words: the always-visible base is ink-faint (AA on both themes), the
+      // full-ink overlay's OPACITY scrubs 0→1. Every state a contrast auditor
+      // can sample passes; the animated property stays opacity-only.
+      // No-JS and reduced motion render the overlays at full opacity (lit).
       const lines = gsap.utils.toArray<HTMLElement>("[data-manifesto-line]", sectionRef.current);
       for (const line of lines) {
-        const words = line.querySelectorAll<HTMLElement>("[data-word]");
+        const lit = line.querySelectorAll<HTMLElement>("[data-word-lit]");
         gsap.fromTo(
-          words,
-          { opacity: 0.22 },
+          lit,
+          { opacity: 0 },
           {
             opacity: 1,
             stagger: 0.06,
@@ -93,17 +96,25 @@ export function Act2Manifesto() {
                 data-manifesto-line
                 className="max-w-[26ch] font-display text-manifesto font-medium text-ink"
               >
-                {line.map((word, j) =>
-                  typeof word === "string" ? (
-                    <span key={j} data-word className="inline">
-                      {word}{" "}
+                {line.map((word, j) => {
+                  const text = typeof word === "string" ? word : word.gradient;
+                  const litClass =
+                    typeof word === "string" ? "text-ink" : "text-gradient-aurora";
+                  return (
+                    <span key={j} className="inline">
+                      <span className="relative inline-block">
+                        <span className="text-ink-faint">{text}</span>
+                        <span
+                          data-word-lit
+                          aria-hidden="true"
+                          className={`absolute inset-0 ${litClass}`}
+                        >
+                          {text}
+                        </span>
+                      </span>{" "}
                     </span>
-                  ) : (
-                    <span key={j} data-word className="text-gradient-aurora inline">
-                      {word.gradient}
-                    </span>
-                  ),
-                )}
+                  );
+                })}
               </p>
             ))}
           </div>

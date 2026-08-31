@@ -24,7 +24,7 @@
   /* Ink */
   --ink: #0b0e16;
   --ink-muted: #55607a;
-  --ink-faint: #6b7690;
+  --ink-faint: #5f6a84; /* 5.4:1 on white, 5.0:1 on porcelain (AA with margin) */
 
   /* Aurora accents — deepened for light so they hold ≥4.5:1 as text */
   --aurora-cyan: #0e7490;

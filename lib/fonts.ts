@@ -1,5 +1,4 @@
 import localFont from "next/font/local";
-import { GeistMono } from "geist/font/mono";
 
 /**
  * Self-hosted brand typography (all OFL-licensed, latin subsets, variable).
@@ -32,7 +31,17 @@ export const sansItalicFace = localFont({
   preload: false,
 });
 
-/** Geist Mono ships its own variable (--font-geist-mono); we alias it below. */
-export const monoFace = GeistMono;
+/**
+ * Mono styles eyebrows/meta/numerals only — never the LCP headline — so it
+ * loads without a preload hint (the 70KB preload was the largest item on the
+ * throttled-mobile critical path; Gate D trace). Vendored from the geist
+ * package into app/fonts; keeps the same --font-geist-mono variable.
+ */
+export const monoFace = localFont({
+  src: [{ path: "../app/fonts/GeistMono-Variable.woff2", weight: "100 900", style: "normal" }],
+  variable: "--font-geist-mono",
+  display: "swap",
+  preload: false,
+});
 
 export const fontClassNames = `${displayFace.variable} ${sansFace.variable} ${sansItalicFace.variable} ${monoFace.variable}`;
