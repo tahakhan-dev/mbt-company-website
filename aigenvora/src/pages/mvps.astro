@@ -19,14 +19,51 @@ const faqJsonLd = {
   sceneMode="build"
 >
   <header class="hero container" data-chapter="mvp-hero">
-    <p class="mono-label" data-reveal>MVPs for startups</p>
-    <h1 data-reveal>Your MVP, built like it has to survive investors and users.</h1>
-    <p class="support" data-reveal>
+    <p class="mono-label" data-entrance style="--ent-delay:.1s">MVPs for startups · STATE: BLUEPRINT</p>
+    <h1 data-entrance style="--ent-delay:.25s">Your MVP, built like it has to survive investors and users.</h1>
+    <p class="support" data-entrance style="--ent-delay:.45s">
       It's the smallest product that proves your business. It is not a throwaway prototype, and
-      not a two-year platform in disguise.
+      not a two-year platform in disguise. Scroll — the engine builds it in front of you.
     </p>
-    <a class="cta cta--warm" href="/contact" data-reveal>Plan your MVP</a>
+    <a class="cta cta--warm" href="/contact" data-entrance style="--ent-delay:.6s">Plan your MVP</a>
   </header>
+
+  <!-- The build, staged: six acts pinned while the engine assembles -->
+  <section class="mvp-build" data-chapter="mvp-build">
+    <div class="pin">
+      <div class="container build-stage">
+        <p class="mono-label stage-eyebrow">The build, step by step</p>
+        <div class="beats" data-step-stage="mvp-build" data-step-count="6">
+          {
+            MVP_STEPS.map((s, i) => (
+              <div class="beat" data-step={i}>
+                <span class="act-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+                <h2><span class="mask"><span class="part">{s.name}</span></span></h2>
+                <p class="beat-body"><span class="mask"><span class="part">{s.body}</span></span></p>
+              </div>
+            ))
+          }
+        </div>
+        <div class="sys-progress mono-label" aria-hidden="true">
+          <span data-step-counter>01</span>/06
+          <span class="bar"><span class="fill" data-step-bar></span></span>
+        </div>
+        <p class="loop-line mono-label">The loop doesn't end at launch. That's the point.</p>
+      </div>
+    </div>
+    <!-- Mobile / reduced-motion: the same story as an editorial sequence -->
+    <ol class="build-index container">
+      {
+        MVP_STEPS.map((s, i) => (
+          <li>
+            <span class="mono-label">{String(i + 1).padStart(2, "0")}</span>
+            <h2>{s.name}</h2>
+            <p>{s.body}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
 
   <section class="who container" data-reveal>
     <p class="mono-label">Who this is for</p>
@@ -35,18 +72,6 @@ const faqJsonLd = {
       without hiring a CTO first.
     </p>
   </section>
-
-  <ol class="steps container" data-chapter="mvp-steps">
-    {
-      MVP_STEPS.map((s, i) => (
-        <li data-reveal>
-          <span class="mono-label">{String(i + 1).padStart(2, "0")}</span>
-          <h2>{s.name}</h2>
-          <p>{s.body}</p>
-        </li>
-      ))
-    }
-  </ol>
 
   <section class="includes container" data-reveal>
     <p class="mono-label">Every MVP ships with</p>
@@ -76,26 +101,224 @@ const faqJsonLd = {
   </section>
 
   <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} is:inline />
+
+  <script>
+    import { chapterProgress, measureChapters, type ChapterRange } from "~/engine/scroll";
+
+    function armMvpSteps(): () => void {
+      const stage = document.querySelector<HTMLElement>('[data-step-stage="mvp-build"]');
+      if (!stage) return () => {};
+      const count = Number(stage.dataset["stepCount"] ?? "6");
+      let chapters: ChapterRange[] = measureChapters();
+      const remeasure = () => {
+        chapters = measureChapters();
+      };
+      window.addEventListener("resize", remeasure, { passive: true });
+      let raf = 0;
+      const tick = (): void => {
+        raf = requestAnimationFrame(tick);
+        const range = chapters.find((c) => c.name === "mvp-build");
+        if (!range) return;
+        const p = chapterProgress(range, window.scrollY, window.innerHeight);
+        const band = Math.min(0.999, Math.max(0, (p - 0.12) / 0.76));
+        const active = Math.min(count - 1, Math.floor(band * count));
+        stage.querySelectorAll<HTMLElement>("[data-step]").forEach((el, i) => {
+          el.classList.toggle("is-active", i === active);
+          el.classList.toggle("is-past", i < active);
+        });
+        const section = stage.closest("section");
+        const counter = section?.querySelector<HTMLElement>("[data-step-counter]");
+        if (counter) counter.textContent = String(active + 1).padStart(2, "0");
+        const bar = section?.querySelector<HTMLElement>("[data-step-bar]");
+        if (bar) bar.style.width = `${((active + 1) / count) * 100}%`;
+      };
+      tick();
+      return () => {
+        cancelAnimationFrame(raf);
+        window.removeEventListener("resize", remeasure);
+      };
+    }
+
+    let disarm: (() => void) | null = null;
+    document.addEventListener("astro:page-load", () => {
+      disarm?.();
+      disarm = armMvpSteps();
+    });
+    document.addEventListener("astro:before-swap", () => {
+      disarm?.();
+      disarm = null;
+    });
+  </script>
 </PublicLayout>
 
 <style>
   .hero {
+    background: transparent;
+    color: #f2f3f8;
+    min-height: 95vh;
     padding-block: var(--space-stage) var(--space-4);
-    min-height: 90vh;
+    display: grid;
+    align-content: center;
+    justify-items: start;
+  }
+  :global(html[data-tier="C"]) .hero,
+  :global(html:not([data-tier])) .hero,
+  :global(html[data-engine="failed"]) .hero {
+    background: #06080f url("/media/hf06-blueprint.webp") center / cover no-repeat;
+  }
+  .hero .mono-label {
+    color: #9da4b3;
   }
   h1 {
     font-size: var(--text-display);
     margin-block: var(--space-2);
-    max-width: 18ch;
+    max-width: 17ch;
+    font-weight: 600;
   }
   .support {
-    color: var(--ink-2);
+    color: #b9bfce;
     font-size: var(--text-lg);
-    max-width: 44ch;
+    max-width: 46ch;
     margin-bottom: var(--space-3);
   }
 
-  .who {
+  .mvp-build {
+    height: 380vh;
+    /* The build story plays in the blueprint dark; scene renders the ground. */
+    color: #f2f3f8;
+  }
+  :global(html[data-tier="C"]) .mvp-build,
+  :global(html:not([data-tier])) .mvp-build,
+  :global(html[data-engine="failed"]) .mvp-build {
+    background: #06080f url("/media/hf06-blueprint.webp") center / cover no-repeat fixed;
+  }
+  .mvp-build .beat-body,
+  .mvp-build .stage-eyebrow,
+  .mvp-build .loop-line {
+    color: #9da4b3;
+  }
+  .mvp-build .act-num {
+    -webkit-text-stroke-color: rgba(242, 243, 248, 0.22);
+  }
+  .pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+  }
+  .build-stage {
+    position: relative;
+    height: 100%;
+  }
+  .stage-eyebrow {
+    position: absolute;
+    top: 12vh;
+    left: var(--gutter);
+  }
+  .beats {
+    position: absolute;
+    inset: 0;
+  }
+  .beat {
+    position: absolute;
+    left: var(--gutter);
+    top: 56%;
+    transform: translateY(-50%);
+    max-width: min(38vw, 460px);
+  }
+  .beat::before {
+    content: "";
+    position: absolute;
+    inset: -1.4rem -2rem;
+    background: radial-gradient(ellipse at 32% 50%, rgba(4, 7, 14, 0.82), rgba(4, 7, 14, 0) 76%);
+    z-index: -1;
+    pointer-events: none;
+  }
+  .act-num {
+    position: absolute;
+    top: -14vh;
+    left: -0.04em;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(4.5rem, 12vh, 8rem);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--hairline);
+    opacity: 0;
+    transform: translateY(0.25em);
+    transition:
+      opacity 500ms var(--ease-out-fast),
+      transform 500ms var(--ease-out-fast);
+  }
+  .beat h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.6rem, 3vw, 2.6rem);
+    letter-spacing: var(--tracking-display);
+    margin: 0 0 0.5rem;
+  }
+  .mask {
+    display: block;
+    overflow: hidden;
+  }
+  .part {
+    display: block;
+    transform: translateY(110%);
+    transition: transform 520ms var(--ease-mech);
+  }
+  .beat-body {
+    color: var(--ink-2);
+    max-width: 40ch;
+    margin: 0;
+  }
+  .beat-body .part {
+    transition-delay: 70ms;
+  }
+  .beat.is-active .part {
+    transform: translateY(0);
+  }
+  .beat.is-active .act-num {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .beat.is-past .part {
+    transform: translateY(-110%);
+  }
+  .sys-progress {
+    position: absolute;
+    bottom: 10vh;
+    left: var(--gutter);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .bar {
+    display: inline-block;
+    width: 140px;
+    height: 1px;
+    background: var(--hairline);
+    position: relative;
+  }
+  .fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    background: var(--accent-warm);
+    width: 0;
+    transition: width 400ms var(--ease-mech);
+  }
+  .loop-line {
+    position: absolute;
+    bottom: 10vh;
+    right: var(--gutter);
+    color: var(--ink-2);
+  }
+  .build-index {
+    display: none;
+  }
+
+  .who,
+  .includes {
     padding-block: var(--space-4);
     border-top: 1px solid var(--hairline-soft);
   }
@@ -106,36 +329,6 @@ const faqJsonLd = {
     letter-spacing: var(--tracking-display);
     max-width: 30ch;
     margin-top: var(--space-2);
-  }
-
-  .steps {
-    list-style: none;
-    margin: 0;
-    padding-block: var(--space-4);
-    display: grid;
-    gap: var(--space-4);
-    max-width: 760px;
-  }
-  .steps li {
-    display: grid;
-    grid-template-columns: 3rem 1fr;
-    gap: 0 var(--space-2);
-  }
-  .steps h2 {
-    font-size: var(--text-xl);
-  }
-  .steps p {
-    grid-column: 2;
-    color: var(--ink-2);
-    margin-top: var(--space-1);
-  }
-  .steps li:nth-child(even) {
-    margin-left: clamp(0px, 10vw, 180px);
-  }
-
-  .includes {
-    padding-block: var(--space-3);
-    border-top: 1px solid var(--hairline-soft);
   }
   .includes ul {
     list-style: none;
@@ -184,9 +377,31 @@ const faqJsonLd = {
     margin-bottom: var(--space-3);
   }
 
-  @media (max-width: 700px) {
-    .steps li:nth-child(even) {
-      margin-left: 0;
+  @media (max-width: 860px), (prefers-reduced-motion: reduce) {
+    .mvp-build {
+      height: auto;
+      padding-block: var(--space-4);
+    }
+    .mvp-build .pin {
+      display: none;
+    }
+    .build-index {
+      display: grid;
+      gap: var(--space-3);
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .build-index li {
+      display: grid;
+      gap: 0.3rem;
+    }
+    .build-index h2 {
+      font-size: var(--text-xl);
+    }
+    .build-index p {
+      color: var(--ink-2);
+      max-width: 50ch;
     }
     .includes ul {
       grid-template-columns: 1fr;

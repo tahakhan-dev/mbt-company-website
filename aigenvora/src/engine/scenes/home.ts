@@ -17,6 +17,7 @@ import {
 } from "three";
 import type { MasterState, SceneContext, SceneModule } from "../types";
 import { buildEngine, MODULE_ACCENTS, type EngineModel } from "../engine-model";
+import { buildStreamField, type StreamField } from "../particles";
 import { clearColor } from "../color";
 import { damp, easeMech, track, track3 } from "../timeline";
 
@@ -42,8 +43,14 @@ const cameraArrival = track3([
 ]);
 
 const rigXTrack = track([
-  { t: 0.0, v: 2.5 },
+  { t: 0.0, v: 3.0 },
   { t: 0.45, v: 0, ease: easeMech },
+]);
+
+/** The engine enters small and grows as it takes the chamber. */
+const rigScaleTrack = track([
+  { t: 0.0, v: 0.58 },
+  { t: 0.5, v: 0.72, ease: easeMech },
 ]);
 
 /** Chamber alpha over the arrival+problem phase; falls as the studio arrives. */
@@ -76,6 +83,7 @@ export class HomeScene implements SceneModule {
   private seedMat!: MeshPhysicalMaterial;
   private orbitCurrent = 0;
   private moduleScales = new Array(12).fill(1) as number[];
+  private stream!: StreamField;
   private towerPos = new Vector3();
   private accentColor = new Color();
   private readoutModules: HTMLElement | null = null;
@@ -95,6 +103,8 @@ export class HomeScene implements SceneModule {
     this.rig.add(this.engine.root);
     this.rig.scale.setScalar(0.72);
     ctx.scene.add(this.rig);
+    this.stream = buildStreamField(ctx.capabilities.tier === "A" ? 1600 : 650);
+    this.rig.add(this.stream.points);
     this.voidColor = clearColor("#030407", ctx.capabilities.tier === "A");
     this.warmColor = clearColor("#160e05", ctx.capabilities.tier === "A");
 
@@ -125,6 +135,7 @@ export class HomeScene implements SceneModule {
 
     this.loadPlate("/media/hf01-chamber.webp", -9);
     this.loadPlate("/media/hf02-resolution.webp", -10);
+    this.loadPlate("/media/hf05-split.webp", -9.5);
 
     this.readoutModules = document.querySelector("[data-readout-modules]");
     this.readoutState = document.querySelector("[data-readout-state]");
@@ -223,6 +234,12 @@ export class HomeScene implements SceneModule {
       const focusBoost = atlasOn && index === activeIdx ? 1 : 0;
       mod.conduitUniforms.uActivation.value = Math.max(activation * 0.35, focusBoost);
       mod.conduitUniforms.uTime.value = t;
+      // Waist channel: glows once seated, burns when it's the act's module.
+      mod.channelUniforms.uActivation.value = Math.max(activation * 0.7, focusBoost);
+      mod.channelUniforms.uTime.value = t * 0.7;
+      // Gyro rings precess slowly — the machine reads alive even at rest.
+      mod.gyro.rotation.z = t * (0.15 + index * 0.012);
+      mod.gyro.rotation.x = Math.sin(index * 2.3) * 0.9 + Math.sin(t * 0.11 + index) * 0.12;
     }
 
     // ---- Ch.3: orbit steps; each act gets a dolly-in pulse and its accent ----
@@ -236,7 +253,11 @@ export class HomeScene implements SceneModule {
     this.seed.rotation.x = t * 0.17;
 
     // ---- Lighting arc across the page ----
-    const chamber = chamberRise(pIntro) * (1 - MathUtils.smoothstep(p3, 0, 0.25));
+    // Chamber darkness may never lag the copy: the problem chapter's own
+    // progress forces it in even on tall viewports.
+    const chamber =
+      Math.max(chamberRise(pIntro), MathUtils.smoothstep(p2, 0.04, 0.16)) *
+      (1 - MathUtils.smoothstep(p3, 0, 0.25));
     const splitDark = MathUtils.smoothstep(p5, 0.05, 0.35) * (1 - MathUtils.smoothstep(p5, 0.75, 1));
     const human = MathUtils.smoothstep(p8, 0.1, 0.6);
     const resolution = MathUtils.smoothstep(p9, 0.15, 0.7);
@@ -271,6 +292,15 @@ export class HomeScene implements SceneModule {
       this.portal.intensity = proofGlow * 2.2;
     }
 
+    // ---- Signal stream: whispers on paper, burns in the dark ----
+    this.stream.uniforms.uTime.value = t;
+    // Paper stays clean; the stream exists only where darkness or focus does.
+    this.stream.uniforms.uEnergy.value = MathUtils.clamp(
+      chamber * 0.9 + splitDark * 0.7 + resolution * 0.8 + (atlasOn ? 0.12 : 0),
+      0,
+      1,
+    );
+
     // ---- Rendered ground: chamber void / split dark / warm resolution ----
     const groundAlpha = Math.max(chamber, splitDark * 0.85, resolution);
     this.groundColor.copy(resolution > Math.max(chamber, splitDark) ? this.warmColor : this.voidColor);
@@ -279,7 +309,7 @@ export class HomeScene implements SceneModule {
     // ---- Plates ----
     const plate1 = this.plates[0];
     if (plate1?.mat && plate1.mesh) {
-      plate1.mat.opacity = Math.max(chamber, splitDark * 0.6) * 0.55;
+      plate1.mat.opacity = chamber * 0.55;
       plate1.mesh.position.x = Math.sin(t * 0.02) * 0.5 + state.pointer.x * -0.4;
       plate1.mesh.position.y = Math.cos(t * 0.016) * 0.25 + state.pointer.y * 0.25;
     }
@@ -287,6 +317,12 @@ export class HomeScene implements SceneModule {
     if (plate2?.mat && plate2.mesh) {
       plate2.mat.opacity = resolution * 0.6;
       plate2.mesh.position.x = Math.sin(t * 0.013) * 0.35 + state.pointer.x * -0.3;
+    }
+    // HF-05: the transformation's split light — cold pools left, one warm source right.
+    const plate3 = this.plates[2];
+    if (plate3?.mat && plate3.mesh) {
+      plate3.mat.opacity = splitDark * 0.7;
+      plate3.mesh.position.x = Math.sin(t * 0.017) * 0.4 + state.pointer.x * -0.35;
     }
 
     // ---- Rig placement ----
@@ -296,7 +332,7 @@ export class HomeScene implements SceneModule {
     this.rig.position.x = rigXTrack(pIntro) * (portrait ? 0.1 : 1);
     // People: the engine recedes upward and shrinks; Resolution: settles back.
     const recede = human * (1 - resolution);
-    this.rig.scale.setScalar(0.72 * (1 - recede * 0.45) * (1 - resolution * 0.12));
+    this.rig.scale.setScalar(rigScaleTrack(pIntro) * (1 - recede * 0.45) * (1 - resolution * 0.12));
     this.rig.position.y = recede * 1.6 - resolution * 0.2;
     this.rig.rotation.y = Math.sin(t * 0.05) * 0.03 + this.orbitCurrent;
 
@@ -327,7 +363,7 @@ export class HomeScene implements SceneModule {
     // engine composition reads right-of-center during those chapters.
     const buildFocus = MathUtils.smoothstep(p4, 0.05, 0.2) * (1 - ringReturn);
     const rightBias = Math.max(inspect, buildFocus);
-    this.lookTarget.x = MathUtils.lerp(this.lookTarget.x, -0.95, rightBias);
+    this.lookTarget.x = MathUtils.lerp(this.lookTarget.x, -1.15, rightBias);
     this.lookTarget.y = MathUtils.lerp(this.lookTarget.y, -0.1, rightBias);
     cam.lookAt(this.lookTarget);
     cam.rotation.x += state.pointer.y * 0.02;
@@ -376,6 +412,7 @@ export class HomeScene implements SceneModule {
     }
     this.seedGeo.dispose();
     this.seedMat.dispose();
+    this.stream.dispose();
     this.engine.dispose();
     this.key.dispose();
     this.fill.dispose();

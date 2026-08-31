@@ -77,3 +77,12 @@ transition stays code-native GLSL. HF-04 unnecessary — mobile 9:16 crops deriv
 sharp. Originals archived at docs/evidence/v3/higgsfield/ (t1, t2, finals); optimized web
 derivatives in aigenvora/public/media/. Delivery via Cloudinary deferred to Phase 5 media pass
 (assets are local-first for the prototype; no hotlinking of MCP URLs anywhere in the app).
+
+## Round 2 (owner directive 2026-09-01: "use Higgsfield for the animation")
+
+| # | Date | Shot | Model/settings | Expected | Pre-balance | Job ID | Actual | Post | Decision |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 5 | 2026-09-01 | HF-05 — Ch.5 transformation plate | nano_banana_pro, 21:9 | 2.00 | 5.76 | b0dad992-264a-4037-a21d-ef9f99ee4948 | 2.00 | 3.76 | **Approved** — split cold-pools/warm-source over machined floor; wired into home Ch.5 (scene plate + Tier C bg). Review clean (no text/logos/people). |
+| 6 | 2026-09-01 | HF-06 — MVP blueprint plate | nano_banana_pro, 21:9 | 2.00 | 3.76 | 0d0e8ab7-204f-40e3-88e1-02bae80ccaeb | 2.00 | 1.76 | **Approved** — blueprint haze, faint linework (nothing readable); wired into MVP hero/build (scene plate + Tier C bg). Review clean. |
+
+**Balance re-verified after round 2: 1.76 credits remaining** (8.24/10 spent total across 2 tests + 4 approved finals). Originals at docs/evidence/v3/higgsfield/hf05-final.png, hf06-final.png; web derivatives hf05-split.webp, hf06-blueprint.webp.

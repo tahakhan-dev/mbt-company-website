@@ -3,10 +3,12 @@ import {
   Clock,
   HalfFloatType,
   PerspectiveCamera,
+  PMREMGenerator,
   Scene,
   SRGBColorSpace,
   WebGLRenderer,
 } from "three";
+import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment.js";
 import { EffectComposer, EffectPass, RenderPass, SMAAEffect } from "postprocessing";
 import type { Capabilities, MasterState, SceneModule } from "./types";
 import { chapterProgress, measureChapters, pageProgress, type ChapterRange } from "./scroll";
@@ -65,6 +67,12 @@ export class EngineRuntime {
     this.renderer.setClearColor(0x000000, 0);
 
     this.camera = new PerspectiveCamera(38, 1, 0.1, 60);
+
+    // Studio environment map: metals and ceramics read as machined surfaces
+    // instead of flat-lit plastic. Cheap (tiny prefiltered cube, generated once).
+    const pmrem = new PMREMGenerator(this.renderer);
+    this.scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    pmrem.dispose();
 
     if (capabilities.tier === "A") {
       // HalfFloat buffers keep the r152+ color pipeline linear until the final

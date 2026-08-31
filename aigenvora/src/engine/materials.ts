@@ -21,6 +21,7 @@ export function ceramicMaterial(): MeshStandardMaterial {
     roughness: 0.38,
     metalness: 0.02,
   });
+  mat.envMapIntensity = 0.55;
   mat.onBeforeCompile = (shader) => {
     // Soft fresnel sheen so ceramic edges catch the key light like glaze.
     shader.fragmentShader = shader.fragmentShader.replace(
@@ -39,11 +40,13 @@ export function ceramicMaterial(): MeshStandardMaterial {
 }
 
 export function titaniumMaterial(): MeshStandardMaterial {
-  return new MeshStandardMaterial({
-    color: new Color("#262a33"),
-    roughness: 0.42,
-    metalness: 0.92,
+  const mat = new MeshStandardMaterial({
+    color: new Color("#2b303c"),
+    roughness: 0.34,
+    metalness: 0.95,
   });
+  mat.envMapIntensity = 1.15;
+  return mat;
 }
 
 export function glassMaterial(_tierA: boolean): MeshPhysicalMaterial {
@@ -91,8 +94,8 @@ export function conduitMaterial(accent: string): ShaderMaterial {
       uniform vec3 uAccent;
       varying float vAlong;
       void main() {
-        // Dark rubber conduit base.
-        vec3 base = vec3(0.05, 0.055, 0.07);
+        // Graphite conduit base — visible but never scribble-black on paper.
+        vec3 base = vec3(0.16, 0.17, 0.2);
         // Activation front sweeps from module (uv 0) toward the core (uv 1).
         float front = smoothstep(vAlong - 0.08, vAlong + 0.02, uActivation);
         // Travelling pulse once the conduit is live.

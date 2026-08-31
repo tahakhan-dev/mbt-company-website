@@ -53,6 +53,7 @@ export class ServiceDetailScene implements SceneModule {
       mod.group.position.copy(mod.aligned);
       mod.group.rotation.set(0, (mod.index / 12) * Math.PI * 2, 0);
       mod.conduitUniforms.uActivation.value = mod.index === this.focusIndex ? 1 : 0.12;
+      mod.channelUniforms.uActivation.value = mod.index === this.focusIndex ? 1 : 0.2;
     }
 
     const focused = this.engine.modules[this.focusIndex];
@@ -86,9 +87,14 @@ export class ServiceDetailScene implements SceneModule {
     if (focused) {
       focused.group.rotation.y += Math.sin(t * 0.6) * 0.0006;
       focused.conduitUniforms.uTime.value = t;
+      focused.channelUniforms.uTime.value = t;
     }
     for (const mod of this.engine.modules) {
-      if (mod.index !== this.focusIndex) mod.conduitUniforms.uTime.value = t * 0.3;
+      if (mod.index !== this.focusIndex) {
+        mod.conduitUniforms.uTime.value = t * 0.3;
+        mod.channelUniforms.uTime.value = t * 0.3;
+      }
+      mod.gyro.rotation.z = t * (0.15 + mod.index * 0.012);
     }
 
     // Camera locks outside the focused module and closes in on scroll; the

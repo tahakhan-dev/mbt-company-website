@@ -390,20 +390,19 @@ const transformPairs = [
     align-items: start;
     min-height: 78vh;
   }
+  .grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
   h1 {
-    font-size: clamp(2.4rem, 5.4vw, 4.9rem);
+    font-size: clamp(2.4rem, 4.6vw, 4.4rem);
     margin-block: var(--space-2);
     font-weight: 600;
-    line-height: 1.02;
+    line-height: 1.04;
+    max-width: 15ch;
   }
   h1 span {
-    display: block;
-    white-space: nowrap;
-  }
-  @media (max-width: 860px) {
-    h1 span {
-      white-space: normal;
-    }
+    display: inline-block;
+    margin-right: 0.24em;
   }
   .support {
     color: var(--ink-2);
@@ -694,7 +693,7 @@ const transformPairs = [
   :global(html[data-tier="C"]) .ch-transform,
   :global(html:not([data-tier])) .ch-transform,
   :global(html[data-engine="failed"]) .ch-transform {
-    background: #090b10;
+    background: #090b10 url("/media/hf05-split.webp") center / cover no-repeat fixed;
   }
   .ch-transform h2 {
     max-width: 26ch;
@@ -702,24 +701,48 @@ const transformPairs = [
   }
   .pairs {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-2) var(--space-4);
+    gap: var(--space-2);
     margin: 0 0 var(--space-3);
-    max-width: 860px;
+    max-width: 900px;
   }
   .pair {
     display: grid;
-    grid-template-columns: 1fr 1.4fr;
+    grid-template-columns: minmax(0, 1fr) 2rem minmax(0, 1.5fr);
+    align-items: baseline;
     gap: var(--space-2);
     border-top: 1px solid rgba(242, 243, 248, 0.12);
-    padding-top: 0.6rem;
+    padding-top: 0.7rem;
   }
   .pair dt {
-    color: #9da4b3;
+    color: #6f7686;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.1rem, 1.9vw, 1.6rem);
+    letter-spacing: var(--tracking-display);
+    text-decoration: line-through;
+    text-decoration-color: rgba(255, 122, 107, 0.7);
+    text-decoration-thickness: 2px;
+  }
+  .pair::after {
+    content: "";
   }
   .pair dd {
     margin: 0;
     color: #d2ff65;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.1rem, 1.9vw, 1.6rem);
+    letter-spacing: var(--tracking-display);
+    grid-column: 3;
+  }
+  .pair dt::after {
+    content: "";
+  }
+  .pair > dt + dd::before {
+    content: "→ ";
+    color: #9da4b3;
+    font-family: var(--font-mono);
+    font-size: 0.9em;
   }
 
   /* ---- Ch.6 / 7 / 8 ---- */

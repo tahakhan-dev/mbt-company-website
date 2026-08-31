@@ -13,6 +13,7 @@ import {
 } from "three";
 import type { MasterState, SceneContext, SceneModule } from "../types";
 import { buildEngine, type EngineModel } from "../engine-model";
+import { buildStreamField, type StreamField } from "../particles";
 import { clearColor } from "../color";
 
 type Mode = "atlas" | "dormant" | "build" | "decompose" | "rest";
@@ -36,6 +37,7 @@ export class AmbientScene implements SceneModule {
   private ambient!: AmbientLight;
   private ctx!: SceneContext;
   private mode: Mode = "dormant";
+  private stream!: StreamField;
   private ground!: Color;
   private warm!: Color;
   private plate: Mesh | null = null;
@@ -52,6 +54,8 @@ export class AmbientScene implements SceneModule {
     this.rig.add(this.engine.root);
     this.rig.scale.setScalar(0.72);
     ctx.scene.add(this.rig);
+    this.stream = buildStreamField(ctx.capabilities.tier === "A" ? 1200 : 500);
+    this.rig.add(this.stream.points);
     this.ground = clearColor("#030407", ctx.capabilities.tier === "A");
     this.warm = clearColor("#160e05", ctx.capabilities.tier === "A");
 
@@ -76,6 +80,23 @@ export class AmbientScene implements SceneModule {
     if (this.mode === "dormant") {
       this.rig.position.set(2.6, 0.4, -1.5);
       this.rig.scale.setScalar(0.45);
+    }
+    if (this.mode === "build") {
+      new TextureLoader().load("/media/hf06-blueprint.webp", (tex) => {
+        tex.colorSpace = SRGBColorSpace;
+        this.plateTex = tex;
+        this.plateGeo = new PlaneGeometry(32, 13.5);
+        this.plateMat = new MeshBasicMaterial({
+          map: tex,
+          transparent: true,
+          opacity: 0.6,
+          depthWrite: false,
+          toneMapped: false,
+        });
+        this.plate = new Mesh(this.plateGeo, this.plateMat);
+        this.plate.position.set(0, 0, -10);
+        this.ctx.scene.add(this.plate);
+      });
     }
     if (this.mode === "rest") {
       new TextureLoader().load("/media/hf02-resolution.webp", (tex) => {
@@ -105,6 +126,24 @@ export class AmbientScene implements SceneModule {
     const portrait = state.viewport.w < 700;
     const cam = this.ctx.camera;
 
+    this.stream.uniforms.uTime.value = t;
+    const energyByMode: Record<Mode, number> = {
+      atlas: 0.55,
+      dormant: 0.25,
+      build: 0.25 + MathUtils.smoothstep(p, 0.05, 0.8) * 0.6,
+      decompose: 0.8 * (1 - MathUtils.smoothstep(p, 0.55, 0.9)) + 0.2,
+      rest: 0.7,
+    };
+    this.stream.uniforms.uEnergy.value = energyByMode[this.mode];
+    for (const mod of this.engine.modules) {
+      mod.gyro.rotation.z = t * (0.15 + mod.index * 0.012);
+      mod.channelUniforms.uTime.value = t * 0.7;
+      mod.channelUniforms.uActivation.value = Math.max(
+        mod.conduitUniforms.uActivation.value,
+        0.3,
+      );
+    }
+
     switch (this.mode) {
       case "atlas": {
         this.rig.rotation.y = t * 0.04 + p * Math.PI * 2;
@@ -119,6 +158,10 @@ export class AmbientScene implements SceneModule {
       }
       case "build": {
         const assemble = MathUtils.smoothstep(p, 0.05, 0.8);
+        // Blueprint dark holds through the hero and the pinned build story,
+        // then hands back to paper for the reading sections.
+        this.ctx.renderer.setClearColor(this.ground, 1 - MathUtils.smoothstep(p, 0.68, 0.8));
+        if (this.plateMat) this.plateMat.opacity = 0.6 * (1 - MathUtils.smoothstep(p, 0.6, 0.78));
         for (const mod of this.engine.modules) {
           const from = mod.scattered.clone().multiplyScalar(1.6);
           mod.group.position.lerpVectors(from, mod.aligned, assemble);
@@ -178,6 +221,7 @@ export class AmbientScene implements SceneModule {
     this.plateGeo?.dispose();
     this.plateMat?.dispose();
     this.plateTex?.dispose();
+    this.stream.dispose();
     this.engine.dispose();
     this.key.dispose();
     this.ambient.dispose();
