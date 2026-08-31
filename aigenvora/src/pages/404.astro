@@ -1,0 +1,31 @@
+---
+import PublicLayout from "~/layouts/PublicLayout.astro";
+import Poster from "~/components/public/Poster.astro";
+---
+
+<PublicLayout title="Not Found" description="This page drifted off the rails.">
+  <section class="lost container">
+    <p class="mono-label">404</p>
+    <h1>This module drifted off the rails.</h1>
+    <div class="art"><Poster state="unresolved" label="One module adrift" /></div>
+    <a class="cta" href="/">Back to the system →</a>
+  </section>
+</PublicLayout>
+
+<style>
+  .lost {
+    min-height: 70vh;
+    padding-block: var(--space-5);
+    display: grid;
+    gap: var(--space-3);
+    align-content: center;
+    justify-items: start;
+  }
+  h1 {
+    font-size: var(--text-display);
+    max-width: 14ch;
+  }
+  .art {
+    max-width: 420px;
+  }
+</style>

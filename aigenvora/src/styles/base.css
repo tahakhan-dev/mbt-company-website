@@ -1,0 +1,160 @@
+/* Base layer: fonts, reset, a11y primitives, shared editorial atoms. */
+
+@layer base {
+  @font-face {
+    font-family: "General Sans";
+    src: url("/fonts/GeneralSans-Variable.woff2") format("woff2");
+    font-weight: 200 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "General Sans";
+    src: url("/fonts/GeneralSans-VariableItalic.woff2") format("woff2");
+    font-weight: 200 700;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "IBM Plex Mono";
+    src: url("/fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2");
+    font-weight: 400;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: "IBM Plex Mono";
+    src: url("/fonts/ibm-plex-mono-latin-500-normal.woff2") format("woff2");
+    font-weight: 500;
+    font-display: swap;
+  }
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    line-height: var(--leading-body);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip; /* page-level horizontal scroll is a gate failure */
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: var(--tracking-display);
+    line-height: var(--leading-tight);
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  p {
+    margin: 0;
+    max-width: 62ch;
+  }
+
+  img,
+  video,
+  canvas {
+    max-width: 100%;
+    display: block;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 100;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 0.6rem 1rem;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+  }
+  .skip-link:focus {
+    left: 0;
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* ---- Editorial atoms ---- */
+  .container {
+    max-width: var(--grid-max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+
+  .cta {
+    display: inline-block;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-base);
+    text-decoration: none;
+    padding: 0.85rem 1.7rem;
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    background: transparent;
+    transition: transform var(--dur-micro) var(--ease-out-fast);
+  }
+  .cta:active {
+    transform: scale(0.97);
+  }
+  .cta--warm {
+    background: var(--accent-warm);
+    border-color: transparent;
+    color: #090b10;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

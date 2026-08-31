@@ -1,0 +1,75 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer" data-scene="carbon">
+  <div class="container inner">
+    <div class="pitch">
+      <p class="mono-label">Next step</p>
+      <p class="line">Tell us what's slow, stuck or still an idea.</p>
+      <a class="cta cta--warm" href="/contact">Build with Aigenvora</a>
+    </div>
+    <nav aria-label="Footer">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/services/ai-agents-automation">Services</a></li>
+        <li><a href="/work/signal-desk">Work</a></li>
+        <li><a href="/mvps">MVPs for Startups</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </nav>
+    <p class="legal mono-label">© {year} Aigenvora · AI-powered software development</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--paper);
+    color: var(--ink);
+    border-top: 1px solid var(--hairline);
+    margin-top: var(--space-5);
+  }
+  .inner {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: var(--space-3);
+    padding-block: var(--space-4);
+  }
+  .line {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 600;
+    letter-spacing: var(--tracking-display);
+    margin-block: var(--space-2);
+    max-width: 24ch;
+  }
+  nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+  nav a {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+  nav a:hover {
+    color: var(--ink);
+  }
+  .legal {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--hairline-soft);
+    padding-top: var(--space-2);
+  }
+  @media (max-width: 720px) {
+    .inner {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

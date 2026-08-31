@@ -1,0 +1,128 @@
+---
+import PublicLayout from "~/layouts/PublicLayout.astro";
+import Poster from "~/components/public/Poster.astro";
+
+/**
+ * GATE B PROTOTYPE — sample narrative, clearly labeled. No client claim is
+ * made or implied; real case studies publish only through the verification
+ * gates (ownershipVerified + clientPermission) after Phase 7.
+ */
+---
+
+<PublicLayout
+  title="Signal Desk — Case Study Prototype"
+  description="Prototype case-study experience for the Aigenvora visual system. Sample narrative — not a client publication."
+  accent="#7957ff"
+>
+  <article>
+    <header class="opening" data-chapter="case-opening" data-scene="dark">
+      <div class="container">
+        <p class="mono-label banner" data-reveal>
+          Prototype · sample narrative — no client claim. Real case studies publish after owner
+          verification.
+        </p>
+        <p class="mono-label" data-reveal>Case study · Operations software · 2026</p>
+        <h1 data-reveal>Signal Desk</h1>
+        <p class="outcome" data-reveal>
+          A message-routing operations desk that reads, sorts and answers so a five-person team
+          stops living in their inbox.
+        </p>
+      </div>
+    </header>
+
+    <section class="chapter container" data-chapter="case-challenge">
+      <p class="mono-label" data-reveal>01 · Challenge</p>
+      <p class="body-lg" data-reveal>
+        Six channels, one shared inbox, no priority signal. Every request — urgent or noise —
+        cost a human read. The team answered fast by working late, not by working assisted.
+      </p>
+    </section>
+
+    <section class="chapter container" data-chapter="case-system">
+      <p class="mono-label" data-reveal>02 · The system</p>
+      <p class="body-lg" data-reveal>
+        A routing spine reads every inbound message, classifies intent, drafts the routine half
+        and escalates the rest with context attached. People approve; the system remembers what
+        they changed.
+      </p>
+      <div class="media" data-reveal>
+        <Poster state="system" label="System diagram — routing spine connecting six channels" />
+      </div>
+    </section>
+
+    <section class="chapter container" data-chapter="case-outcome">
+      <p class="mono-label" data-reveal>03 · Outcome</p>
+      <p class="body-lg" data-reveal>
+        The routine half of the desk runs itself with a person on the approval lane. (In a real
+        case study this section carries verified, sourced metrics — or none.)
+      </p>
+    </section>
+
+    <nav class="next container" aria-label="Next project" data-chapter="case-next">
+      <p class="mono-label">Next</p>
+      <a class="next-link" href="/">Back to the system →</a>
+    </nav>
+  </article>
+</PublicLayout>
+
+<style>
+  .opening {
+    /* Project-colored cinematic open: engine renders the approach; this is the fallback ground. */
+    background: transparent;
+    min-height: 130vh;
+    display: flex;
+    align-items: flex-end;
+    padding-block: var(--space-stage);
+  }
+  :global(html[data-tier="C"]) .opening,
+  :global(html:not([data-tier])) .opening,
+  :global(html[data-engine="failed"]) .opening {
+    background: #0a0714;
+  }
+  .banner {
+    border: 1px solid var(--hairline);
+    display: inline-block;
+    padding: 0.5rem 0.8rem;
+    margin-bottom: var(--space-4);
+  }
+  h1 {
+    font-size: var(--text-mega);
+    margin-block: var(--space-2);
+  }
+  .outcome {
+    font-size: var(--text-lg);
+    color: var(--ink-2);
+    max-width: 44ch;
+  }
+
+  .chapter {
+    padding-block: var(--space-4);
+  }
+  .body-lg {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 500;
+    letter-spacing: var(--tracking-display);
+    max-width: 34ch;
+    margin-top: var(--space-2);
+  }
+  .chapter:nth-of-type(odd) .body-lg {
+    margin-left: clamp(0px, 12vw, 220px);
+  }
+  .media {
+    margin-top: var(--space-3);
+    max-width: 720px;
+  }
+
+  .next {
+    padding-block: var(--space-5);
+    border-top: 1px solid var(--hairline-soft);
+  }
+  .next-link {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    font-weight: 600;
+    letter-spacing: var(--tracking-display);
+    text-decoration: none;
+  }
+</style>

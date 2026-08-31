@@ -1,0 +1,164 @@
+---
+import PublicLayout from "~/layouts/PublicLayout.astro";
+import FrameStage from "~/components/public/FrameStage.astro";
+import Poster from "~/components/public/Poster.astro";
+---
+
+<PublicLayout
+  title="AI-Powered Software Development"
+  description="Aigenvora designs, builds and operates AI-powered software: agents, products, data systems and custom platforms built by one senior team."
+>
+  <!-- Chapter 1 — Arrival (state: Unresolved) -->
+  <section class="ch-arrival" data-chapter="arrival">
+    <div class="container grid">
+      <div class="copy">
+        <p class="mono-label" data-reveal>AI-powered software development</p>
+        <h1 data-reveal>We turn ambitious ideas and broken workflows into software that moves.</h1>
+        <p class="support" data-reveal>
+          AI agents, products, data systems and custom platforms — built by one senior team.
+        </p>
+        <div class="actions" data-reveal>
+          <a class="cta cta--warm" href="/contact">Build with Aigenvora</a>
+          <a class="cta" href="/work/signal-desk">Explore our work</a>
+        </div>
+      </div>
+      <div class="stage">
+        <FrameStage tl="AIGENVORA ENGINE" tr="STATE: UNRESOLVED" bl="MODULES 00/12" br="FIG. 01">
+          <Poster state="unresolved" label="The Aigenvora Engine — twelve modules, unresolved" />
+        </FrameStage>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chapter 2 — The problem (chamber) -->
+  <section class="ch-problem" data-chapter="problem" data-scene="dark">
+    <div class="container">
+      <p class="mono-label chapter-mark" data-reveal>02 · The problem</p>
+      <div class="manifesto">
+        <p class="line" data-reveal>
+          Most companies don't have a software problem. They have twelve tools that refuse to talk.
+        </p>
+        <p class="line" data-reveal>People spend their days moving data that should move itself.</p>
+        <p class="line" data-reveal>
+          That gap between systems is where margins, hours and patience go to die.
+        </p>
+      </div>
+      <Poster state="unresolved" label="Disconnected signals between misaligned modules" />
+    </div>
+  </section>
+
+  <!-- Prototype endcap: where Ch.3 begins (Gate B scope ends here) -->
+  <section class="ch-next" data-chapter="system-teaser">
+    <div class="container">
+      <p class="mono-label" data-reveal>03 · The system — twelve ways to make software move</p>
+      <h2 data-reveal>One team, one system, no hand-offs.</h2>
+      <p class="support" data-reveal>
+        The full service atlas assembles here. Prototype continues on the service route.
+      </p>
+      <a class="cta" href="/services/ai-agents-automation" data-reveal>Service 01 · AI Agents &amp; Automation</a>
+    </div>
+  </section>
+</PublicLayout>
+
+<style>
+  .ch-arrival {
+    min-height: 160vh;
+    padding-top: var(--space-stage);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: var(--space-3);
+    align-items: start;
+    min-height: 78vh;
+  }
+  h1 {
+    font-size: var(--text-display);
+    margin-block: var(--space-2) var(--space-2);
+    max-width: 15ch;
+  }
+  .support {
+    color: var(--ink-2);
+    font-size: var(--text-lg);
+    max-width: 44ch;
+  }
+  .actions {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    margin-top: var(--space-3);
+  }
+  .stage {
+    min-height: 56vh;
+    position: sticky;
+    top: 12vh;
+    display: grid; /* stretches the frame device to the full stage height */
+  }
+
+  .ch-problem {
+    /* The chamber's darkness is rendered by the engine (scene clear color
+       ramps in). Tier C / no-JS / failed-engine visitors get a solid ground. */
+    background: transparent;
+    color: var(--ink);
+    min-height: 240vh;
+    padding-block: var(--space-5);
+  }
+  :global(html[data-tier="C"]) .ch-problem,
+  :global(html:not([data-tier])) .ch-problem,
+  :global(html[data-engine="failed"]) .ch-problem {
+    background: #030407;
+  }
+  .chapter-mark {
+    margin-bottom: var(--space-4);
+  }
+  .manifesto {
+    display: grid;
+    gap: 38vh;
+    padding-block: 10vh 30vh;
+  }
+  .manifesto .line {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 600;
+    letter-spacing: var(--tracking-display);
+    max-width: 30ch;
+  }
+  .manifesto .line:nth-child(2) {
+    margin-left: clamp(0px, 18vw, 320px);
+  }
+
+  .ch-next {
+    padding-block: var(--space-5);
+  }
+  .ch-next h2 {
+    font-size: var(--text-xl);
+    margin-block: var(--space-2);
+  }
+  .ch-next .support {
+    margin-bottom: var(--space-3);
+  }
+
+  @media (max-width: 860px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+    .stage {
+      position: static;
+      min-height: 48vh;
+      order: -1;
+    }
+    .ch-arrival {
+      min-height: auto;
+      padding-bottom: var(--space-4);
+    }
+    .manifesto {
+      gap: 24vh;
+    }
+    .manifesto .line:nth-child(2) {
+      margin-left: 0;
+    }
+    .ch-problem {
+      min-height: 160vh;
+    }
+  }
+</style>

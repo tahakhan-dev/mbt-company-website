@@ -1,0 +1,92 @@
+/* Aigenvora design tokens — the single source of truth for color, type,
+   space and motion. Scene-directed theming: the site does not offer a user
+   toggle; sections opt into the dark chamber via [data-scene="dark"], which
+   re-maps the same semantic tokens (DESIGN law: docs/design/AIGENVORA-STORYBOARD.md). */
+
+@layer tokens {
+  :root {
+    /* ---- Editorial Light (home key) ---- */
+    --paper: #f2f3f8;
+    --raised: #ffffff;
+    --ink: #090b10;
+    --ink-2: #4e5360;
+    --hairline: rgba(9, 11, 16, 0.12);
+    --hairline-soft: rgba(9, 11, 16, 0.07);
+    --accent-electric: #1a39ff;
+    --accent-lime: #c7ff3d;
+    --accent-violet: #7957ff;
+    --accent-warm: #ffb84d;
+    --focus-ring: #1a39ff;
+
+    /* ---- Type ---- */
+    --font-display: "General Sans", "Helvetica Neue", Arial, sans-serif;
+    --font-body: "General Sans", "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+
+    --text-xs: 0.72rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: clamp(1.4rem, 2.4vw, 1.9rem);
+    --text-display: clamp(2.6rem, 7vw, 5.8rem);
+    --text-mega: clamp(3.4rem, 13vw, 12rem);
+
+    --leading-tight: 1.04;
+    --leading-body: 1.6;
+    --tracking-display: -0.02em;
+    --tracking-mono: 0.08em;
+
+    /* ---- Layout ---- */
+    --grid-max: 1280px;
+    --gutter: clamp(20px, 4vw, 44px);
+    --space-1: 0.5rem;
+    --space-2: 1rem;
+    --space-3: 2rem;
+    --space-4: 4rem;
+    --space-5: 8rem;
+    --space-stage: clamp(4rem, 14vh, 10rem);
+
+    /* ---- Motion (docs/design/MOTION-MATRIX.md) ---- */
+    --ease-mech: cubic-bezier(0.72, 0, 0.14, 1);
+    --ease-drift: cubic-bezier(0.22, 0.08, 0.14, 1);
+    --ease-out-fast: cubic-bezier(0.16, 1, 0.3, 1);
+    --dur-micro: 150ms;
+    --dur-reveal: 420ms;
+    --dur-mech: 600ms;
+    --dur-route: 650ms;
+
+    color-scheme: light;
+  }
+
+  /* ---- Cinematic Dark (the chamber) — scene-scoped, not user-scoped ---- */
+  [data-scene="dark"] {
+    --paper: #030407;
+    --raised: #11141c;
+    --ink: #f2f3f8;
+    --ink-2: #9da4b3;
+    --hairline: rgba(242, 243, 248, 0.12);
+    --hairline-soft: rgba(242, 243, 248, 0.06);
+    --accent-electric: #4a63ff;
+    --accent-lime: #d2ff65;
+    --accent-violet: #a18aff;
+    --accent-warm: #ffc86a;
+    --focus-ring: #a18aff;
+    color-scheme: dark;
+  }
+
+  /* Carbon variant for raised dark surfaces */
+  [data-scene="carbon"] {
+    --paper: #090b10;
+    --raised: #11141c;
+    --ink: #f2f3f8;
+    --ink-2: #9da4b3;
+    --hairline: rgba(242, 243, 248, 0.12);
+    --hairline-soft: rgba(242, 243, 248, 0.06);
+    --accent-electric: #4a63ff;
+    --accent-lime: #d2ff65;
+    --accent-violet: #a18aff;
+    --accent-warm: #ffc86a;
+    --focus-ring: #a18aff;
+    color-scheme: dark;
+  }
+}

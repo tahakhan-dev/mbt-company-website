@@ -1,0 +1,44 @@
+---
+/**
+ * The frame device — hairline drafting frame with mono corner readouts.
+ * Pure HTML: survives every capability tier; the canvas shows through it.
+ */
+interface Props {
+  tl?: string;
+  tr?: string;
+  bl?: string;
+  br?: string;
+  class?: string;
+}
+const { tl = "AIGENVORA ENGINE", tr = "", bl = "", br = "", class: cls = "" } = Astro.props;
+---
+
+<div class:list={["frame-stage", cls]} aria-hidden="true">
+  <span class="corner c-tl">{tl}</span>
+  <span class="corner c-tr">{tr}</span>
+  <span class="corner c-bl">{bl}</span>
+  <span class="corner c-br">{br}</span>
+  <slot />
+</div>
+
+<style>
+  .frame-stage {
+    position: relative;
+    border: 1px solid var(--hairline);
+    min-height: 100%;
+  }
+  .corner {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 500;
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    color: var(--ink-2);
+    padding: 0.5rem 0.65rem;
+  }
+  .c-tl { top: 0; left: 0; }
+  .c-tr { top: 0; right: 0; }
+  .c-bl { bottom: 0; left: 0; }
+  .c-br { bottom: 0; right: 0; }
+</style>

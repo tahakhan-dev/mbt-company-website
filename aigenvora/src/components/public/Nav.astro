@@ -1,0 +1,94 @@
+---
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/services/ai-agents-automation", label: "Services" },
+  { href: "/work/signal-desk", label: "Work" },
+  { href: "/mvps", label: "MVPs for Startups" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+];
+const current = Astro.url.pathname;
+---
+
+<header class="site-nav" transition:persist="site-nav">
+  <div class="bar container">
+    <a class="wordmark" href="/">AIGENVORA</a>
+    <nav aria-label="Primary">
+      <ul>
+        {
+          links.map((l) => (
+            <li>
+              <a href={l.href} aria-current={current === l.href ? "page" : undefined}>
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+    <a class="cta cta--warm nav-cta" href="/contact">Build with Aigenvora</a>
+  </div>
+</header>
+
+<style>
+  .site-nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in srgb, var(--paper) 82%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--hairline-soft);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    padding-block: 0.8rem;
+  }
+  .wordmark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    font-size: 0.95rem;
+    text-decoration: none;
+  }
+  nav ul {
+    display: flex;
+    gap: 1.4rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  nav a {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ink-2);
+    transition: color var(--dur-micro) var(--ease-out-fast);
+  }
+  nav a:hover,
+  nav a[aria-current="page"] {
+    color: var(--ink);
+  }
+  .nav-cta {
+    padding: 0.55rem 1.1rem;
+    font-size: var(--text-sm);
+  }
+  @media (max-width: 900px) {
+    nav {
+      min-width: 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    nav ul {
+      gap: 0.9rem;
+      width: max-content;
+    }
+    .nav-cta {
+      display: none;
+    }
+  }
+</style>

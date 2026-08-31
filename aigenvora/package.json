@@ -1,0 +1,33 @@
+{
+  "name": "aigenvora",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Aigenvora — AI-powered software development. Astro SSR + Three.js r158 + Firebase.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test:unit": "vitest run"
+  },
+  "dependencies": {
+    "@astrojs/netlify": "8.2.4",
+    "@fontsource/ibm-plex-mono": "5.3.0",
+    "astro": "7.2.9",
+    "firebase-admin": "^14.3.0",
+    "postprocessing": "6.36.0",
+    "three": "0.158.0",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.6",
+    "@types/three": "0.158.3",
+    "dotenv": "^17.0.0",
+    "typescript": "^5.9.0",
+    "vitest": "^4.1.11"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}
