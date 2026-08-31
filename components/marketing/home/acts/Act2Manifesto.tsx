@@ -15,7 +15,7 @@ import { useReducedMotion } from "@/components/motion/MotionProvider";
  */
 const LINES: Array<Array<string | { gradient: string }>> = [
   ["Every", "business", "we", "meet", "is", "busier", "than", "it", "should", "be."],
-  ["Not", "because", "the", "work", "is", "hard", "—", "because", "the", "work", "is", "manual."],
+  ["Not", "because", "the", "work", "is", "hard.", "Because", "the", "work", "is", "manual."],
   ["Software", "was", "supposed", "to", "fix", "this.", "Mostly,", "it", "added", "tabs."],
   ["So", "we", "build", "systems", "that", "do", "the", "work:", "answer,", "route,", "reconcile,", "report."],
   ["The", "hours", "come", "back.", { gradient: "The hours become growth." }],
@@ -83,16 +83,9 @@ export function Act2Manifesto() {
         ref={panelRef}
         className="bg-void px-5 py-32 ring-1 ring-hairline md:rounded-t-[3rem] md:px-10 md:py-44 lg:px-16"
       >
-        <div className="mx-auto grid max-w-5xl gap-12 md:grid-cols-[auto_1fr] md:gap-16">
-          <div className="flex flex-row items-start gap-4 md:flex-col">
-            <span className="font-mono text-[0.8125rem] uppercase tracking-[0.2em] text-ink-faint">
-              02&thinsp;/&thinsp;07
-            </span>
-            <span className="hidden h-full w-px bg-hairline-strong md:block" aria-hidden="true" />
-            <span className="font-mono text-[0.8125rem] uppercase tracking-[0.2em] text-aurora-teal">
-              Why we exist
-            </span>
-          </div>
+        {/* Type-only chapter (T9): the manifesto needs no label — the act
+            rail carries the wayfinding, the words carry the composition. */}
+        <div className="mx-auto max-w-4xl border-l border-hairline-strong pl-8 md:pl-14">
           <div className="space-y-9">
             {LINES.map((line, i) => (
               <p

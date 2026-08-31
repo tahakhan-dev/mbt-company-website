@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { X, Check } from "@phosphor-icons/react/dist/ssr";
 import { notFound } from "next/navigation";
 import { getProjects, getService, getServices, getSiteSettings } from "@/lib/data/content";
 import { richTextToHtml } from "@/lib/richtext";
-import { Eyebrow } from "@/components/ui/Eyebrow";
 import { SplitReveal } from "@/components/motion/SplitReveal";
 import { Reveal } from "@/components/motion/Reveal";
 import { Bezel } from "@/components/ui/Bezel";
@@ -75,13 +75,10 @@ export default async function ServiceDetailPage({
       <div className="mx-auto w-full max-w-7xl px-4 pb-24 pt-36 md:px-8 md:pt-44">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-7">
-            <Reveal y={20}>
-              <Eyebrow>Service</Eyebrow>
-            </Reveal>
             <SplitReveal
               as="h1"
               mode="load"
-              className="mt-6 font-display text-display font-medium text-balance"
+              className="font-display text-display font-medium text-balance"
             >
               {service.name}
             </SplitReveal>
@@ -103,6 +100,54 @@ export default async function ServiceDetailPage({
           </Reveal>
         </div>
 
+        {(service.transformation.before.length > 0 ||
+          service.transformation.after.length > 0) && (
+          <section className="mt-24" aria-label="The transformation">
+            <SectionHeading eyebrow="The transformation" title="Life before. Life after." />
+            <Reveal stagger={0.12} className="mt-12 grid gap-5 md:grid-cols-2">
+              <div className="rounded-[1.75rem] bg-bezel p-1.5 ring-1 ring-hairline soft-shadow">
+                <div className="h-full rounded-[calc(1.75rem-0.375rem)] bg-surface inner-glow p-8">
+                  <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-error/80">
+                    Before
+                  </p>
+                  <ul className="mt-6 space-y-4">
+                    {service.transformation.before.map((line) => (
+                      <li key={line} className="flex items-start gap-3 leading-relaxed text-ink-muted">
+                        <X weight="bold" className="mt-1.5 size-3.5 shrink-0 text-error/70" aria-hidden="true" />
+                        {line}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className="rounded-[1.75rem] bg-bezel p-1.5 ring-1 ring-hairline soft-shadow">
+                <div className="h-full rounded-[calc(1.75rem-0.375rem)] bg-surface inner-glow p-8">
+                  <p className="font-mono text-[0.68rem] uppercase tracking-[0.22em] text-aurora-teal">
+                    After
+                  </p>
+                  <ul className="mt-6 space-y-4">
+                    {service.transformation.after.map((line) => (
+                      <li key={line} className="flex items-start gap-3 leading-relaxed text-ink">
+                        <Check weight="bold" className="mt-1.5 size-3.5 shrink-0 text-aurora-teal" aria-hidden="true" />
+                        {line}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </Reveal>
+            {service.transformation.metric && (
+              <Reveal className="mt-8">
+                <p className="inline-flex flex-wrap items-baseline gap-3 rounded-2xl bg-bezel px-6 py-4 ring-1 ring-hairline">
+                  <span className="text-gradient-aurora font-mono text-2xl font-medium md:text-3xl">
+                    {service.transformation.metric}
+                  </span>
+                </p>
+              </Reveal>
+            )}
+          </section>
+        )}
+
         {longHtml && (
           <Reveal className="mt-20 max-w-3xl">
             <div className="rich-text" dangerouslySetInnerHTML={{ __html: longHtml }} />
@@ -111,7 +156,7 @@ export default async function ServiceDetailPage({
 
         {service.offerings.length > 0 && (
           <section className="mt-24" aria-label="What we build">
-            <SectionHeading eyebrow="What we build" title="Concrete deliverables, not decks." />
+            <SectionHeading title="Concrete deliverables, not decks." />
             <Reveal stagger={0.08} className="mt-12 grid gap-5 md:grid-cols-2">
               {service.offerings.map((offering) => (
                 <Bezel key={offering.title} glow innerClassName="h-full p-7">
@@ -128,7 +173,7 @@ export default async function ServiceDetailPage({
 
         {service.process.length > 0 && (
           <section className="mt-24" aria-label="How this engagement runs">
-            <SectionHeading eyebrow="How it runs" title="From first call to production." />
+            <SectionHeading title="From first call to production." />
             <Reveal stagger={0.1} className="mt-12 grid gap-5 md:grid-cols-3">
               {service.process.map((step, i) => (
                 <div key={step.title} className="rounded-[1.6rem] bg-white/[0.03] p-7 ring-1 ring-hairline">
@@ -204,7 +249,7 @@ export default async function ServiceDetailPage({
 
         {service.faqs.length > 0 && (
           <section className="mt-24 max-w-3xl" aria-label="FAQ">
-            <SectionHeading eyebrow="FAQ" title="Asked on most first calls." />
+            <SectionHeading title="Asked on most first calls." />
             <Reveal className="mt-10">
               <Accordion items={service.faqs} />
             </Reveal>
@@ -217,7 +262,7 @@ export default async function ServiceDetailPage({
         contactEmail={settings.contactEmail}
         responsePromise={settings.responsePromise}
         title={`Ready to scope your ${service.name.toLowerCase()} project?`}
-        lede="Bring the problem to a free strategy call — you'll leave with an honest feasibility read and a rough budget."
+        lede="Bring the problem to the call. You'll leave with an honest feasibility read and a rough budget."
       />
     </>
   );

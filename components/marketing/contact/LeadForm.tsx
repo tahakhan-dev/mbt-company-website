@@ -99,7 +99,7 @@ export function LeadForm({
         <span className="grid size-14 place-items-center rounded-full bg-aurora-teal/10 ring-1 ring-aurora-teal/40">
           <CheckCircle weight="light" className="size-7 text-aurora-teal" />
         </span>
-        <h3 className="font-display text-2xl font-medium">Got it — thank you.</h3>
+        <h3 className="font-display text-2xl font-medium">Got it. Thank you.</h3>
         <p className="max-w-sm leading-relaxed text-ink-muted">
           Your message is in our inbox. A senior engineer (not a sales rep) will reply within
           one business day.
@@ -152,7 +152,7 @@ export function LeadForm({
         ))}
       </div>
       <p className="mb-6 font-mono text-[0.68rem] uppercase tracking-[0.22em] text-ink-faint">
-        Step {step + 1} of 2 — {step === 0 ? "who you are" : "what you need"}
+        Step {step + 1} of 2 · {step === 0 ? "who you are" : "what you need"}
       </p>
 
       {step === 0 ? (

@@ -104,7 +104,7 @@ export function SiteFooter({ settings }: { settings: SiteSettings }) {
             © {new Date().getFullYear()} {settings.name}. All rights reserved.
           </p>
           <p className="font-mono uppercase tracking-[0.18em]">
-            Built by {settings.name} — the way we build for clients.
+            Built by {settings.name}, the way we build for clients.
           </p>
         </div>
       </div>

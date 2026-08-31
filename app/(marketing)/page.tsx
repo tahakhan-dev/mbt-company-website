@@ -54,7 +54,6 @@ export default async function HomePage() {
         eyebrow={settings.heroEyebrow}
         headline={settings.heroHeadline}
         subline={settings.heroSubline}
-        trustLine={settings.trustLine}
         ctaHref={ctaHref}
       />
       <Act2Manifesto />

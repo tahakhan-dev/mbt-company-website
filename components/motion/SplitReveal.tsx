@@ -48,7 +48,15 @@ export function SplitReveal({
             stagger: 0.09,
             delay,
             ...(mode === "scroll"
-              ? { scrollTrigger: { trigger: el, start: "top 88%", once: true } }
+              ? {
+                  // Reverses on scroll-up: the story plays backward too
+                  // (V2 bidirectional motion contract).
+                  scrollTrigger: {
+                    trigger: el,
+                    start: "top 88%",
+                    toggleActions: "play none none reverse",
+                  },
+                }
               : {}),
           }),
       });

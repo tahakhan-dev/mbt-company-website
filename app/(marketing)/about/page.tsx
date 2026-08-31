@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
   title: "About",
   description:
-    "MBT is a senior AI software house: engineers, designers, and data specialists who ship production systems — not decks.",
+    "MBT is a senior AI software house: engineers, designers, and data specialists who ship production systems, not decks.",
 };
 
 const VALUES = [
@@ -22,13 +22,13 @@ const VALUES = [
     icon: Crosshair,
     title: "Outcomes over output",
     detail:
-      "Every sprint is judged by the metric it moves — resolution rate, cost per ticket, conversion — never by story points burned.",
+      "Every sprint is judged by the metric it moves (resolution rate, cost per ticket, conversion), never by story points burned.",
   },
   {
     icon: Handshake,
     title: "Radical ownership",
     detail:
-      "Your repos, your cloud, your IP, from day one. We earn the next engagement by making ourselves easy to replace — so nobody wants to.",
+      "Your repos, your cloud, your IP, from day one. We earn the next engagement by making ourselves easy to replace, so nobody wants to.",
   },
   {
     icon: Lightning,
@@ -54,13 +54,13 @@ export default async function AboutPage() {
             mode="load"
             className="mt-6 max-w-4xl font-display text-display font-medium text-balance"
           >
-            A software house built for the AI era — by people who ship.
+            A software house built for the AI era, by people who ship.
           </SplitReveal>
           <Reveal y={30} delay={0.3}>
             <div className="mt-10 grid max-w-4xl gap-8 text-lg leading-relaxed text-ink-muted md:grid-cols-2">
               <p>
                 {settings.name} started with a simple observation: most companies don’t need a
-                bigger vendor — they need a smaller, sharper one. A team senior enough to make
+                bigger vendor. They need a smaller, sharper one. A team senior enough to make
                 architecture calls on Monday and be shipping them by Friday.
               </p>
               <p>

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/services" },
   title: "Services",
   description:
-    "AI & generative AI, data engineering, fintech engineering, product engineering, cloud & DevOps, and product design — end to end, by one senior team.",
+    "Ten service lines, from AI chatbots and automation to fintech and design. End to end, by one senior team.",
 };
 
 export default async function ServicesPage() {
@@ -26,7 +26,7 @@ export default async function ServicesPage() {
           as="h1"
           eyebrow="Services"
           title="Everything an AI product needs to ship."
-          lede="Strategy, design, engineering, data, and infrastructure — six disciplines that usually take four vendors, delivered by one accountable team."
+          lede="Strategy, design, engineering, data, and infrastructure: disciplines that usually take four vendors, delivered by one accountable team."
         />
         <div className="mt-16 flex flex-col gap-5">
           {services.map((service, i) => (
@@ -69,7 +69,7 @@ export default async function ServicesPage() {
         contactEmail={settings.contactEmail}
         responsePromise={settings.responsePromise}
         title="Not sure which service you need?"
-        lede="That's normal — most projects span two or three. Bring the problem; we'll bring the shape of the solution."
+        lede="That's normal. Most projects span two or three. Bring the problem; we'll bring the shape of the solution."
       />
     </>
   );

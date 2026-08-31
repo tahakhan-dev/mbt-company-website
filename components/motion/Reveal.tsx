@@ -30,7 +30,7 @@ export function Reveal({
   stagger = 0,
   delay = 0,
   y,
-  once = true,
+  once = false,
   as: Tag = "div",
 }: {
   children: ReactNode;
@@ -41,6 +41,11 @@ export function Reveal({
   delay?: number;
   /** Override the rise distance (rise/mask variants). */
   y?: number;
+  /**
+   * Default false: the entrance REVERSES when the user scrolls back above
+   * the trigger, so the whole story plays backward on scroll-up (V2 motion
+   * contract). Pass true only for one-shot cases (e.g. LCP-critical hero).
+   */
   once?: boolean;
   as?: "div" | "section" | "ul" | "span";
 }) {
@@ -59,15 +64,17 @@ export function Reveal({
         delay,
         ease: EASE_OUT,
         stagger,
-        clearProps: "transform,opacity,clipPath",
+        // No clearProps: the tween must stay alive so scrolling back up can
+        // reverse it; reversible reveals keep their transforms.
+        ...(once ? { clearProps: "transform,opacity,clipPath" } : null),
         scrollTrigger: {
           trigger: ref.current,
           start: "top 86%",
-          once,
+          toggleActions: once ? "play none none none" : "play none none reverse",
         },
       });
     },
-    { scope: ref, dependencies: [reduced, variant] },
+    { scope: ref, dependencies: [reduced, variant, once] },
   );
 
   const TagName = Tag as "div";
@@ -102,16 +109,11 @@ export function RevealGroup({
       gsap.set(items, { y: 40, opacity: 0 });
       ScrollTrigger.batch(Array.from(items), {
         start: "top 88%",
-        once: true,
         onEnter: (batch) =>
-          gsap.to(batch, {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: EASE_OUT,
-            stagger: 0.08,
-            clearProps: "transform,opacity",
-          }),
+          gsap.to(batch, { y: 0, opacity: 1, duration: 0.8, ease: EASE_OUT, stagger: 0.08 }),
+        // Scroll-up reverses the entrance (V2 bidirectional motion contract).
+        onLeaveBack: (batch) =>
+          gsap.to(batch, { y: 40, opacity: 0, duration: 0.5, ease: EASE_OUT, stagger: 0.05 }),
       });
     },
     { scope: ref, dependencies: [reduced] },

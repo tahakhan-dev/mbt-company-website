@@ -43,7 +43,7 @@ export default async function PrivacyPage() {
           </li>
           <li>
             Your IP address is used transiently to derive an approximate location (country and
-            city) and the network operator’s name, and is then discarded — we store only a
+            city) and the network operator’s name, and is then discarded. We store only a
             salted one-way hash, never the IP itself.
           </li>
           <li>

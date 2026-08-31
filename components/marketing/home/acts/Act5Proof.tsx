@@ -38,7 +38,7 @@ export function Act5Proof({
     <section
       data-act="5"
       data-act-label="Proof"
-      aria-label="Proof — recent case studies"
+      aria-label="Proof: recent case studies"
       className="relative z-10 px-5 py-28 md:px-10 md:py-40 lg:px-16"
     >
       <div className="mx-auto max-w-7xl">
@@ -53,60 +53,95 @@ export function Act5Proof({
             </p>
           </div>
           <Button href="/work" variant="ghost" cta="act5-all">
-            All case studies
+            See the work
           </Button>
         </Reveal>
 
         <div className="mt-16 space-y-24 md:mt-24 md:space-y-32">
           {projects.map((project, i) => {
-            const flip = i % 2 === 1;
             const lead = project.metrics[0];
+            const meta = (
+              <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink-faint">
+                {[project.industry, project.client].filter(Boolean).join(" · ")}
+              </p>
+            );
+            const titleEl = (
+              <h3 className="mt-4 text-balance font-display text-title font-medium text-ink">
+                <Link
+                  href={`/work/${project.slug}`}
+                  className="transition-colors duration-300 ease-swift hover:text-aurora-teal"
+                >
+                  {project.title}
+                </Link>
+              </h3>
+            );
+            const metricEl = lead && (
+              <p className="mt-6 flex items-baseline gap-3">
+                <span className="text-gradient-aurora font-mono text-stat font-medium">
+                  {lead.value}
+                </span>
+                <span className="text-sm text-ink-faint">{lead.label}</span>
+              </p>
+            );
+            const readLink = (
+              <Link
+                href={`/work/${project.slug}`}
+                className="mt-6 inline-block font-mono text-[0.8125rem] uppercase tracking-[0.16em] text-ink underline decoration-hairline-strong underline-offset-8 transition-colors duration-300 ease-swift hover:text-aurora-teal"
+              >
+                Read the case
+              </Link>
+            );
+            const coverEl = (
+              <Link href={`/work/${project.slug}`} aria-label={`Case study: ${project.title}`}>
+                <TiltCard>
+                  <Bezel radius="1.9rem" glow>
+                    {/* ParallaxMedia's outer carries the size; its inner layer
+                        is absolute and oversized for the drift range. */}
+                    <ParallaxMedia
+                      amount={12}
+                      className={i === 2 ? "aspect-[21/9]" : "aspect-[16/10]"}
+                    >
+                      <ProjectCover project={project} className="h-full w-full" />
+                    </ParallaxMedia>
+                  </Bezel>
+                </TiltCard>
+              </Link>
+            );
+
+            // Third row breaks the zigzag: full-bleed cover, text row beneath.
+            if (i === 2) {
+              return (
+                <Reveal key={project.id} y={60}>
+                  {coverEl}
+                  <div className="mt-8 grid gap-6 md:grid-cols-[1.4fr_1fr] md:items-end">
+                    <div>
+                      {meta}
+                      {titleEl}
+                      <p className="mt-4 max-w-xl leading-relaxed text-ink-muted">
+                        {project.summary}
+                      </p>
+                      {readLink}
+                    </div>
+                    <div className="md:text-right">{metricEl}</div>
+                  </div>
+                </Reveal>
+              );
+            }
+
+            const flip = i % 2 === 1;
             return (
               <Reveal
                 key={project.id}
-                className={cn(
-                  "grid items-center gap-8 md:grid-cols-12 md:gap-10",
-                )}
+                className="grid items-center gap-8 md:grid-cols-12 md:gap-10"
                 y={60}
               >
-                <div className={cn("md:col-span-7", flip && "md:order-2")}>
-                  <Link href={`/work/${project.slug}`} aria-label={`Case study: ${project.title}`}>
-                    <ParallaxMedia amount={12}>
-                      <TiltCard>
-                        <Bezel radius="1.9rem" glow>
-                          <ProjectCover project={project} className="aspect-[16/10] w-full" />
-                        </Bezel>
-                      </TiltCard>
-                    </ParallaxMedia>
-                  </Link>
-                </div>
+                <div className={cn("md:col-span-7", flip && "md:order-2")}>{coverEl}</div>
                 <div className={cn("md:col-span-5", flip && "md:order-1")}>
-                  <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink-faint">
-                    {[project.industry, project.client].filter(Boolean).join(" · ")}
-                  </p>
-                  <h3 className="mt-4 font-display text-title font-medium text-ink">
-                    <Link
-                      href={`/work/${project.slug}`}
-                      className="transition-colors duration-300 ease-swift hover:text-aurora-teal"
-                    >
-                      {project.title}
-                    </Link>
-                  </h3>
+                  {meta}
+                  {titleEl}
                   <p className="mt-4 leading-relaxed text-ink-muted">{project.summary}</p>
-                  {lead && (
-                    <p className="mt-6 flex items-baseline gap-3">
-                      <span className="text-gradient-aurora font-mono text-stat font-medium">
-                        {lead.value}
-                      </span>
-                      <span className="text-sm text-ink-faint">{lead.label}</span>
-                    </p>
-                  )}
-                  <Link
-                    href={`/work/${project.slug}`}
-                    className="mt-6 inline-block font-mono text-[0.8125rem] uppercase tracking-[0.16em] text-ink underline decoration-hairline-strong underline-offset-8 transition-colors duration-300 ease-swift hover:text-aurora-teal"
-                  >
-                    Read the case
-                  </Link>
+                  {metricEl}
+                  {readLink}
                 </div>
               </Reveal>
             );
@@ -136,7 +171,7 @@ export function Act5Proof({
               <Bezel radius="1.75rem" innerClassName="p-8 md:p-10">
                 <p className="text-lg leading-relaxed text-ink">&ldquo;{t.quote}&rdquo;</p>
                 <p className="mt-6 font-mono text-xs uppercase tracking-[0.16em] text-ink-faint">
-                  {[t.author, t.company].filter(Boolean).join(" — ")}
+                  {[t.author, t.company].filter(Boolean).join(" · ")}
                 </p>
               </Bezel>
             </Reveal>

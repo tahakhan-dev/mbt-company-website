@@ -22,16 +22,24 @@ export function Counter({
       const el = ref.current;
       if (reduced || !el) return;
       const state = { n: 0 };
+      // Count in the target's own precision (4.9 never flashes as 5), and
+      // reset on scroll-up so the count replays with the story (V2
+      // bidirectional motion contract).
+      const decimals = Number.isInteger(value) ? 0 : 1;
       gsap.to(state, {
         n: value,
         duration: 1.6,
         ease: "power2.out",
-        scrollTrigger: { trigger: el, start: "top 88%", once: true },
+        scrollTrigger: {
+          trigger: el,
+          start: "top 88%",
+          toggleActions: "restart none none reset",
+        },
         onStart: () => {
           el.textContent = `0${suffix}`;
         },
         onUpdate: () => {
-          el.textContent = `${Math.round(state.n)}${suffix}`;
+          el.textContent = `${state.n.toFixed(decimals)}${suffix}`;
         },
         onComplete: () => {
           el.textContent = `${value}${suffix}`;

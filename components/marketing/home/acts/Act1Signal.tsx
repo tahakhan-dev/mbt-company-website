@@ -20,13 +20,11 @@ export function Act1Signal({
   eyebrow,
   headline,
   subline,
-  trustLine,
   ctaHref,
 }: {
   eyebrow: string;
   headline: string;
   subline: string;
-  trustLine: string;
   ctaHref: string;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
@@ -35,7 +33,6 @@ export function Act1Signal({
   const claimRef = useRef<HTMLDivElement>(null);
   const claimLineRef = useRef<HTMLSpanElement>(null);
   const claimCaptionRef = useRef<HTMLParagraphElement>(null);
-  const cueRef = useRef<HTMLDivElement>(null);
   const ctaRowRef = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
@@ -89,7 +86,6 @@ export function Act1Signal({
         )
           .to(split.lines, { yPercent: -115, stagger: 0.035, duration: 0.15 }, 0.28)
           .to(introRef.current, { autoAlpha: 0, y: -26, duration: 0.1 }, 0.29)
-          .to(cueRef.current, { autoAlpha: 0, duration: 0.06 }, 0.18)
           .to(claimLineRef.current, { yPercent: 0, duration: 0.16, ease: "power2.out" }, 0.42)
           .to(claimCaptionRef.current, { autoAlpha: 1, y: 0, duration: 0.1 }, 0.52)
           // Hand the stage to Act 2's wipe with nothing left beneath it.
@@ -111,7 +107,7 @@ export function Act1Signal({
       ref={sectionRef}
       data-act="1"
       data-act-label="Signal"
-      aria-label="Intro — what we do"
+      aria-label="Intro: what we do"
       className={cn("relative z-10", !reduced && "md:h-[280vh]")}
     >
       <div
@@ -125,7 +121,7 @@ export function Act1Signal({
           <Eyebrow>{eyebrow}</Eyebrow>
           <h1
             ref={headlineRef}
-            className="mt-6 max-w-[11ch] font-display text-hero font-medium text-ink"
+            className="mt-6 max-w-[14ch] text-balance font-display text-hero font-medium text-ink"
           >
             {headline}
           </h1>
@@ -157,28 +153,18 @@ export function Act1Signal({
           </div>
         </div>
 
-        {/* Persistent anchor row: the ONE warm CTA + cue + trust line */}
+        {/* Persistent anchor row: the ONE warm CTA + its ghost pair, nothing
+            else (hero stack discipline: eyebrow, headline, subtext, CTAs) */}
         <div
           ref={ctaRowRef}
-          className="relative z-10 mt-14 flex flex-wrap items-end justify-between gap-6 md:mt-0"
+          className="relative z-10 mt-14 flex flex-wrap items-center gap-4 md:mt-0"
         >
-          <div className="flex flex-wrap items-center gap-4">
-            <Button href={ctaHref} size="lg" cta="hero">
-              Book a 5-minute growth call
-            </Button>
-            <Button href="/work" variant="ghost" size="lg" cta="hero-secondary">
-              See the work
-            </Button>
-          </div>
-          <div ref={cueRef} className="hidden flex-col items-center gap-2 md:flex" aria-hidden="true">
-            <span className="font-mono text-[0.6875rem] uppercase tracking-[0.3em] text-ink-faint">
-              Scroll
-            </span>
-            <span className="h-10 w-px bg-gradient-to-b from-ink-faint/70 to-transparent" />
-          </div>
-          <p className="hidden font-mono text-xs uppercase tracking-[0.16em] text-ink-faint lg:block">
-            {trustLine}
-          </p>
+          <Button href={ctaHref} size="lg" cta="hero">
+            Book a 5-minute growth call
+          </Button>
+          <Button href="/work" variant="ghost" size="lg" cta="hero-secondary">
+            See the work
+          </Button>
         </div>
       </div>
     </section>

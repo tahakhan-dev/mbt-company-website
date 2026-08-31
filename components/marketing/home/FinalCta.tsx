@@ -9,8 +9,8 @@ export function FinalCta({
   ctaHref,
   contactEmail,
   responsePromise,
-  title = "Let’s build the thing your users are waiting for.",
-  lede = "A 30-minute strategy call. You leave with an honest read on feasibility, a rough budget, and a suggested first release — whether or not we work together.",
+  title = "Five minutes. Bring your worst bottleneck.",
+  lede = "Tell us where the hours go. Before the call ends, you’ll know which system gets them back, what it costs, and what it returns.",
 }: {
   ctaHref: string;
   contactEmail: string;
@@ -23,7 +23,7 @@ export function FinalCta({
       <AuroraBackdrop intensity="cta" />
       <div className="relative mx-auto flex w-full max-w-4xl flex-col items-center px-4 text-center md:px-8">
         <Reveal y={20}>
-          <Eyebrow>Start a project</Eyebrow>
+          <Eyebrow>The next step</Eyebrow>
         </Reveal>
         <SplitReveal
           as="h2"
@@ -37,8 +37,11 @@ export function FinalCta({
         <Reveal y={32} delay={0.35}>
           <div className="mt-10 flex flex-col items-center gap-5">
             <Button href={ctaHref} size="lg" cta="final-cta">
-              Book a free AI strategy call
+              Book a 5-minute growth call
             </Button>
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink-faint">
+              No pitch. You leave with a plan. · {responsePromise}
+            </p>
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink-faint">
               or write to{" "}
               <a
@@ -47,8 +50,7 @@ export function FinalCta({
                 data-track-outbound
               >
                 {contactEmail}
-              </a>{" "}
-              · {responsePromise}
+              </a>
             </p>
           </div>
         </Reveal>

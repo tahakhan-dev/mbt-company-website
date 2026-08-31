@@ -49,7 +49,7 @@ export default function StyleguidePage() {
               <ServiceIcon iconKey="sparkle" />
               <h3 className="mt-5 font-display text-xl font-medium">AI &amp; GenAI</h3>
               <p className="mt-2 text-sm leading-relaxed text-ink-muted">
-                LLM apps, agents, RAG systems — shipped with evals from day one.
+                LLM apps, agents, RAG systems. Shipped with evals from day one.
               </p>
             </Bezel>
             <Bezel glow innerClassName="p-8">
@@ -89,8 +89,8 @@ export default function StyleguidePage() {
           <Eyebrow>Accordion</Eyebrow>
           <Accordion
             items={[
-              { question: "Who owns the IP?", answer: "You do — code, models, and prompts, from day one." },
-              { question: "How fast to v1?", answer: "Most first releases ship in 4–8 weeks." },
+              { question: "Who owns the IP?", answer: "You do: code, models, and prompts, from day one." },
+              { question: "How fast to v1?", answer: "Most first releases ship in 4-8 weeks." },
             ]}
           />
         </section>

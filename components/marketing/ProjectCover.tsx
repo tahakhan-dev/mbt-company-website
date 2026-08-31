@@ -33,7 +33,7 @@ export function ProjectCover({
   return (
     <GeneratedCover
       seed={cover.seed || title}
-      title={cover.alt || `${title} — cover art`}
+      title={cover.alt || `${title} cover art`}
       className={className ?? "absolute inset-0 h-full w-full"}
     />
   );

@@ -34,7 +34,7 @@ export async function generateMetadata({
   const project = await getProject(slug);
   if (!project) return { title: "Case study not found" };
   return {
-    title: `${project.title} — Case study`,
+    title: `${project.title} · Case study`,
     description: project.summary,
     alternates: { canonical: `/work/${project.slug}` },
   };
@@ -80,9 +80,9 @@ export default async function CaseStudyPage({
 
   const facts: { label: string; value: string }[] = [
     { label: "Client", value: project.client || "Confidential" },
-    { label: "Industry", value: project.industry || "—" },
-    { label: "Timeline", value: project.timeline || "—" },
-    { label: "Services", value: serviceNames.join(", ") || "—" },
+    { label: "Industry", value: project.industry || "·" },
+    { label: "Timeline", value: project.timeline || "·" },
+    { label: "Services", value: serviceNames.join(", ") || "·" },
   ];
 
   return (

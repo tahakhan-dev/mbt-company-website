@@ -77,7 +77,7 @@ export function WorkGrid({
 
       {visible.length === 0 ? (
         <p className="mt-16 text-ink-muted">
-          Nothing matches that combination yet — try another filter.
+          Nothing matches that combination yet. Try another filter.
         </p>
       ) : (
         <Reveal stagger={0.08} className="mt-12 grid gap-6 md:grid-cols-2">

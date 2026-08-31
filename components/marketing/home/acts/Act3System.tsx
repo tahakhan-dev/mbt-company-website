@@ -5,7 +5,6 @@ import Link from "next/link";
 import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useReducedMotion, useScrollTo } from "@/components/motion/MotionProvider";
-import { Eyebrow } from "@/components/ui/Eyebrow";
 import { ServiceIcon } from "@/components/ui/ServiceIcon";
 import { cn } from "@/lib/utils/format";
 
@@ -128,19 +127,18 @@ export function Act3System({ services }: { services: Act3Service[] }) {
       ref={sectionRef}
       data-act="3"
       data-act-label="The system"
-      aria-label="Services — ten ways we take work off your plate"
+      aria-label="Services: ten ways we take work off your plate"
       className={cn("relative z-10", !reduced && "md:h-[560vh]")}
     >
       <div className={cn(!reduced && "md:sticky md:top-0 md:flex md:h-[100dvh] md:items-center")}>
         <div className="mx-auto grid w-full max-w-7xl gap-12 px-5 py-24 md:grid-cols-[1fr_1.2fr] md:gap-10 md:px-10 md:py-0 lg:px-16">
           {/* Left: act header + live index (desktop) */}
           <div className="flex flex-col justify-center">
-            <Eyebrow>The system</Eyebrow>
-            <h2 className="mt-5 max-w-[16ch] font-display text-display font-medium text-ink">
+            <h2 className="max-w-[16ch] text-balance font-display text-display font-medium text-ink">
               Ten ways we take work off your plate.
             </h2>
             <p className="mt-5 max-w-md text-ink-muted">
-              Every line below is a system we design, ship, and measure — each one chosen to
+              Every line below is a system we design, ship, and measure. Each one is chosen to
               return hours first and compound from there.
             </p>
 

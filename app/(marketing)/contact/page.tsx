@@ -37,7 +37,7 @@ export default async function ContactPage() {
             </SplitReveal>
             <Reveal y={30} delay={0.3}>
               <p className="mt-6 max-w-md text-lg leading-relaxed text-ink-muted">
-                Two quick steps. No qualification gauntlet, no SDR follow-up sequence — a senior
+                Two quick steps. No qualification gauntlet, no SDR follow-up sequence. A senior
                 engineer reads every inquiry. {settings.responsePromise}
               </p>
             </Reveal>

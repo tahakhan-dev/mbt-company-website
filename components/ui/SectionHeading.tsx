@@ -13,7 +13,7 @@ export function SectionHeading({
   as = "h2",
   className,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: ReactNode;
   lede?: ReactNode;
   align?: "left" | "center";
@@ -29,7 +29,7 @@ export function SectionHeading({
       )}
     >
       <Reveal y={24}>
-        <Eyebrow>{eyebrow}</Eyebrow>
+        {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
       </Reveal>
       <SplitReveal
         as={as}

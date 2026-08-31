@@ -10,8 +10,8 @@ export const budgetOptions = [
 
 export const budgetLabels: Record<(typeof budgetOptions)[number], string> = {
   "under-10k": "Under $10k",
-  "10k-25k": "$10k – $25k",
-  "25k-50k": "$25k – $50k",
+  "10k-25k": "$10k to $25k",
+  "25k-50k": "$25k to $50k",
   "50k-plus": "$50k+",
   "not-sure": "Not sure yet",
 };

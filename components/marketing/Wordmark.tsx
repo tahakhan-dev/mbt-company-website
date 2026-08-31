@@ -27,7 +27,7 @@ export function Wordmark({
   );
   if (!asLink) return mark;
   return (
-    <Link href="/" aria-label={`${name} — home`} className="rounded-sm">
+    <Link href="/" aria-label={`${name} home`} className="rounded-sm">
       {mark}
     </Link>
   );

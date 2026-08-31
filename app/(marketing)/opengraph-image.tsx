@@ -1,7 +1,7 @@
 import { brandOgImage, OG_SIZE } from "@/lib/og/template";
 import { getSiteSettings } from "@/lib/data/content";
 
-export const alt = "MBT — AI Software House";
+export const alt = "MBT · AI Systems Studio";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 

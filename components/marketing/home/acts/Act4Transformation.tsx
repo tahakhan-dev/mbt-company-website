@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { useReducedMotion } from "@/components/motion/MotionProvider";
-import { Eyebrow } from "@/components/ui/Eyebrow";
 import { cn } from "@/lib/utils/format";
 
 /**
@@ -86,7 +85,7 @@ function BeforePanel({ className }: { className?: string }) {
               Orders.xlsx · edited 11:58 PM
             </p>
             <div className="mt-2 grid grid-cols-3 gap-px overflow-hidden rounded-md bg-hairline font-mono text-[0.5625rem] text-ink-faint">
-              {["#4712", "PENDING?", "—", "#4713", "shipped??", "$1,240", "#4714", "", "$86O", "#4715", "dup?", "$412"].map(
+              {["#4712", "PENDING?", "?", "#4713", "shipped??", "$1,240", "#4714", "", "$86O", "#4715", "dup?", "$412"].map(
                 (cell, i) => (
                   <span key={i} className={cn("bg-surface px-1.5 py-1", cell === "" && "bg-error-surface")}>
                     {cell || "!"}
@@ -99,7 +98,7 @@ function BeforePanel({ className }: { className?: string }) {
           <div className="space-y-1.5">
             {[
               ["Payment export failed", "2:04 AM"],
-              ["Sync error — retry manually", "2:31 AM"],
+              ["Sync error, retry manually", "2:31 AM"],
             ].map(([msg, t]) => (
               <div
                 key={msg}
@@ -266,8 +265,7 @@ export function Act4Transformation() {
       >
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <Eyebrow>The transformation</Eyebrow>
-            <h2 className="mt-4 font-display text-title font-medium text-ink md:text-[2.6rem]">
+            <h2 className="text-balance font-display text-title font-medium text-ink md:text-[2.6rem]">
               Your Tuesday, before and after.
             </h2>
           </div>
