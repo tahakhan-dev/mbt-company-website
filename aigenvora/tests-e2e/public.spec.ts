@@ -5,7 +5,7 @@ const routes = [
   ["/services", "Services"],
   ["/services/ai-agents-automation", "AI Agents"],
   ["/work", "Work"],
-  ["/work/signal-desk", "Signal Desk"],
+  ["/work/zugrow", "Zugrow"],
   ["/mvps", "MVPs"],
   ["/about", "About"],
   ["/contact", "Contact"],

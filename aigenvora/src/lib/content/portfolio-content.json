@@ -1,0 +1,309 @@
+[
+  {
+    "slug": "zugrow",
+    "name": "Zugrow",
+    "url": "https://zugrow.com",
+    "category": "AI Agents & Automation",
+    "serviceSlug": "ai-agents-automation",
+    "accent": "electric",
+    "oneLiner": "AI-first property management for short-term rental hosts — messaging, pricing and calendars on autopilot.",
+    "story": {
+      "what": "Zugrow is an AI-first property management system for short-term rental hosts and serviced accommodation operators. It pulls guest messaging, bookings, calendars and pricing across Airbnb, Booking.com and Vrbo into one platform, at a flat per-property price with no booking commission.",
+      "built": "The work behind it is calendar and rate sync across booking channels, a unified guest inbox, and an agent layer for guest replies, booking-request screening and nightly pricing — with hosts keeping approval over sensitive decisions. Multi-channel sync is the hard part: conflicting availability, rate pushes and double-booking prevention across three different APIs.",
+      "capabilities": [
+        "Multi-channel calendar sync (Airbnb, Booking.com, Vrbo)",
+        "AI guest messaging with host approval",
+        "Automated guest vetting",
+        "Dynamic nightly pricing",
+        "Cleaning and maintenance workflows"
+      ]
+    },
+    "metrics": [
+      { "label": "Monthly recurring revenue", "value": "~$240/mo", "source": "Indie Hackers (owner-supplied, 2026-09)" },
+      { "label": "Pricing", "value": "From £16.60/property/mo", "source": "product site (owner-supplied, 2026-09)" }
+    ]
+  },
+  {
+    "slug": "userdesk",
+    "name": "Userdesk",
+    "url": "https://userdesk.io",
+    "category": "AI Customer Support",
+    "serviceSlug": "ai-integration",
+    "accent": "violet",
+    "oneLiner": "No-code AI assistants trained on your website, Notion and PDFs — answering customers in 52+ languages.",
+    "story": {
+      "what": "Userdesk lets a business spin up a ChatGPT-style assistant trained on its own content — website pages, Notion docs, PDFs — and embed it for customer support and lead generation. It suits small teams that want support coverage without adding headcount.",
+      "built": "Operating a product like this means content ingestion and retrieval over customer-supplied sources, grounding so answers come from the trained material rather than the model's imagination, and drop-in embeds plus integrations for WordPress, Slack, Shopify, Webflow, Wix and Squarespace.",
+      "capabilities": [
+        "Trains on websites, Notion and PDFs",
+        "Grounded answers in 52+ languages",
+        "Lead capture inside the chat",
+        "Embeds for WordPress, Shopify, Webflow and more",
+        "Slack integration"
+      ]
+    },
+    "metrics": [
+      { "label": "Monthly recurring revenue", "value": "$700/mo", "source": "Indie Hackers (owner-supplied, 2026-09)" }
+    ]
+  },
+  {
+    "slug": "pdfdata",
+    "name": "PDFData",
+    "url": "https://pdfdata.co",
+    "category": "AI Document Processing",
+    "serviceSlug": "ai-agents-automation",
+    "accent": "lime",
+    "oneLiner": "AI invoice and receipt extraction for bookkeepers — fields read, totals validated, duplicates flagged.",
+    "story": {
+      "what": "PDFData turns invoices and receipts — scans included — into structured data for bookkeepers, accountants and finance teams. It extracts merchant, date, amount and tax fields and exports clean Excel and CSV files instead of a pile of PDFs.",
+      "built": "The build behind it is OCR plus model-driven field extraction, validation rules that check totals and flag duplicate documents, and export pipelines accountants can rely on. Accuracy is the product: a wrong amount is worse than no extraction, so validation carries as much weight as the model.",
+      "capabilities": [
+        "Invoice and receipt field extraction",
+        "OCR for scanned documents",
+        "Total validation and duplicate flagging",
+        "Excel and CSV export",
+        "Batch document processing"
+      ]
+    },
+    "metrics": [
+      { "label": "Monthly recurring revenue", "value": "$5.3K/mo", "source": "Indie Hackers (owner-supplied, 2026-09)" },
+      { "label": "Pricing", "value": "$29–$499/mo", "source": "product site (owner-supplied, 2026-09)" }
+    ]
+  },
+  {
+    "slug": "helpkit",
+    "name": "HelpKit",
+    "url": "https://www.helpkit.so",
+    "category": "AI Knowledge Base",
+    "serviceSlug": "ai-integration",
+    "accent": "electric",
+    "oneLiner": "Turns Notion docs into a professional help center — search, SEO, custom domain and an AI answer layer.",
+    "story": {
+      "what": "HelpKit turns Notion pages into hosted help centers, knowledge bases and documentation sites — with custom domains, full-text search, SEO and an embeddable widget. Teams keep writing where they already write; customers get a real support site.",
+      "built": "Behind it sits a rendering pipeline that keeps the published site in sync with Notion, fast full-text search over that content, an embeddable help widget, and an AI chatbot layer that answers questions from the knowledge base with the docs as its source.",
+      "capabilities": [
+        "Notion-to-help-center publishing",
+        "Full-text search and SEO",
+        "Custom domains and embeddable widget",
+        "AI chatbot answers grounded in your docs",
+        "Article analytics"
+      ]
+    },
+    "metrics": [
+      { "label": "Customers", "value": "90+", "source": "founder-reported (owner-supplied, 2026-09)" },
+      { "label": "Monthly recurring revenue", "value": "$2K", "source": "founder-reported (owner-supplied, 2026-09)" }
+    ]
+  },
+  {
+    "slug": "photoinvoice",
+    "name": "PhotoInvoice",
+    "url": "https://www.photoinvoice.com",
+    "category": "Niche SaaS",
+    "serviceSlug": "custom-saas-development",
+    "accent": "violet",
+    "oneLiner": "Invoicing for real estate photographers — clients pay first, then the final files unlock.",
+    "story": {
+      "what": "PhotoInvoice is built around one workflow: real estate photographers deliver watermarked previews, the client pays the invoice, and the final files unlock automatically. It removes the payment chase that eats photographers' evenings.",
+      "built": "The system is a pay-to-download delivery flow wired to payment processing: watermarked preview generation, file delivery that flips on settlement, and the invoicing, client records and reminder notifications around it. The interesting engineering is making payment and delivery one atomic step.",
+      "capabilities": [
+        "Pay-to-download file delivery",
+        "Watermarked previews",
+        "Invoicing and payment processing",
+        "Client management",
+        "Automated payment reminders"
+      ]
+    },
+    "metrics": [
+      { "label": "Invoices sent", "value": "70K+", "source": "product site (owner-supplied, 2026-09)" },
+      { "label": "Collected by photographers through the platform", "value": "$14M+", "source": "product site (owner-supplied, 2026-09)" },
+      { "label": "Monthly recurring revenue", "value": "$510/mo", "source": "Indie Hackers (owner-supplied, 2026-09)" }
+    ]
+  },
+  {
+    "slug": "holaolas",
+    "name": "HolaOlas",
+    "url": "https://holaolas.app",
+    "category": "Booking Software",
+    "serviceSlug": "web-application-development",
+    "accent": "lime",
+    "oneLiner": "Commission-free direct bookings for tours and water sports — links, QR codes and payments straight to the operator.",
+    "story": {
+      "what": "HolaOlas gives tourism operators — dive shops, sailing tours, activity businesses — a direct booking and payment system that takes no commission. It began inside a small sailing tour business in Quintana Roo, Mexico, and is built for operators exactly like it.",
+      "built": "The platform covers real-time availability and departure scheduling, shareable booking links and QR codes an operator can print on a flyer, Stripe payments that settle directly to the business, Google Calendar sync and a public API for anything custom.",
+      "capabilities": [
+        "Shareable booking links and QR codes",
+        "Real-time availability and scheduling",
+        "Stripe payments direct to the operator",
+        "Google Calendar sync",
+        "Public API"
+      ]
+    },
+    "metrics": [
+      { "label": "Monthly recurring revenue", "value": "~$3.1K/mo", "source": "Indie Hackers (owner-supplied, 2026-09)" }
+    ]
+  },
+  {
+    "slug": "nat",
+    "name": "Nat.app",
+    "url": "https://www.nat.app",
+    "category": "CRM",
+    "serviceSlug": "web-application-development",
+    "accent": "electric",
+    "oneLiner": "A personal CRM inside Gmail — it spots the relationships going quiet and drafts the follow-up.",
+    "story": {
+      "what": "Nat is a personal CRM for consultants, founders and freelancers whose business runs on relationships rather than pipelines. It sits on Gmail and Google Calendar, imports contacts and interaction history, and surfaces who is going quiet before the relationship goes cold.",
+      "built": "Under the surface: Gmail and Calendar sync for interaction history, AI classification of contacts and conversation state, follow-up detection across the inbox, and Stripe and Segment imports so customer context lives next to the conversation. It works inside Gmail rather than asking anyone to switch tools.",
+      "capabilities": [
+        "Gmail and Google Calendar sync",
+        "AI contact categorization",
+        "Dormant-relationship alerts",
+        "One-click follow-ups with templates",
+        "In-Gmail notes, Stripe and Segment imports"
+      ]
+    },
+    "metrics": [
+      { "label": "Monthly recurring revenue", "value": "$12K/mo", "source": "Indie Hackers (owner-supplied, 2026-09)" }
+    ]
+  },
+  {
+    "slug": "bizzey",
+    "name": "Bizzey",
+    "url": "https://www.bizzey.com",
+    "category": "Business Management",
+    "serviceSlug": "custom-saas-development",
+    "accent": "violet",
+    "oneLiner": "One admin suite for freelancers and SMEs — invoices, quotes, projects, time and expenses in one place.",
+    "story": {
+      "what": "Bizzey bundles the admin a small business actually does — invoicing, quotes, CRM, project management, time tracking and expenses — into one suite. It is built for the Belgian market, with the local payment and accounting integrations that market expects.",
+      "built": "It is a multi-module platform where invoices, projects, tracked time and expenses share one data model, wired into Mollie and Stripe for payments and Clearfacts, Yuki and Ponto on the accounting side. The discipline is keeping six modules coherent instead of shipping six small apps.",
+      "capabilities": [
+        "Invoicing and quotes",
+        "CRM and project management",
+        "Time tracking and expenses",
+        "Mollie and Stripe payments",
+        "Accounting integrations (Clearfacts, Yuki, Ponto)"
+      ]
+    },
+    "metrics": [
+      { "label": "Monthly recurring revenue", "value": "$1.2K/mo", "source": "Indie Hackers (owner-supplied, 2026-09)" },
+      { "label": "Pricing", "value": "€24.99/mo", "source": "product site (owner-supplied, 2026-09)" }
+    ]
+  },
+  {
+    "slug": "webhookrelay",
+    "name": "Webhook Relay",
+    "url": "https://webhookrelay.com",
+    "category": "API & Integration",
+    "serviceSlug": "api-system-integration",
+    "accent": "lime",
+    "oneLiner": "Receives, transforms and delivers webhooks anywhere — public URLs, private servers or localhost.",
+    "story": {
+      "what": "Webhook Relay is a webhook gateway and tunneling service for developers: it accepts webhooks, transforms payloads with JavaScript or Lua functions, and delivers them to public endpoints, private networks or a laptop behind a firewall. Its users range from solo developers to enterprise teams.",
+      "built": "The substance is durable delivery infrastructure — retries for up to 30 days, throttling, dead-letter handling, bidirectional tunnels into private networks — plus a function runtime for payload transformation and the SOC 2 Type II, SSO and audit logging that enterprise buyers require.",
+      "capabilities": [
+        "Webhook forwarding and tunneling",
+        "JavaScript and Lua payload transforms",
+        "Durable retries up to 30 days",
+        "Bidirectional tunnels to private networks",
+        "SOC 2 Type II, SSO and audit logs"
+      ]
+    },
+    "metrics": [
+      { "label": "Monthly recurring revenue", "value": "$3.8K/mo", "source": "Indie Hackers (owner-supplied, 2026-09)" },
+      { "label": "Pricing", "value": "From $8.99/mo", "source": "product site (owner-supplied, 2026-09)" }
+    ]
+  },
+  {
+    "slug": "phare",
+    "name": "Phare",
+    "url": "https://phare.io",
+    "category": "Monitoring & Maintenance",
+    "serviceSlug": "maintenance-managed-ai",
+    "accent": "electric",
+    "oneLiner": "European uptime monitoring with alerting, incident management and branded status pages.",
+    "story": {
+      "what": "Phare monitors websites and servers from multiple regions and manages the whole incident loop — alerts, incident timelines and public status pages. It is built and hosted in the EU on European infrastructure, with GDPR compliance treated as a feature rather than a footnote.",
+      "built": "Running it means distributed uptime checks across regions, multi-channel alerting over email, SMS and Telegram, branded status pages on custom domains, and a documented API — operating continuously since 2022, with a free tier that never caps team size.",
+      "capabilities": [
+        "Multi-region uptime monitoring",
+        "Email, SMS and Telegram alerts",
+        "Incident management",
+        "Branded status pages on custom domains",
+        "EU-hosted, GDPR-first infrastructure"
+      ]
+    },
+    "metrics": [
+      { "label": "Paying Scale customers", "value": "66", "source": "public live metrics (owner-supplied, 2026-09)" },
+      { "label": "Monthly recurring revenue", "value": "~€346/mo", "source": "public live metrics (owner-supplied, 2026-09)" }
+    ]
+  },
+  {
+    "slug": "chatbuddy",
+    "name": "AI ChatBuddy",
+    "url": "https://www.indiehackers.com/product/ai-chatbuddy",
+    "category": "Mobile App",
+    "serviceSlug": "mobile-app-development",
+    "accent": "violet",
+    "oneLiner": "A mobile app for chatting with AI models and generating images on the go.",
+    "story": {
+      "what": "AI ChatBuddy packages AI chat and image generation into a mobile app — a single consumer surface over large language and image models, for people who want AI in their pocket rather than in a browser tab.",
+      "built": "A product like this is a mobile client over hosted model APIs: conversation state and history, streamed responses, image generation requests, and the in-app subscription plumbing that app stores require.",
+      "capabilities": [
+        "AI chat on mobile",
+        "AI image generation",
+        "Conversation history",
+        "In-app subscriptions"
+      ]
+    },
+    "metrics": [
+      { "label": "Monthly recurring revenue", "value": "$45/mo", "source": "Indie Hackers (owner-supplied, 2026-09)" }
+    ]
+  },
+  {
+    "slug": "securevibing",
+    "name": "SecureVibing",
+    "url": "https://securevibing.com",
+    "category": "Cybersecurity",
+    "serviceSlug": "cybersecurity-ai-security",
+    "accent": "lime",
+    "oneLiner": "Security scans and manual audits for AI-built apps — exposed keys, open databases, missing headers.",
+    "story": {
+      "what": "SecureVibing checks the apps people ship with AI coding tools — Cursor, Windsurf, Claude, ChatGPT — for the classic fast-build mistakes: exposed API keys, misconfigured databases, missing security headers. Automated scans, plus a done-for-you manual audit for founders who want it handled.",
+      "built": "The scanning side covers API-key exposure, security-header analysis and Supabase-specific misconfiguration checks, including deep scans, periodic re-checks and a subdomain finder. The audit side is manual review with fixes prioritized, sold as a flat-price engagement.",
+      "capabilities": [
+        "API-key exposure scanning",
+        "Supabase configuration checks",
+        "Security header analysis",
+        "Periodic re-scans and subdomain discovery",
+        "Done-for-you manual audits"
+      ]
+    },
+    "metrics": [
+      { "label": "Manual audit", "value": "$499", "source": "product site (owner-supplied, 2026-09)" },
+      { "label": "Indie hackers helped", "value": "20+", "source": "product site (owner-supplied, 2026-09)" }
+    ]
+  },
+  {
+    "slug": "rotateproduct",
+    "name": "RotateProduct",
+    "url": "https://rotateproduct.com",
+    "category": "AI SaaS Product",
+    "serviceSlug": "ai-saas-product-development",
+    "accent": "electric",
+    "oneLiner": "Turns one product photo into a rotating 3D-style video for e-commerce pages.",
+    "story": {
+      "what": "RotateProduct generates rotating, 3D-style product videos from a single photo — up to 1080p with commercial rights — for e-commerce stores that want motion on product pages without a studio shoot. It ships as a web app and as a Shopify app that drops the video straight onto the product page.",
+      "built": "The core is a generative video pipeline that infers a product's unseen angles from one image, with rendering and quality controls to keep outputs saleable, plus a Shopify integration billed per generated video rather than per seat.",
+      "capabilities": [
+        "Single photo to rotating product video",
+        "Up to 1080p output with commercial rights",
+        "Shopify app with per-video pricing",
+        "Batch generation for catalogs"
+      ]
+    },
+    "metrics": [
+      { "label": "Plans", "value": "$19 / $39 / $99 per month", "source": "product site (owner-supplied, 2026-09)" },
+      { "label": "Shopify app", "value": "Per-video pricing", "source": "product site (owner-supplied, 2026-09)" }
+    ]
+  }
+]

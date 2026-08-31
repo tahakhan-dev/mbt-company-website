@@ -21,7 +21,16 @@ export const SITE = {
   contactEmail: "hello@aigenvora.com",
   responseExpectation: "We reply within two working days.",
   cta: "Build with Aigenvora",
-} as const;
+  // Owner supplies real values (or edits in /admin/settings); empty = hidden.
+  phone: "",
+  whatsapp: "",
+  address: "",
+  linkedin: "",
+  twitter: "",
+  github: "",
+};
+
+export type SiteSettings = typeof SITE;
 
 const service = (
   order: number,

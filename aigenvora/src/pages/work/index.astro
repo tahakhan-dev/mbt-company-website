@@ -1,56 +1,91 @@
 ---
 import PublicLayout from "~/layouts/PublicLayout.astro";
+import { getPortfolio } from "~/lib/content/portfolio";
 
-/**
- * Verified case studies publish here through the admin (ownershipVerified +
- * clientPermission gates). Until the owner clears engagements, the index
- * shows the truthful pending state plus the labeled format prototype —
- * never invented work (integrity rule, master prompt §14.1).
- */
+const projects = getPortfolio();
+const categories = [...new Set(projects.map((p) => p.category))];
 ---
 
 <PublicLayout
   title="Work"
-  description="Aigenvora case studies — published only after each engagement is verified with its client, with roles stated plainly and metrics sourced."
+  description="Thirteen shipped products built and operated by the Aigenvora team — AI agents, document processing, booking, CRM, monitoring and security software."
   sceneMode="dormant"
 >
   <header class="hero container">
-    <p class="mono-label" data-reveal>Work · proof over polish</p>
-    <h1 data-reveal>WORK</h1>
-    <p class="support" data-reveal>
-      Every case study here goes through the same gate: the engagement verified with the client,
-      our role stated plainly, and every metric carrying its source and date. The first verified
-      studies are in that pipeline now.
+    <p class="mono-label" data-choreo data-choreo-start="0.02" data-choreo-end="0.08">
+      Work · {projects.length} shipped products
+    </p>
+    <h1 data-entrance style="--ent-delay:.15s">WORK</h1>
+    <p class="support" data-entrance style="--ent-delay:.35s">
+      Products our team has built and operated — each one a working business with real users,
+      real revenue and a live link you can visit. Metrics carry their sources; nothing here is a
+      mockup.
     </p>
   </header>
 
-  <section class="list container">
-    <a class="entry" href="/work/signal-desk" data-reveal>
-      <span class="mono-label tag">Format prototype · sample narrative</span>
-      <span class="name">Signal Desk</span>
-      <span class="outcome">A message-routing operations desk that reads, sorts and answers — the case-study experience, shown with sample content.</span>
-      <span class="mono-label go">Open →</span>
-    </a>
-
-    <div class="pending" data-reveal>
-      <p class="mono-label">In verification</p>
-      <p>
-        Thirteen shipped products are being cleared for publication — AI automation, document
-        processing, booking, CRM, monitoring and security tools. Each appears the moment its
-        client signs off.
-      </p>
-      <a class="cta" href="/contact">Ask about relevant work →</a>
-    </div>
+  <section class="filters container" aria-label="Filter by category">
+    <button class="chip is-active" data-filter="all">All</button>
+    {categories.map((c) => <button class="chip" data-filter={c}>{c}</button>)}
   </section>
+
+  <ol class="list container">
+    {
+      projects.map((p, i) => (
+        <li data-category={p.category} data-reveal>
+          <a class="row" href={`/work/${p.slug}`} style={`--row-accent: var(--accent-${p.accent === "lime" ? "lime" : p.accent === "violet" ? "violet" : "electric"})`}>
+            <span class="num mono-label">{String(i + 1).padStart(2, "0")}</span>
+            <span class="body">
+              <span class="name">{p.name}</span>
+              <span class="cat mono-label">{p.category}</span>
+              <span class="line">{p.oneLiner}</span>
+            </span>
+            <span class="media" aria-hidden="true">
+              {p.heroImage ? (
+                <img src={p.heroImage} alt="" loading="lazy" width="360" height="225" />
+              ) : (
+                <span class="poster-fallback">
+                  <span class="mono-label">{p.name}</span>
+                </span>
+              )}
+            </span>
+            <span class="go mono-label">Case study →</span>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+
+  <section class="endcap container">
+    <h2 data-reveal>Your product could be number fourteen.</h2>
+    <a class="cta cta--warm" href="/contact" data-reveal>Build with Aigenvora</a>
+  </section>
+
+  <script>
+    function armFilters(): void {
+      const chips = document.querySelectorAll<HTMLButtonElement>("[data-filter]");
+      const items = document.querySelectorAll<HTMLElement>(".list [data-category]");
+      chips.forEach((chip) => {
+        chip.addEventListener("click", () => {
+          chips.forEach((c) => c.classList.toggle("is-active", c === chip));
+          const f = chip.dataset["filter"];
+          items.forEach((li) => {
+            li.hidden = f !== "all" && li.dataset["category"] !== f;
+          });
+        });
+      });
+    }
+    document.addEventListener("astro:page-load", armFilters);
+  </script>
 </PublicLayout>
 
 <style>
   .hero {
-    padding-block: var(--space-stage) var(--space-4);
+    padding-block: var(--space-stage) var(--space-3);
   }
   h1 {
-    font-size: clamp(4rem, 18vw, 15rem);
-    line-height: 0.9;
+    font-size: clamp(4rem, 17vw, 14rem);
+    line-height: 0.92;
+    font-weight: 600;
   }
   .support {
     color: var(--ink-2);
@@ -59,50 +94,135 @@ import PublicLayout from "~/layouts/PublicLayout.astro";
     margin-top: var(--space-3);
   }
 
-  .list {
-    padding-block: var(--space-3) var(--space-5);
-    display: grid;
-    gap: var(--space-3);
-    max-width: 900px;
-  }
-  .entry {
-    display: grid;
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
-    padding: var(--space-3);
+    padding-block: var(--space-2) var(--space-3);
+  }
+  .chip {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    background: transparent;
     border: 1px solid var(--hairline);
-    background: var(--raised);
+    color: var(--ink-2);
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+  }
+  .chip.is-active {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  .list {
+    list-style: none;
+    margin: 0;
+    padding-block: 0 var(--space-5);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: minmax(3rem, 6vw) 1.4fr minmax(220px, 360px) auto;
+    gap: var(--space-3);
+    align-items: center;
+    padding: 1.4rem 0.4rem;
+    border-top: 1px solid var(--hairline);
     text-decoration: none;
-    transition: transform var(--dur-micro) var(--ease-out-fast);
+    position: relative;
+    transition: background var(--dur-micro) var(--ease-out-fast);
   }
-  .entry:hover {
-    transform: translateY(-3px);
+  .list li:last-child .row {
+    border-bottom: 1px solid var(--hairline);
   }
-  .tag {
-    color: var(--accent-violet);
+  .row::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--row-accent);
+    transform: scaleY(0);
+    transition: transform var(--dur-micro) var(--ease-mech);
+  }
+  .row:hover {
+    background: var(--raised);
+  }
+  .row:hover::before {
+    transform: scaleY(1);
+  }
+  .num {
+    font-size: clamp(1rem, 2.4vw, 1.6rem);
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
   }
   .name {
+    display: block;
     font-family: var(--font-display);
-    font-weight: 700;
-    font-size: var(--text-display);
+    font-weight: 600;
+    font-size: clamp(1.5rem, 3.2vw, 2.6rem);
     letter-spacing: var(--tracking-display);
   }
-  .outcome {
+  .cat {
+    display: block;
+    margin-top: 0.2rem;
+    color: var(--row-accent);
+  }
+  .line {
+    display: block;
     color: var(--ink-2);
-    max-width: 52ch;
+    max-width: 46ch;
+    margin-top: 0.4rem;
+  }
+  .media {
+    overflow: hidden;
+    border: 1px solid var(--hairline);
+    aspect-ratio: 16 / 10;
+    background: var(--raised);
+  }
+  .media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    transition: transform 600ms var(--ease-drift);
+  }
+  .row:hover .media img {
+    transform: scale(1.045);
+  }
+  .poster-fallback {
+    display: grid;
+    place-items: center;
+    height: 100%;
+    background: #090b10;
+  }
+  .poster-fallback .mono-label {
+    color: #9da4b3;
   }
   .go {
     color: var(--accent-electric);
+    white-space: nowrap;
   }
 
-  .pending {
-    border-top: 1px solid var(--hairline);
-    padding-top: var(--space-3);
-    display: grid;
-    gap: var(--space-2);
-    justify-items: start;
+  .endcap {
+    padding-block: var(--space-4) var(--space-5);
   }
-  .pending p:not(.mono-label) {
-    color: var(--ink-2);
-    max-width: 56ch;
+  .endcap h2 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-3);
+  }
+
+  @media (max-width: 900px) {
+    .row {
+      grid-template-columns: 2.4rem 1fr;
+    }
+    .media {
+      grid-column: 2;
+      max-width: 420px;
+    }
+    .go {
+      grid-column: 2;
+    }
   }
 </style>

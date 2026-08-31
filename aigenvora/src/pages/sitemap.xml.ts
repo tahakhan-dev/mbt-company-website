@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { getServices } from "~/lib/content/queries";
+import { getPortfolio } from "~/lib/content/portfolio";
 import { env } from "~/env";
 
 export const prerender = false;
@@ -12,6 +13,7 @@ export const GET: APIRoute = async () => {
     "/services",
     ...services.map((s) => `/services/${s.slug}`),
     "/work",
+    ...getPortfolio().map((p) => `/work/${p.slug}`),
     "/mvps",
     "/about",
     "/contact",

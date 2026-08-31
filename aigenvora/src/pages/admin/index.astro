@@ -3,13 +3,29 @@ import AdminLayout from "~/layouts/AdminLayout.astro";
 import { adminDb, col } from "~/lib/firebase/server";
 
 const db = adminDb();
-const [leads, projects, auditSnap] = await Promise.all([
+const [leads, projects, auditSnap, viewsSnap] = await Promise.all([
   db.collection(col("leads")).get(),
   db.collection(col("projects")).get(),
   db.collection(col("adminAudit")).orderBy("at", "desc").limit(8).get(),
+  db.collection(col("pageviews")).orderBy("at", "desc").limit(300).get(),
 ]);
 const newLeads = leads.docs.filter((d) => d.data()["status"] === "new").length;
 const published = projects.docs.filter((d) => d.data()["status"] === "published").length;
+
+const views = viewsSnap.docs.map((d) => d.data());
+const countBy = (key: string): [string, number][] =>
+  Object.entries(
+    views.reduce<Record<string, number>>((acc, v) => {
+      const k = String(v[key] || "—");
+      acc[k] = (acc[k] ?? 0) + 1;
+      return acc;
+    }, {}),
+  )
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 6);
+const topCountries = countBy("country");
+const topPaths = countBy("path");
+const uniqueVisitors = new Set(views.map((v) => v["sid"])).size;
 ---
 
 <AdminLayout title="Dashboard">
@@ -27,6 +43,27 @@ const published = projects.docs.filter((d) => d.data()["status"] === "published"
       <span class="n">12</span>
       <span>services (edit copy &amp; status)</span>
     </a>
+  </div>
+
+  <h2>Visitors (last {views.length} pageviews · {uniqueVisitors} unique)</h2>
+  <div class="cards">
+    <div class="panel">
+      <p class="muted">By country</p>
+      <table>
+        <tbody>
+          {topCountries.map(([k, n]) => <tr><td>{k}</td><td>{n}</td></tr>)}
+          {views.length === 0 && <tr><td>No pageviews recorded yet.</td></tr>}
+        </tbody>
+      </table>
+    </div>
+    <div class="panel">
+      <p class="muted">Top pages</p>
+      <table>
+        <tbody>
+          {topPaths.map(([k, n]) => <tr><td>{k}</td><td>{n}</td></tr>)}
+        </tbody>
+      </table>
+    </div>
   </div>
 
   <h2>Recent activity</h2>
@@ -66,6 +103,13 @@ const published = projects.docs.filter((d) => d.data()["status"] === "published"
       font-size: 2rem;
       font-weight: 700;
       color: var(--text);
+    }
+    .muted {
+      color: var(--dim);
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 0 0 0.5rem;
     }
     @media (max-width: 760px) {
       .cards {

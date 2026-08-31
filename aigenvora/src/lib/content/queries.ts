@@ -38,6 +38,78 @@ export async function getService(slug: string): Promise<ServiceDetail | undefine
   return all.find((s) => s.slug === slug);
 }
 
+export interface Testimonial {
+  id: string;
+  quote: string;
+  name: string;
+  title: string;
+  company: string;
+  videoUrl: string;
+  status: string;
+  order: number;
+}
+
+export interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  bio: string;
+  status: string;
+  order: number;
+}
+
+export function getTestimonials(): Promise<Testimonial[]> {
+  return cached("content:testimonials", async () => {
+    try {
+      const { adminDb, col } = await import("~/lib/firebase/server");
+      const snap = await adminDb().collection(col("testimonials")).get();
+      return snap.docs
+        .map((d) => {
+          const x = d.data();
+          return {
+            id: d.id,
+            quote: String(x["quote"] ?? ""),
+            name: String(x["name"] ?? x["author"] ?? ""),
+            title: String(x["title"] ?? x["role"] ?? ""),
+            company: String(x["company"] ?? ""),
+            videoUrl: String(x["videoUrl"] ?? ""),
+            status: String(x["status"] ?? "draft"),
+            order: Number(x["order"] ?? 99),
+          };
+        })
+        .filter((t) => t.quote && t.status !== "archived")
+        .sort((a, b) => a.order - b.order);
+    } catch {
+      return [];
+    }
+  });
+}
+
+export function getTeam(): Promise<TeamMember[]> {
+  return cached("content:team", async () => {
+    try {
+      const { adminDb, col } = await import("~/lib/firebase/server");
+      const snap = await adminDb().collection(col("team")).get();
+      return snap.docs
+        .map((d) => {
+          const x = d.data();
+          return {
+            id: d.id,
+            name: String(x["name"] ?? ""),
+            role: String(x["role"] ?? x["title"] ?? ""),
+            bio: String(x["bio"] ?? ""),
+            status: String(x["status"] ?? "draft"),
+            order: Number(x["order"] ?? 99),
+          };
+        })
+        .filter((m) => m.name && m.status !== "archived")
+        .sort((a, b) => a.order - b.order);
+    } catch {
+      return [];
+    }
+  });
+}
+
 export function getSettings(): Promise<typeof SITE> {
   return cached("content:settings", async () => {
     try {

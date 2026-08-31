@@ -177,3 +177,19 @@ For every product the owner must confirm, in writing, before the draft can flip 
 11. **AI ChatBuddy** — Whether the app is live anywhere at all; engagement model with Cyril Gupta / Teknikforce; permission. Default recommendation: **exclude** — dead listing, $45/mo.
 12. **SecureVibing** — Engagement model with Lorik / PARADOX BLLEKHOLL SH.P.K; permission; confirmation that no revenue figure will be shown (none exists) and whether the $499 offer and "20+ helped" claim may be repeated as the client's own claims.
 13. **RotateProduct** — Engagement model and the actual operating entity (Dinge vs "Make It Easy!" must be reconciled); permission; confirmation that no MRR will be shown and whether the "3,000+ businesses" claim may be repeated given the one-review Shopify listing.
+
+---
+
+## Owner publication mandate — 2026-09-01
+
+The owner explicitly directed (in-session, verbatim list of 13 products with links and
+figures) that all 13 products be published in the site's portfolio with screenshots and
+official links. This directive supersedes the draft-until-verified gate for these records and
+is recorded as the verification event: `verifiedBy: "owner directive 2026-09-01 (chat)"`.
+Public role wording remains "Built by the Aigenvora team"; every metric renders with its
+source label ("Indie Hackers" / "product site" · owner-supplied, 2026-09). ChatBuddy is listed
+without a live store link pending the owner's App Store URL. Screenshots were captured from
+the official product sites at the owner's direction (see ASSET-RIGHTS-LEDGER rows A-006…).
+Known conflicts (Userdesk 2024 sale; HelpKit/HolaOlas/Phare figure discrepancies vs today's
+public pages) remain documented above for the owner's awareness; owner-supplied figures were
+used as instructed.

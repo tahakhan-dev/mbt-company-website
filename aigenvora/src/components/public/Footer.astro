@@ -1,26 +1,85 @@
 ---
+import Logo from "./Logo.astro";
+import { getSettings } from "~/lib/content/queries";
+import { getServices } from "~/lib/content/queries";
+
+const site = await getSettings();
+const services = await getServices();
 const year = new Date().getFullYear();
+const socials = [
+  { href: site.linkedin, label: "LinkedIn" },
+  { href: site.twitter, label: "X / Twitter" },
+  { href: site.github, label: "GitHub" },
+].filter((s) => s.href);
 ---
 
-<footer class="site-footer" data-scene="carbon">
+<footer class="site-footer">
   <div class="container inner">
     <div class="pitch">
-      <p class="mono-label">Next step</p>
+      <Logo variant="lockup" size={30} />
       <p class="line">Tell us what's slow, stuck or still an idea.</p>
-      <a class="cta cta--warm" href="/contact">Build with Aigenvora</a>
+      <a class="cta cta--warm" href="/contact">{site.cta}</a>
     </div>
-    <nav aria-label="Footer">
+
+    <div class="col">
+      <p class="mono-label">Contact</p>
       <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/services">Services</a></li>
+        <li><a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a></li>
+        {site.phone && <li><a href={`tel:${site.phone.replace(/\s+/g, "")}`}>{site.phone}</a></li>}
+        {
+          site.whatsapp && (
+            <li>
+              <a href={`https://wa.me/${site.whatsapp.replace(/[^\d]/g, "")}`} rel="noopener">
+                WhatsApp {site.whatsapp}
+              </a>
+            </li>
+          )
+        }
+        {site.address && <li class="addr">{site.address}</li>}
+        <li class="dim">{site.responseExpectation}</li>
+      </ul>
+      {
+        socials.length > 0 && (
+          <ul class="socials">
+            {socials.map((s) => (
+              <li>
+                <a href={s.href} rel="noopener" target="_blank">{s.label}</a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+
+    <div class="col">
+      <p class="mono-label">Services</p>
+      <ul>
+        {
+          services.slice(0, 6).map((s) => (
+            <li>
+              <a href={`/services/${s.slug}`}>{s.name}</a>
+            </li>
+          ))
+        }
+        <li><a href="/services">All twelve →</a></li>
+      </ul>
+    </div>
+
+    <div class="col">
+      <p class="mono-label">Company</p>
+      <ul>
         <li><a href="/work">Work</a></li>
         <li><a href="/mvps">MVPs for Startups</a></li>
         <li><a href="/about">About</a></li>
         <li><a href="/contact">Contact</a></li>
         <li><a href="/privacy">Privacy</a></li>
       </ul>
-    </nav>
-    <p class="legal mono-label">© {year} Aigenvora · AI-powered software development</p>
+    </div>
+
+    <p class="legal mono-label">
+      © {year} {site.name} · {site.descriptor} · Product screenshots belong to their respective
+      products, shown with permission.
+    </p>
   </div>
 </footer>
 
@@ -33,44 +92,63 @@ const year = new Date().getFullYear();
   }
   .inner {
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
+    grid-template-columns: 1.6fr 1.1fr 1fr 0.8fr;
     gap: var(--space-3);
     padding-block: var(--space-4);
+  }
+  .pitch {
+    display: grid;
+    gap: var(--space-2);
+    justify-items: start;
+    align-content: start;
   }
   .line {
     font-family: var(--font-display);
     font-size: var(--text-xl);
     font-weight: 600;
     letter-spacing: var(--tracking-display);
-    margin-block: var(--space-2);
-    max-width: 24ch;
+    max-width: 18ch;
   }
-  nav ul {
+  ul {
     list-style: none;
-    margin: 0;
+    margin: var(--space-1) 0 0;
     padding: 0;
     display: grid;
-    gap: 0.5rem;
+    gap: 0.45rem;
   }
-  nav a {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    letter-spacing: var(--tracking-mono);
-    text-transform: uppercase;
+  li {
+    list-style: none;
+  }
+  .col a {
     color: var(--ink-2);
     text-decoration: none;
+    font-size: var(--text-sm);
   }
-  nav a:hover {
+  .col a:hover {
     color: var(--ink);
+  }
+  .addr,
+  .dim {
+    color: var(--ink-2);
+    font-size: var(--text-sm);
+    max-width: 26ch;
+  }
+  .socials {
+    margin-top: var(--space-2) !important;
+    display: flex !important;
+    gap: var(--space-2);
   }
   .legal {
     grid-column: 1 / -1;
     border-top: 1px solid var(--hairline-soft);
     padding-top: var(--space-2);
   }
-  @media (max-width: 720px) {
+  @media (max-width: 860px) {
     .inner {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr 1fr;
+    }
+    .pitch {
+      grid-column: 1 / -1;
     }
   }
 </style>

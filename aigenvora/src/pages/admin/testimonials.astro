@@ -1,0 +1,91 @@
+---
+import AdminLayout from "~/layouts/AdminLayout.astro";
+import { adminDb, col } from "~/lib/firebase/server";
+
+const snap = await adminDb().collection(col("testimonials")).get();
+const items = snap.docs
+  .map((d) => {
+    const x = d.data();
+    return {
+      id: d.id,
+      quote: String(x["quote"] ?? ""),
+      name: String(x["name"] ?? x["author"] ?? ""),
+      title: String(x["title"] ?? x["role"] ?? ""),
+      company: String(x["company"] ?? ""),
+      videoUrl: String(x["videoUrl"] ?? ""),
+      status: String(x["status"] ?? "draft"),
+      order: Number(x["order"] ?? 50),
+    };
+  })
+  .sort((a, b) => a.order - b.order);
+const saved = Astro.url.searchParams.get("saved");
+const error = Astro.url.searchParams.get("error");
+---
+
+<AdminLayout title="Testimonials">
+  <h1>Testimonials &amp; video reviews</h1>
+  {saved && <p class="flash">Saved “{saved}”. Public cache refreshed.</p>}
+  {error && <p class="flash error">That change didn't validate — nothing was saved.</p>}
+  <p>
+    Quotes show on the home page (top 3 by order, unless archived). Add a video URL (mp4) to a
+    testimonial and it also appears in the video-reviews block. Replace the seeded samples with
+    real client voices — prefer quotes with a specific noun in them.
+  </p>
+
+  {
+    [...items, { id: "", quote: "", name: "", title: "", company: "", videoUrl: "", status: "draft", order: 50 }].map(
+      (t) => (
+        <details class="panel" open={t.id === "" || saved === t.id}>
+          <summary>
+            {t.id === "" ? <b>+ New testimonial</b> : <><b>{t.name}</b> — “{t.quote.slice(0, 60)}…” <span class={`pill ${t.status}`}>{t.status}</span></>}
+          </summary>
+          <form method="post" action="/api/admin/testimonials">
+            <div class="grid2">
+              <label><span>Id (kebab-case)</span><input name="id" value={t.id} required pattern="[a-z0-9-]+" readonly={t.id !== ""} /></label>
+              <label><span>Order (lower shows first)</span><input name="order" type="number" value={t.order} min="0" max="99" /></label>
+            </div>
+            <label><span>Quote</span><textarea name="quote" rows="3" required maxlength="1000">{t.quote}</textarea></label>
+            <div class="grid2">
+              <label><span>Name</span><input name="name" value={t.name} required /></label>
+              <label><span>Title / role</span><input name="title" value={t.title} /></label>
+            </div>
+            <div class="grid2">
+              <label><span>Company</span><input name="company" value={t.company} /></label>
+              <label><span>Video URL (mp4, optional)</span><input name="videoUrl" value={t.videoUrl} /></label>
+            </div>
+            <label>
+              <span>Status</span>
+              <select name="status">
+                <option value="draft" selected={t.status === "draft"}>draft (still shown until archived)</option>
+                <option value="published" selected={t.status === "published"}>published</option>
+                <option value="archived" selected={t.status === "archived"}>archived (hidden)</option>
+              </select>
+            </label>
+            <button type="submit">Save</button>
+          </form>
+          {
+            t.id !== "" && (
+              <form method="post" action="/api/admin/testimonials" onsubmit="return confirm('Delete this testimonial?')">
+                <input type="hidden" name="id" value={t.id} />
+                <input type="hidden" name="intent" value="delete" />
+                <button class="danger" type="submit">Delete</button>
+              </form>
+            )
+          }
+        </details>
+      ),
+    )
+  }
+
+  <style>
+    details {
+      margin-bottom: 0.7rem;
+    }
+    summary {
+      cursor: pointer;
+    }
+    form {
+      margin-top: 1rem;
+    }
+  </style>
+</AdminLayout>

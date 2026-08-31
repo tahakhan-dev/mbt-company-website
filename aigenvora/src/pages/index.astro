@@ -4,9 +4,16 @@ import FrameStage from "~/components/public/FrameStage.astro";
 import Poster from "~/components/public/Poster.astro";
 import { getServices, getSettings } from "~/lib/content/queries";
 import { MANIFESTO, MVP_STEPS } from "~/lib/content/defaults";
+import { getPortfolio } from "~/lib/content/portfolio";
+import { getTestimonials } from "~/lib/content/queries";
 
 const services = await getServices();
 const site = await getSettings();
+const testimonials = await getTestimonials();
+const videoReviews = testimonials.filter((t) => t.videoUrl);
+const featured = getPortfolio()
+  .filter((p) => p.heroImage)
+  .slice(0, 3);
 
 const transformPairs = [
   ["Customer messages", "answered with your rules"],
@@ -39,6 +46,9 @@ const transformPairs = [
           <a class="cta cta--warm" href="/contact">{site.cta}</a>
           <a class="cta" href="/work">Explore our work</a>
         </div>
+        <p class="mono-label substat" data-entrance style="--ent-delay:.88s">
+          Thirteen products in production · Twelve ways to build yours
+        </p>
       </div>
       <div class="stage" data-entrance style="--ent-delay:.4s">
         <FrameStage tl="AIGENVORA ENGINE" tr="" bl="" br="FIG. 01">
@@ -186,11 +196,78 @@ const transformPairs = [
         Thirteen products our team has built and operated — AI agents, document processing,
         booking, CRM, monitoring, security. Each one is a working business, not a mockup.
       </p>
-      <a class="cta" href="/work" data-choreo data-choreo-start="0.28" data-choreo-end="0.36">
-        Explore the portfolio →
+      <div class="work-strip">
+        {
+          featured.map((p, i) => (
+            <a
+              class="work-card"
+              href={`/work/${p.slug}`}
+              data-choreo
+              data-choreo-start={String(0.26 + i * 0.06)}
+              data-choreo-end={String(0.36 + i * 0.06)}
+            >
+              <img src={p.heroImage} alt={`${p.name} product interface`} loading="lazy" width="600" height="375" />
+              <span class="wc-name">{p.name}</span>
+              <span class="wc-cat mono-label">{p.category}</span>
+            </a>
+          ))
+        }
+      </div>
+      <a class="cta" href="/work" data-choreo data-choreo-start="0.46" data-choreo-end="0.54">
+        Explore all 13 products →
       </a>
     </div>
   </section>
+
+  <!-- Client voices -->
+  {
+    testimonials.length > 0 && (
+      <section class="ch-voices" data-chapter="voices">
+        <div class="container">
+          <p class="mono-label" data-choreo data-choreo-start="0.1" data-choreo-end="0.18">
+            Client voices
+          </p>
+          <h2 data-choreo data-choreo-start="0.14" data-choreo-end="0.24">
+            What it's like to build with us.
+          </h2>
+          <div class="voices">
+            {testimonials.slice(0, 3).map((t, i) => (
+              <blockquote
+                class="voice"
+                data-choreo
+                data-choreo-start={String(0.22 + i * 0.07)}
+                data-choreo-end={String(0.32 + i * 0.07)}
+              >
+                <p class="quote">“{t.quote}”</p>
+                <footer>
+                  <b>{t.name}</b>
+                  <span class="mono-label">
+                    {t.title}
+                    {t.company ? ` · ${t.company}` : ""}
+                  </span>
+                </footer>
+              </blockquote>
+            ))}
+          </div>
+          {videoReviews.length > 0 && (
+            <div class="video-reviews">
+              <p class="mono-label" data-reveal>Video reviews</p>
+              <div class="vr-grid">
+                {videoReviews.map((t) => (
+                  <figure class="vr" data-reveal>
+                    <video controls preload="none" src={t.videoUrl} />
+                    <figcaption>
+                      <b>{t.name}</b> · {t.company}
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+    )
+  }
 
   <!-- Ch.7 — People and method -->
   <section class="ch-people" data-chapter="people">
@@ -203,6 +280,7 @@ const transformPairs = [
         <p data-choreo data-choreo-start="0.24" data-choreo-end="0.32">The people who scope your product are the people who build it.</p>
         <p data-choreo data-choreo-start="0.3" data-choreo-end="0.38">You get one channel, short loops and working software every week.</p>
         <p data-choreo data-choreo-start="0.36" data-choreo-end="0.44">You own the code, the infrastructure and the roadmap.</p>
+        <p data-choreo data-choreo-start="0.42" data-choreo-end="0.5">Your repo, your cloud, your name on everything. We work in your channels, not around them.</p>
       </div>
       <div class="method" data-choreo data-choreo-start="0.46" data-choreo-end="0.56">
         <p class="mono-label">Delivery method</p>
@@ -337,6 +415,9 @@ const transformPairs = [
     gap: var(--space-2);
     flex-wrap: wrap;
     margin-top: var(--space-3);
+  }
+  .substat {
+    margin-top: var(--space-2);
   }
   .stage {
     min-height: 56vh;
@@ -643,7 +724,7 @@ const transformPairs = [
 
   /* ---- Ch.6 / 7 / 8 ---- */
   .ch-work {
-    min-height: 110vh;
+    min-height: 130vh;
     padding-block: var(--space-5);
     display: flex;
     align-items: center;
@@ -655,6 +736,114 @@ const transformPairs = [
   .ch-work .support {
     margin-bottom: var(--space-3);
     max-width: 52ch;
+  }
+  .work-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+    margin-block: var(--space-3);
+  }
+  .work-card {
+    display: grid;
+    gap: 0.35rem;
+    text-decoration: none;
+  }
+  .work-card img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--hairline);
+    transition: transform 500ms var(--ease-drift);
+  }
+  .work-card:hover img {
+    transform: translateY(-5px);
+  }
+  .work-card:nth-child(2) {
+    margin-top: var(--space-3);
+  }
+  .wc-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-lg);
+  }
+  .wc-cat {
+    color: var(--ink-2);
+  }
+  @media (max-width: 860px) {
+    .work-strip {
+      grid-template-columns: 1fr;
+    }
+    .work-card:nth-child(2) {
+      margin-top: 0;
+    }
+  }
+
+  .ch-voices {
+    padding-block: var(--space-5);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+  }
+  .ch-voices h2 {
+    margin-block: var(--space-2) var(--space-3);
+  }
+  .voices {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+    max-width: 1100px;
+  }
+  .voice {
+    margin: 0;
+    border-top: 1px solid var(--hairline);
+    padding-top: var(--space-2);
+  }
+  .voice .quote {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: var(--text-lg);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.35;
+    max-width: 30ch;
+  }
+  .voice footer {
+    margin-top: var(--space-2);
+    display: grid;
+    gap: 0.2rem;
+  }
+  .voice:nth-child(2) {
+    margin-top: var(--space-3);
+  }
+  .video-reviews {
+    margin-top: var(--space-4);
+  }
+  .vr-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+    max-width: 1100px;
+  }
+  .vr {
+    margin: 0;
+  }
+  .vr video {
+    width: 100%;
+    border: 1px solid var(--hairline);
+    background: #090b10;
+    aspect-ratio: 16 / 9;
+  }
+  .vr figcaption {
+    margin-top: 0.4rem;
+    color: var(--ink-2);
+    font-size: var(--text-sm);
+  }
+  @media (max-width: 860px) {
+    .voices {
+      grid-template-columns: 1fr;
+    }
+    .voice:nth-child(2) {
+      margin-top: 0;
+    }
   }
 
   .ch-people {

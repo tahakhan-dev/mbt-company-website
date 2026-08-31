@@ -1,6 +1,16 @@
 ---
 import PublicLayout from "~/layouts/PublicLayout.astro";
 import { PRINCIPLES } from "~/lib/content/defaults";
+import { getTeam } from "~/lib/content/queries";
+
+const team = await getTeam();
+const principles = [
+  ...PRINCIPLES,
+  {
+    name: "Operate what you build",
+    body: "We run products in production, so we design like the 3am page is coming to us. Because sometimes it is.",
+  },
+];
 
 /**
  * Team portraits are owner-supplied per the rights ledger; the people section
@@ -27,6 +37,12 @@ import { PRINCIPLES } from "~/lib/content/defaults";
     </div>
   </header>
 
+  <section class="stats container" aria-label="Company facts">
+    <p class="mono-label strip" data-reveal>
+      12 service lines · 13 products in production · 1 senior team · Your repo, your cloud, your code
+    </p>
+  </section>
+
   <section class="belief container" data-chapter="about-belief">
     <p class="mono-label" data-reveal>What we believe</p>
     <p class="statement" data-reveal>
@@ -38,7 +54,7 @@ import { PRINCIPLES } from "~/lib/content/defaults";
     <p class="mono-label" data-reveal>Principles</p>
     <div class="grid">
       {
-        PRINCIPLES.map((p, i) => (
+        principles.map((p, i) => (
           <div class="principle" data-reveal>
             <span class="mono-label">{String(i + 1).padStart(2, "0")}</span>
             <h2>{p.name}</h2>
@@ -68,10 +84,41 @@ import { PRINCIPLES } from "~/lib/content/defaults";
       A small senior team — engineers, designers and operators who have shipped and run
       production systems across AI, SaaS, mobile and infrastructure.
     </p>
+    {
+      team.length > 0 && (
+        <div class="members">
+          {team.map((m) => (
+            <div class="member" data-reveal>
+              <span class="portrait" aria-hidden="true" />
+              <b>{m.name}</b>
+              <span class="mono-label">{m.role}</span>
+              {m.bio && <p>{m.bio}</p>}
+            </div>
+          ))}
+        </div>
+      )
+    }
     <p class="support" data-reveal>
-      Portraits and bios are published as each teammate approves them — real people, no stock
-      faces, no invented headcount.
+      Portraits are published as each teammate approves them — real people, no stock faces.
     </p>
+  </section>
+
+  <section class="ways container">
+    <p class="mono-label" data-reveal>Ways to work with us</p>
+    <div class="ways-grid">
+      <div data-reveal>
+        <h2>Project build</h2>
+        <p>A scoped system with milestones and a definition of done you sign off. Billed by milestone, documented as it ships, handed over clean.</p>
+      </div>
+      <div data-reveal>
+        <h2>MVP sprint</h2>
+        <p>Time-boxed from validation to launch, exactly as the <a href="/mvps">MVP page</a> describes it. Your accounts, your code, from the first commit.</p>
+      </div>
+      <div data-reveal>
+        <h2>Managed cover</h2>
+        <p>Monthly and cancellable: monitoring, updates, incident response and AI-quality reviews, per <a href="/services/maintenance-managed-ai">service 12</a>.</p>
+      </div>
+    </div>
   </section>
 
   <section class="endcap container">
@@ -156,8 +203,72 @@ import { PRINCIPLES } from "~/lib/content/defaults";
     color: var(--ink);
   }
 
+  .stats {
+    padding-block: var(--space-3) 0 !important;
+  }
+  .strip {
+    border-block: 1px solid var(--hairline);
+    padding-block: 0.8rem;
+    font-size: 0.8rem;
+  }
+
+  .members {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+    max-width: 1000px;
+  }
+  .member {
+    display: grid;
+    gap: 0.3rem;
+    align-content: start;
+  }
+  .portrait {
+    aspect-ratio: 4 / 5;
+    background:
+      linear-gradient(160deg, var(--raised), var(--paper));
+    border: 1px solid var(--hairline);
+    margin-bottom: 0.4rem;
+  }
+  .member b {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+  }
+  .member p {
+    color: var(--ink-2);
+    font-size: var(--text-sm);
+  }
   .team .support {
-    margin-top: var(--space-2);
+    margin-top: var(--space-3);
+  }
+
+  .ways {
+    padding-block: var(--space-4);
+    border-top: 1px solid var(--hairline-soft);
+  }
+  .ways-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+    max-width: 1000px;
+  }
+  .ways h2 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-1);
+  }
+  .ways p {
+    color: var(--ink-2);
+    font-size: var(--text-sm);
+  }
+  .ways a {
+    color: var(--accent-electric);
+  }
+  @media (max-width: 800px) {
+    .ways-grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   .endcap h2 {

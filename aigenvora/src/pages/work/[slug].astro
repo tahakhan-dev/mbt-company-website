@@ -1,0 +1,283 @@
+---
+import PublicLayout from "~/layouts/PublicLayout.astro";
+import {
+  accentHex,
+  getPortfolioProject,
+  nextPortfolioProject,
+} from "~/lib/content/portfolio";
+import { getService } from "~/lib/content/queries";
+
+const { slug } = Astro.params;
+const project = slug ? getPortfolioProject(slug) : undefined;
+if (!project) {
+  return new Response(null, { status: 404, statusText: "Not Found" });
+}
+const next = nextPortfolioProject(project.slug);
+const service = await getService(project.serviceSlug);
+const accent = accentHex(project.accent);
+---
+
+<PublicLayout
+  title={`${project.name} — Case Study`}
+  description={project.oneLiner}
+  accent={accent}
+>
+  <article style={`--case-accent:${accent}`}>
+    <!-- Cinematic opening: project-tinted portal scene renders behind -->
+    <header class="opening" data-chapter="case-opening">
+      <div class="container">
+        <p class="mono-label crumbs" data-entrance style="--ent-delay:.1s">
+          <a href="/work">Work</a> · {project.category}
+        </p>
+        <h1 data-entrance style="--ent-delay:.25s">{project.name}</h1>
+        <p class="outcome scrim" data-entrance style="--ent-delay:.45s">{project.oneLiner}</p>
+        {
+          project.liveUrl && (
+            <a class="cta visit" href={project.liveUrl} target="_blank" rel="noopener" data-entrance style="--ent-delay:.6s">
+              Visit {project.name} ↗
+            </a>
+          )
+        }
+      </div>
+    </header>
+
+    <!-- The product, seen -->
+    {
+      project.heroImage && (
+        <section class="media-stage container" data-chapter="case-media">
+          <figure data-choreo data-choreo-start="0.05" data-choreo-end="0.18">
+            <img
+              src={project.heroImage}
+              alt={`${project.name} — product interface`}
+              width="1200"
+              height="750"
+              loading="lazy"
+            />
+            <figcaption class="mono-label">{project.name} · live product</figcaption>
+          </figure>
+        </section>
+      )
+    }
+
+    <section class="chapter container" data-chapter="case-what">
+      <p class="mono-label" data-choreo data-choreo-start="0.08" data-choreo-end="0.15">01 · The product</p>
+      <p class="body-lg" data-choreo data-choreo-start="0.12" data-choreo-end="0.22">{project.story.what}</p>
+    </section>
+
+    <section class="chapter container" data-chapter="case-built">
+      <p class="mono-label" data-choreo data-choreo-start="0.08" data-choreo-end="0.15">02 · What we built</p>
+      <p class="body-lg offset" data-choreo data-choreo-start="0.12" data-choreo-end="0.22">{project.story.built}</p>
+      {
+        project.midImage && (
+          <figure class="inline-media" data-choreo data-choreo-start="0.3" data-choreo-end="0.42">
+            <img
+              src={project.midImage}
+              alt={`${project.name} — product detail`}
+              width="1200"
+              height="750"
+              loading="lazy"
+            />
+          </figure>
+        )
+      }
+    </section>
+
+    <section class="chapter container" data-chapter="case-capabilities">
+      <p class="mono-label" data-choreo data-choreo-start="0.08" data-choreo-end="0.15">03 · Capabilities</p>
+      <ul class="caps">
+        {
+          project.story.capabilities.map((c, i) => (
+            <li data-choreo data-choreo-start={String(0.14 + i * 0.05)} data-choreo-end={String(0.22 + i * 0.05)}>
+              {c}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    {
+      project.metrics.length > 0 && (
+        <section class="chapter container" data-chapter="case-metrics">
+          <p class="mono-label" data-choreo data-choreo-start="0.08" data-choreo-end="0.15">04 · In numbers</p>
+          <dl class="metrics">
+            {project.metrics.map((m, i) => (
+              <div class="metric" data-choreo data-choreo-start={String(0.14 + i * 0.06)} data-choreo-end={String(0.24 + i * 0.06)}>
+                <dt>{m.label}</dt>
+                <dd>{m.value}</dd>
+                <span class="mono-label src">{m.source}</span>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )
+    }
+
+    <section class="chapter container" data-chapter="case-service">
+      {
+        service && (
+          <a class="service-link" href={`/services/${service.slug}`} data-reveal>
+            <span class="mono-label">Related service · {String(service.order).padStart(2, "0")}</span>
+            <span class="name">{service.name}</span>
+          </a>
+        )
+      }
+    </section>
+
+    <nav class="next container" aria-label="Next project">
+      <p class="mono-label">Next product</p>
+      <a class="next-link" href={`/work/${next.slug}`}>{next.name} →</a>
+    </nav>
+  </article>
+</PublicLayout>
+
+<style>
+  .opening {
+    background: transparent;
+    color: #f2f3f8;
+    min-height: 120vh;
+    display: flex;
+    align-items: flex-end;
+    padding-block: var(--space-stage) var(--space-4);
+  }
+  :global(html[data-tier="C"]) .opening,
+  :global(html:not([data-tier])) .opening,
+  :global(html[data-engine="failed"]) .opening {
+    background: #0a0714;
+  }
+  .crumbs a {
+    color: #9da4b3;
+    text-decoration: none;
+  }
+  h1 {
+    font-size: var(--text-mega);
+    font-weight: 600;
+    line-height: 0.95;
+    margin-block: var(--space-2);
+  }
+  .outcome {
+    font-size: var(--text-lg);
+    color: #c9cedb;
+    max-width: 44ch;
+    margin-bottom: var(--space-3);
+  }
+  .visit {
+    border-color: var(--case-accent);
+    color: #f2f3f8;
+  }
+
+  .media-stage {
+    padding-block: var(--space-4);
+  }
+  .media-stage figure,
+  .inline-media {
+    margin: 0;
+    border: 1px solid var(--hairline);
+    background: var(--raised);
+  }
+  .media-stage img,
+  .inline-media img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .media-stage figcaption {
+    padding: 0.6rem 0.8rem;
+    border-top: 1px solid var(--hairline-soft);
+  }
+
+  .chapter {
+    padding-block: var(--space-4);
+  }
+  .body-lg {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2.4vw, 2rem);
+    font-weight: 500;
+    letter-spacing: var(--tracking-display);
+    line-height: 1.25;
+    max-width: 38ch;
+    margin-top: var(--space-2);
+  }
+  .body-lg.offset {
+    margin-left: clamp(0px, 10vw, 200px);
+  }
+  .inline-media {
+    max-width: 820px;
+    margin-top: var(--space-3);
+    margin-left: clamp(0px, 10vw, 200px);
+  }
+
+  .caps {
+    list-style: none;
+    margin: var(--space-2) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-1) var(--space-3);
+    max-width: 860px;
+  }
+  .caps li {
+    border-left: 2px solid var(--case-accent);
+    padding-left: 0.8rem;
+    color: var(--ink-2);
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-3);
+    margin: var(--space-3) 0 0;
+    max-width: 900px;
+  }
+  .metric dt {
+    color: var(--ink-2);
+    font-size: var(--text-sm);
+  }
+  .metric dd {
+    margin: 0.2rem 0;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    letter-spacing: var(--tracking-display);
+  }
+  .src {
+    color: var(--ink-2);
+    font-size: 0.62rem;
+  }
+
+  .service-link {
+    display: grid;
+    gap: 0.4rem;
+    text-decoration: none;
+    border-top: 1px solid var(--hairline);
+    padding-top: var(--space-3);
+    max-width: 520px;
+  }
+  .service-link .name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-xl);
+    letter-spacing: var(--tracking-display);
+  }
+
+  .next {
+    padding-block: var(--space-4) var(--space-5);
+    border-top: 1px solid var(--hairline-soft);
+  }
+  .next-link {
+    font-family: var(--font-display);
+    font-size: var(--text-display);
+    font-weight: 600;
+    letter-spacing: var(--tracking-display);
+    text-decoration: none;
+  }
+
+  @media (max-width: 760px) {
+    .caps {
+      grid-template-columns: 1fr;
+    }
+    .body-lg.offset,
+    .inline-media {
+      margin-left: 0;
+    }
+  }
+</style>

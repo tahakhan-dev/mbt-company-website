@@ -1,0 +1,47 @@
+---
+import AdminLayout from "~/layouts/AdminLayout.astro";
+import { cloudinaryConfigured, uploadImage } from "~/lib/media/cloudinary";
+import { audit } from "~/lib/admin/audit";
+import { originAllowed } from "~/lib/admin/auth";
+
+const configured = cloudinaryConfigured();
+let result: { ok: boolean; message: string } | null = null;
+
+if (Astro.request.method === "POST" && originAllowed(Astro.request)) {
+  const form = await Astro.request.formData();
+  const file = form.get("file");
+  if (file instanceof File && file.size > 0 && file.size < 10 * 1024 * 1024) {
+    const uploaded = await uploadImage(file);
+    if (uploaded.ok) {
+      await audit(Astro.locals.admin!.email, "media.upload", uploaded.publicId);
+      result = { ok: true, message: `Uploaded: ${uploaded.url}` };
+    } else {
+      result = { ok: false, message: uploaded.error };
+    }
+  } else {
+    result = { ok: false, message: "Choose an image under 10MB." };
+  }
+}
+---
+
+<AdminLayout title="Media">
+  <h1>Media (Cloudinary)</h1>
+  {
+    !configured.ok && (
+      <p class="flash error">
+        Cloudinary is not active: {configured.reason} Add it to the environment (see
+        aigenvora/.env.example) and this page starts working — no code change needed.
+      </p>
+    )
+  }
+  {result && <p class={`flash ${result.ok ? "" : "error"}`}>{result.message}</p>}
+
+  <form class="panel" method="post" enctype="multipart/form-data">
+    <label><span>Image (jpg/png/webp, &lt;10MB)</span><input type="file" name="file" accept="image/*" required /></label>
+    <button type="submit" disabled={!configured.ok}>Upload</button>
+  </form>
+  <p>
+    Uploads land in the <code>aigenvora</code> folder of your Cloudinary account; the returned
+    URL can be pasted into testimonials (video poster), team portraits or project media.
+  </p>
+</AdminLayout>

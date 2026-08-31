@@ -24,6 +24,18 @@ const error = Astro.url.searchParams.get("error") === "1";
       <label><span>Primary CTA label</span><input name="cta" value={site.cta} required /></label>
       <label><span>Response expectation</span><input name="responseExpectation" value={site.responseExpectation} required /></label>
     </div>
+    <h2>Contact details (shown in the footer and on /contact when filled)</h2>
+    <div class="grid2">
+      <label><span>Phone</span><input name="phone" value={site.phone} placeholder="+92 ..." /></label>
+      <label><span>WhatsApp</span><input name="whatsapp" value={site.whatsapp} placeholder="+92 ..." /></label>
+    </div>
+    <label><span>Address</span><input name="address" value={site.address} placeholder="Street, City, Country" /></label>
+    <h2>Social links (shown when filled)</h2>
+    <div class="grid2">
+      <label><span>LinkedIn URL</span><input name="linkedin" value={site.linkedin} /></label>
+      <label><span>X / Twitter URL</span><input name="twitter" value={site.twitter} /></label>
+    </div>
+    <label><span>GitHub URL</span><input name="github" value={site.github} /></label>
     <button type="submit">Save settings</button>
   </form>
 </AdminLayout>

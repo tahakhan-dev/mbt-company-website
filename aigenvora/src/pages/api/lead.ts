@@ -15,7 +15,9 @@ export const prerender = false;
 // upgrade to Firestore counters if serverless fan-out makes it toothless.
 const hits = new Map<string, number[]>();
 const WINDOW_MS = 60 * 60 * 1000;
-const MAX_PER_WINDOW = 5;
+// Generous enough for an office NAT; dev is effectively unlimited so the e2e
+// suite stays deterministic across repeated runs.
+const MAX_PER_WINDOW = import.meta.env.DEV ? 10_000 : 15;
 
 function rateLimited(ip: string): boolean {
   const now = Date.now();

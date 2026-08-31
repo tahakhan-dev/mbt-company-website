@@ -1,0 +1,79 @@
+---
+import AdminLayout from "~/layouts/AdminLayout.astro";
+import { adminDb, col } from "~/lib/firebase/server";
+
+const snap = await adminDb().collection(col("team")).get();
+const items = snap.docs
+  .map((d) => {
+    const x = d.data();
+    return {
+      id: d.id,
+      name: String(x["name"] ?? ""),
+      role: String(x["role"] ?? x["title"] ?? ""),
+      bio: String(x["bio"] ?? ""),
+      status: String(x["status"] ?? "draft"),
+      order: Number(x["order"] ?? 50),
+    };
+  })
+  .sort((a, b) => a.order - b.order);
+const saved = Astro.url.searchParams.get("saved");
+const error = Astro.url.searchParams.get("error");
+---
+
+<AdminLayout title="Team">
+  <h1>Team</h1>
+  {saved && <p class="flash">Saved “{saved}”.</p>}
+  {error && <p class="flash error">That change didn't validate — nothing was saved.</p>}
+  <p>Members show on the About page unless archived. Portraits arrive in a later media pass.</p>
+
+  {
+    [...items, { id: "", name: "", role: "", bio: "", status: "draft", order: 50 }].map((m) => (
+      <details class="panel" open={m.id === "" || saved === m.id}>
+        <summary>
+          {m.id === "" ? <b>+ New member</b> : <><b>{m.name}</b> · {m.role} <span class={`pill ${m.status}`}>{m.status}</span></>}
+        </summary>
+        <form method="post" action="/api/admin/team">
+          <div class="grid2">
+            <label><span>Id (kebab-case)</span><input name="id" value={m.id} required pattern="[a-z0-9-]+" readonly={m.id !== ""} /></label>
+            <label><span>Order</span><input name="order" type="number" value={m.order} min="0" max="99" /></label>
+          </div>
+          <div class="grid2">
+            <label><span>Name</span><input name="name" value={m.name} required /></label>
+            <label><span>Role</span><input name="role" value={m.role} required /></label>
+          </div>
+          <label><span>Short bio</span><textarea name="bio" rows="2" maxlength="600">{m.bio}</textarea></label>
+          <label>
+            <span>Status</span>
+            <select name="status">
+              <option value="draft" selected={m.status === "draft"}>draft (still shown until archived)</option>
+              <option value="published" selected={m.status === "published"}>published</option>
+              <option value="archived" selected={m.status === "archived"}>archived (hidden)</option>
+            </select>
+          </label>
+          <button type="submit">Save</button>
+        </form>
+        {
+          m.id !== "" && (
+            <form method="post" action="/api/admin/team" onsubmit="return confirm('Delete this member?')">
+              <input type="hidden" name="id" value={m.id} />
+              <input type="hidden" name="intent" value="delete" />
+              <button class="danger" type="submit">Delete</button>
+            </form>
+          )
+        }
+      </details>
+    ))
+  }
+
+  <style>
+    details {
+      margin-bottom: 0.7rem;
+    }
+    summary {
+      cursor: pointer;
+    }
+    form {
+      margin-top: 1rem;
+    }
+  </style>
+</AdminLayout>

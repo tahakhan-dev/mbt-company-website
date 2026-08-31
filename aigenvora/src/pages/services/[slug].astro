@@ -4,6 +4,8 @@ import FrameStage from "~/components/public/FrameStage.astro";
 import Poster from "~/components/public/Poster.astro";
 import { getService, getServices } from "~/lib/content/queries";
 import { PROCESS } from "~/lib/content/defaults";
+import { getPortfolioByService } from "~/lib/content/portfolio";
+import { SERVICE_EXTRAS } from "~/lib/content/service-extras";
 
 const { slug } = Astro.params;
 const service = slug ? await getService(slug) : undefined;
@@ -12,6 +14,8 @@ if (!service) {
 }
 const all = await getServices();
 const next = all.find((s) => s.order === (service.order % 12) + 1);
+const related = getPortfolioByService(service.slug);
+const extras = SERVICE_EXTRAS[service.slug];
 
 const faqJsonLd = {
   "@context": "https://schema.org",
@@ -67,6 +71,15 @@ const faqJsonLd = {
       </div>
     </section>
 
+    {
+      extras && (
+        <section class="benefits container" data-reveal>
+          <p class="mono-label">Why it pays off</p>
+          <p class="benefits-body">{extras.benefits}</p>
+        </section>
+      )
+    }
+
     <section class="deliver container" data-reveal>
       <p class="mono-label">What the engagement delivers</p>
       <ul>
@@ -89,6 +102,21 @@ const faqJsonLd = {
       </ol>
     </section>
 
+    {
+      extras && (
+        <section class="stack container" data-reveal>
+          <p class="mono-label">What we typically reach for</p>
+          <ul>
+            {extras.stack.map((s) => <li>{s}</li>)}
+          </ul>
+          <p class="stack-note">
+            Stacks are chosen per project and documented in an architecture decision record —
+            never inherited from a template.
+          </p>
+        </section>
+      )
+    }
+
     <section class="faq container">
       <p class="mono-label" data-reveal>Asked before every engagement</p>
       {
@@ -100,6 +128,27 @@ const faqJsonLd = {
         ))
       }
     </section>
+
+    {
+      related.length > 0 && (
+        <section class="related container">
+          <p class="mono-label" data-reveal>Shipped with this service</p>
+          <div class="related-grid">
+            {related.map((p) => (
+              <a class="related-card" href={`/work/${p.slug}`} data-reveal>
+                {p.heroImage ? (
+                  <img src={p.heroImage} alt="" loading="lazy" width="600" height="375" />
+                ) : (
+                  <span class="related-fallback mono-label">{p.name}</span>
+                )}
+                <span class="rc-name">{p.name}</span>
+                <span class="rc-line">{p.oneLiner}</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
 
     <section class="endcap container" data-chapter="service-end">
       <h2 data-reveal>Which workflow costs you the most hours?</h2>
@@ -168,6 +217,47 @@ const faqJsonLd = {
     margin-top: var(--space-2);
   }
 
+  .benefits {
+    padding-block: var(--space-3);
+    border-top: 1px solid var(--hairline-soft);
+  }
+  .benefits-body {
+    font-family: var(--font-display);
+    font-size: clamp(1.15rem, 1.9vw, 1.6rem);
+    font-weight: 500;
+    letter-spacing: var(--tracking-display);
+    line-height: 1.35;
+    max-width: 52ch;
+    margin-top: var(--space-2);
+  }
+
+  .stack {
+    padding-block: var(--space-3);
+    border-top: 1px solid var(--hairline-soft);
+  }
+  .stack ul {
+    list-style: none;
+    margin: var(--space-2) 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .stack li {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.03em;
+    border: 1px solid var(--hairline);
+    padding: 0.4rem 0.7rem;
+    color: var(--ink-2);
+  }
+  .stack-note {
+    margin-top: var(--space-2);
+    color: var(--ink-2);
+    font-size: var(--text-sm);
+    max-width: 56ch;
+  }
+
   .deliver {
     padding-block: var(--space-3);
     border-top: 1px solid var(--hairline-soft);
@@ -233,6 +323,49 @@ const faqJsonLd = {
     color: var(--ink-2);
     padding: 0 0.2rem 1rem;
     max-width: 62ch;
+  }
+
+  .related {
+    padding-block: var(--space-4);
+    border-top: 1px solid var(--hairline-soft);
+  }
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+    max-width: 980px;
+  }
+  .related-card {
+    display: grid;
+    gap: 0.4rem;
+    text-decoration: none;
+  }
+  .related-card img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--hairline);
+    transition: transform 500ms var(--ease-drift);
+  }
+  .related-card:hover img {
+    transform: translateY(-4px);
+  }
+  .related-fallback {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 10;
+    background: #090b10;
+    color: #9da4b3;
+    border: 1px solid var(--hairline);
+  }
+  .rc-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-lg);
+  }
+  .rc-line {
+    color: var(--ink-2);
+    font-size: var(--text-sm);
   }
 
   .endcap {

@@ -20,9 +20,26 @@ const sent = Astro.url.searchParams.get("sent") === "1";
           Share what's slow, stuck or still an idea. A senior engineer reads every message.
         </p>
         <p class="mono-label expectation" data-reveal>{site.responseExpectation}</p>
-        <p class="support alt" data-reveal>
-          Prefer email? <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>
-        </p>
+        <div class="channels" data-reveal>
+          <p class="support alt">
+            Prefer email? <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>
+          </p>
+          {
+            site.phone && (
+              <p class="support alt">
+                Call <a href={`tel:${site.phone.replace(/\s+/g, "")}`}>{site.phone}</a>
+              </p>
+            )
+          }
+          {
+            site.whatsapp && (
+              <p class="support alt">
+                WhatsApp <a href={`https://wa.me/${site.whatsapp.replace(/[^\d]/g, "")}`} rel="noopener">{site.whatsapp}</a>
+              </p>
+            )
+          }
+          {site.address && <p class="support alt addr">{site.address}</p>}
+        </div>
       </header>
 
       {
@@ -182,6 +199,14 @@ const sent = Astro.url.searchParams.get("sent") === "1";
   .alt {
     margin-top: var(--space-2);
     font-size: var(--text-base);
+  }
+  .channels {
+    display: grid;
+    gap: 0.2rem;
+  }
+  .addr {
+    color: #9da4b3;
+    max-width: 30ch;
   }
 
   form {
