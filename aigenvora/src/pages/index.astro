@@ -106,7 +106,14 @@ import Poster from "~/components/public/Poster.astro";
   :global(html[data-tier="C"]) .ch-problem,
   :global(html:not([data-tier])) .ch-problem,
   :global(html[data-engine="failed"]) .ch-problem {
-    background: #030407;
+    background: #030407 url("/media/hf01-chamber.webp") center / cover no-repeat fixed;
+  }
+  @media (max-width: 700px) {
+    :global(html[data-tier="C"]) .ch-problem,
+    :global(html:not([data-tier])) .ch-problem,
+    :global(html[data-engine="failed"]) .ch-problem {
+      background: #030407 url("/media/hf01-chamber-mobile.webp") center / cover no-repeat;
+    }
   }
   .chapter-mark {
     margin-bottom: var(--space-4);

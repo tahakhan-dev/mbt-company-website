@@ -4,7 +4,13 @@ import {
   DirectionalLight,
   Group,
   MathUtils,
+  Mesh,
+  MeshBasicMaterial,
+  PlaneGeometry,
+  SRGBColorSpace,
+  TextureLoader,
   Vector3,
+  type Texture,
 } from "three";
 import type { MasterState, SceneContext, SceneModule } from "../types";
 import { buildEngine, type EngineModel } from "../engine-model";
@@ -76,6 +82,10 @@ export class ArrivalScene implements SceneModule {
   private lookTarget = new Vector3();
   private posOut: [number, number, number] = [0, 0, 0];
   private voidColor!: Color;
+  private plate: Mesh | null = null;
+  private plateMat: MeshBasicMaterial | null = null;
+  private plateGeo: PlaneGeometry | null = null;
+  private plateTex: Texture | null = null;
 
   init(ctx: SceneContext): void {
     this.ctx = ctx;
@@ -95,6 +105,26 @@ export class ArrivalScene implements SceneModule {
 
     ctx.camera.position.set(0.4, 0.6, 6.4);
     ctx.camera.lookAt(0, 0, 0);
+
+    // HF-01 plate (GENERATIVE-ASSET-LEDGER row 3): the chamber's crossing
+    // signals, animated by the engine — slow drift + pointer parallax. Loads
+    // async and simply never appears if the texture fails; the chamber's
+    // rendered darkness carries the scene without it.
+    new TextureLoader().load("/media/hf01-chamber.webp", (tex) => {
+      tex.colorSpace = SRGBColorSpace;
+      this.plateTex = tex;
+      this.plateGeo = new PlaneGeometry(30, 12.6);
+      this.plateMat = new MeshBasicMaterial({
+        map: tex,
+        transparent: true,
+        opacity: 0,
+        depthWrite: false,
+        toneMapped: false,
+      });
+      this.plate = new Mesh(this.plateGeo, this.plateMat);
+      this.plate.position.set(0, 0, -9);
+      this.ctx.scene.add(this.plate);
+    });
   }
 
   update(state: MasterState, _dt: number): void {
@@ -135,7 +165,13 @@ export class ArrivalScene implements SceneModule {
     }
 
     // Chamber: the frame "expands past the viewport" as rendered darkness.
-    this.ctx.renderer.setClearColor(this.voidColor, chamberAlpha(p));
+    const chamber = chamberAlpha(p);
+    this.ctx.renderer.setClearColor(this.voidColor, chamber);
+    if (this.plate && this.plateMat) {
+      this.plateMat.opacity = chamber * 0.55;
+      this.plate.position.x = Math.sin(t * 0.02) * 0.5 + state.pointer.x * -0.4;
+      this.plate.position.y = Math.cos(t * 0.016) * 0.25 + state.pointer.y * 0.25;
+    }
 
     // Lighting arc: cold split → dimmer chamber; core warms as the system nears.
     this.key.intensity = keyIntensity(p);
@@ -170,6 +206,10 @@ export class ArrivalScene implements SceneModule {
   dispose(): void {
     this.ctx.renderer.setClearColor(0x000000, 0);
     this.ctx.scene.remove(this.rig, this.key, this.fill, this.ambient);
+    if (this.plate) this.ctx.scene.remove(this.plate);
+    this.plateGeo?.dispose();
+    this.plateMat?.dispose();
+    this.plateTex?.dispose();
     this.engine.dispose();
     this.key.dispose();
     this.fill.dispose();

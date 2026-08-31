@@ -56,7 +56,8 @@ readable content. Initial route JS (excl. engine, excl. admin) budget: <170KB gz
 
 | Scene | Tris | Draw calls | Shaders | Texture MB | RT MB | Post passes | Frame ms target |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Home Ch.1–9 | | | | | | | 16.6 desktop / 33 mobile |
+| Home Ch.1–2 (measured 2026-09-01, Gate B prototype) | 18,480 | 102 (over 40 target — merge/instancing pass scheduled Phase 8) | 4 material families + conduit GLSL | ~1 (HF-01 webp) | SMAA + HalfFloat scene buffer | 2 (Render, SMAA) | 60fps @4× CPU throttle, 0 long tasks |
+| Home Ch.3–9 | | | | | | | 16.6 desktop / 33 mobile |
 | Services atlas | | | | | | | |
 | Service detail | | | | | | | |
 | Work portals | | | | | | | |

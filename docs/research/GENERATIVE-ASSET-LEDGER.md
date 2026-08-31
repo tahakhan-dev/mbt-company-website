@@ -45,8 +45,35 @@ Explicitly out of scope for generation: logo, UI, readable product screenshots, 
 fake clients/people/metrics/testimonials, Lusion replicas, derivatives of client assets, any
 essential content that disappears when video is unavailable.
 
+## Pricing + terms facts (verified 2026-09-01, post-Gate-A, before first spend)
+
+- Costs preflighted with `get_cost:true` (no jobs submitted): **video is unaffordable** —
+  seedance_2_5 6s/720p/21:9 = **39 credits** (~4× the entire ceiling). Image stills:
+  nano_banana_pro 21:9 = **2 credits**; soul_2 16:9/2k = **0.12 credits**.
+- **Plan adaptation (priority order preserved per §3A.2):** HF-01/HF-02 ship as high-res STILL
+  plates, animated at runtime by the engine (slow shader pan/parallax/grain — cheaper at runtime
+  than video anyway, and reduced-motion tier gets the static frame natively). Direction tests on
+  soul_2 (0.12 cr each), finals on nano_banana_pro 21:9 (2 cr each). HF-03 transition video is
+  dropped (unaffordable); the masked-wipe transition stays code-native GLSL.
+- Commercial terms verified: Higgsfield's Terms of Use grant users ownership of outputs and
+  unrestricted commercial use on all plans incl. free; no separate commercial license; rights
+  survive account cancellation; outputs may be used to train their models (acceptable for
+  abstract brand plates; never send client/private media). Sources:
+  https://higgsfield.ai/terms-of-use-agreement ·
+  https://higgsfield.ai/creator-hub/help-center/account/who-owns-my-generations-and-can-i-use-them-commercially
+
 ## Generation log
 
 | # | Date | Shot | Model/settings | Expected cost | Pre-balance | Job ID | Actual cost | Post-balance | Decision |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| — | — | none yet — blocked until Creative Gate A approval | | | 10 | | | 10 | |
+| 1 | 2026-09-01 | HF-01-T1 direction test (comp A: three conflicting cold shafts) | soul_2, 16:9, 2k | 0.12 | 10.00 | adfc7530-91d4-4abc-8eda-5ceebbe5ad67 | 0.12 | 9.88 | Rejected for final (too bright/theatrical for a backdrop) — kept as evidence |
+| 2 | 2026-09-01 | HF-01-T2 direction test (comp B: two opposing thin beams, off-center void) | soul_2, 16:9, 2k | 0.12 | 9.88 | 3f15df1a-f5e2-4ea6-a731-5f4f3d7cb7d5 | 0.12 | 9.76 | **Winning direction** — thin crossing signals = the Problem chapter motif |
+| 3 | 2026-09-01 | HF-01 FINAL — problem-chamber plate (T2 direction refined) | nano_banana_pro, 21:9 | 2.00 | 9.76 | 63ea043f-4c3f-4c64-9ba6-387795ccca18 | 2.00 | 7.76 | **Approved.** Review: no artifacts/text/logos/people; dark enough for overlay text; center-weighted → 9:16 crop derivable locally (no HF-04 spend) |
+| 4 | 2026-09-01 | HF-02 FINAL — warm resolution plate (amber raking brushed dark metal) | nano_banana_pro, 21:9 | 2.00 | 7.76 | 5d936102-0f67-4fe6-9e6f-1ffa2fea41f2 | 2.00 | 5.76 | **Approved.** Same review clean; machined-metal texture matches engine material language |
+
+**Balance re-verified after session: 5.76 credits remaining** (spent 4.24 of 10; tests 0.24/2,
+signature 4.00/5, supporting 0/2, reserve intact >1). HF-03 dropped (video 39 cr — over ceiling);
+transition stays code-native GLSL. HF-04 unnecessary — mobile 9:16 crops derived locally with
+sharp. Originals archived at docs/evidence/v3/higgsfield/ (t1, t2, finals); optimized web
+derivatives in aigenvora/public/media/. Delivery via Cloudinary deferred to Phase 5 media pass
+(assets are local-first for the prototype; no hotlinking of MCP URLs anywhere in the app).
