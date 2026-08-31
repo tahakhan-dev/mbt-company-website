@@ -2,24 +2,38 @@
 import PublicLayout from "~/layouts/PublicLayout.astro";
 import FrameStage from "~/components/public/FrameStage.astro";
 import Poster from "~/components/public/Poster.astro";
+import { getServices, getSettings } from "~/lib/content/queries";
+import { MANIFESTO, MVP_STEPS } from "~/lib/content/defaults";
+
+const services = await getServices();
+const site = await getSettings();
+
+const transformPairs = [
+  ["Customer messages", "answered with your rules"],
+  ["Documents", "read, validated, filed"],
+  ["Bookings", "confirmed while you sleep"],
+  ["Invoices", "reconciled, chased, reported"],
+  ["CRM records", "one truth, every system"],
+  ["Friday reports", "assembled overnight"],
+] as const;
 ---
 
 <PublicLayout
   title="AI-Powered Software Development"
   description="Aigenvora designs, builds and operates AI-powered software: agents, products, data systems and custom platforms built by one senior team."
 >
-  <!-- Chapter 1 — Arrival (state: Unresolved) -->
+  <!-- Ch.1 — Arrival (Unresolved) -->
   <section class="ch-arrival" data-chapter="arrival">
     <div class="container grid">
       <div class="copy">
-        <p class="mono-label" data-reveal>AI-powered software development</p>
+        <p class="mono-label" data-reveal>{site.descriptor}</p>
         <h1 data-reveal>We turn ambitious ideas and broken workflows into software that moves.</h1>
         <p class="support" data-reveal>
           AI agents, products, data systems and custom platforms — built by one senior team.
         </p>
         <div class="actions" data-reveal>
-          <a class="cta cta--warm" href="/contact">Build with Aigenvora</a>
-          <a class="cta" href="/work/signal-desk">Explore our work</a>
+          <a class="cta cta--warm" href="/contact">{site.cta}</a>
+          <a class="cta" href="/work">Explore our work</a>
         </div>
       </div>
       <div class="stage">
@@ -30,39 +44,180 @@ import Poster from "~/components/public/Poster.astro";
     </div>
   </section>
 
-  <!-- Chapter 2 — The problem (chamber) -->
-  <section class="ch-problem" data-chapter="problem" data-scene="dark">
+  <!-- Ch.2 — The problem (chamber) -->
+  <section class="ch-problem" data-chapter="problem">
     <div class="container">
       <p class="mono-label chapter-mark" data-reveal>02 · The problem</p>
       <div class="manifesto">
-        <p class="line" data-reveal>
-          Most companies don't have a software problem. They have twelve tools that refuse to talk.
-        </p>
-        <p class="line" data-reveal>People spend their days moving data that should move itself.</p>
-        <p class="line" data-reveal>
-          That gap between systems is where margins, hours and patience go to die.
-        </p>
+        {MANIFESTO.map((line) => <p class="line" data-reveal>{line}</p>)}
       </div>
-      <Poster state="unresolved" label="Disconnected signals between misaligned modules" />
     </div>
   </section>
 
-  <!-- Prototype endcap: where Ch.3 begins (Gate B scope ends here) -->
-  <section class="ch-next" data-chapter="system-teaser">
-    <div class="container">
-      <p class="mono-label" data-reveal>03 · The system — twelve ways to make software move</p>
-      <h2 data-reveal>One team, one system, no hand-offs.</h2>
-      <p class="support" data-reveal>
-        The full service atlas assembles here. Prototype continues on the service route.
-      </p>
-      <a class="cta" href="/services/ai-agents-automation" data-reveal>Service 01 · AI Agents &amp; Automation</a>
+  <!-- Ch.3 — The system (service atlas, pinned on desktop) -->
+  <section class="ch-system" data-chapter="system" id="system">
+    <div class="pin">
+      <div class="container atlas">
+        <div class="atlas-head">
+          <p class="mono-label">03 · The system</p>
+          <h2>Twelve ways to make software move.</h2>
+          <p class="support">One team, one system, no hand-offs.</p>
+          <p class="mono-label counter" aria-hidden="true">
+            MODULES <span data-atlas-counter>01</span>/12
+          </p>
+        </div>
+        <ol class="atlas-list" data-atlas-list>
+          {
+            services.map((s, i) => (
+              <li data-atlas-item={i}>
+                <a href={`/services/${s.slug}`}>
+                  <span class="mono-label num">{String(s.order).padStart(2, "0")}</span>
+                  <span class="name">{s.name}</span>
+                  <span class="outcome">{s.outcome}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
     </div>
   </section>
+
+  <!-- Ch.4 — For founders -->
+  <section class="ch-founders" data-chapter="founders">
+    <div class="container">
+      <p class="mono-label" data-reveal>04 · For founders</p>
+      <h2 data-reveal>From first sketch to a product people can finally use.</h2>
+      <p class="belief" data-reveal>An MVP is not a demo. It's the first honest version of your business.</p>
+      <ol class="founder-steps">
+        {
+          MVP_STEPS.map((s, i) => (
+            <li data-reveal>
+              <span class="mono-label">{String(i + 1).padStart(2, "0")}</span>
+              <h3>{s.name}</h3>
+            </li>
+          ))
+        }
+      </ol>
+      <a class="cta cta--warm" href="/mvps" data-reveal>Plan your MVP</a>
+    </div>
+  </section>
+
+  <!-- Ch.5 — Transformation -->
+  <section class="ch-transform" data-chapter="transformation">
+    <div class="container">
+      <p class="mono-label chapter-mark" data-reveal>05 · Before / after</p>
+      <h2 data-reveal>Before: six tools and a person in the middle.<br />After: one system that runs the routine.</h2>
+      <dl class="pairs">
+        {
+          transformPairs.map(([before, after]) => (
+            <div class="pair" data-reveal>
+              <dt>{before}</dt>
+              <dd>{after}</dd>
+            </div>
+          ))
+        }
+      </dl>
+      <p class="support" data-reveal>
+        While your team does the work only people can do.
+      </p>
+    </div>
+  </section>
+
+  <!-- Ch.6 — Work (proof) -->
+  <section class="ch-work" data-chapter="work">
+    <div class="container">
+      <p class="mono-label" data-reveal>06 · Work</p>
+      <h2 data-reveal>Systems in the world.</h2>
+      <p class="support" data-reveal>
+        Case studies publish here as each engagement is verified with its client — role stated
+        plainly, metrics sourced and dated, nothing inflated. The experience prototype shows the
+        format:
+      </p>
+      <a class="work-card" href="/work/signal-desk" data-reveal>
+        <span class="mono-label">Prototype · Operations software</span>
+        <span class="name">Signal Desk</span>
+        <span class="outcome">A message-routing desk that reads, sorts and answers — so a five-person team stops living in their inbox.</span>
+        <span class="mono-label go">View the case study format →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Ch.8 — People and method (Ch.7 voices renders when verified testimonials exist) -->
+  <section class="ch-people" data-chapter="people">
+    <div class="container">
+      <p class="mono-label" data-reveal>07 · People &amp; method</p>
+      <h2 data-reveal>Senior people, start to ship.</h2>
+      <div class="statements">
+        <p data-reveal>The people who scope your product are the people who build it.</p>
+        <p data-reveal>You get one channel, short loops and working software every week.</p>
+        <p data-reveal>You own the code, the infrastructure and the roadmap.</p>
+      </div>
+      <div class="method" data-reveal>
+        <p class="mono-label">Delivery method</p>
+        <ol>
+          <li><b>Map</b> — sit in the real process, find where hours go.</li>
+          <li><b>Design</b> — smallest valuable system, risk behind checkpoints.</li>
+          <li><b>Build</b> — working software weekly, rehearsed against real cases.</li>
+          <li><b>Operate</b> — monitored, reviewed, improved after launch.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ch.9 — Resolution -->
+  <section class="ch-resolution" data-chapter="resolution">
+    <div class="container">
+      <p class="mono-label" data-reveal>08 · Next</p>
+      <h2 data-reveal>Build what moves next.</h2>
+      <p class="support" data-reveal>
+        Tell us what's slow, stuck or still an idea. We'll tell you what we'd build first.
+      </p>
+      <div class="actions" data-reveal>
+        <a class="cta cta--warm" href="/contact">{site.cta}</a>
+        <a class="cta cta--ghost" href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>
+      </div>
+      <p class="mono-label risk" data-reveal>A first conversation costs nothing and usually saves a quarter.</p>
+    </div>
+  </section>
+
+  <script>
+    // Atlas: active service + counter derive from the same scroll math the
+    // engine uses (chapterProgress), so DOM and scene stay in step.
+    import { chapterProgress, measureChapters } from "~/engine/scroll";
+
+    function armAtlas(): void {
+      const counter = document.querySelector<HTMLElement>("[data-atlas-counter]");
+      const items = document.querySelectorAll<HTMLElement>("[data-atlas-item]");
+      if (!counter || items.length === 0) return;
+      let range = measureChapters().find((c) => c.name === "system");
+      const remeasure = () => {
+        range = measureChapters().find((c) => c.name === "system");
+      };
+      window.addEventListener("resize", remeasure, { passive: true });
+      let raf = 0;
+      const tick = (): void => {
+        raf = requestAnimationFrame(tick);
+        if (!range) return;
+        const p = chapterProgress(range, window.scrollY, window.innerHeight);
+        const active = Math.min(11, Math.floor(p * 12));
+        counter.textContent = String(active + 1).padStart(2, "0");
+        items.forEach((el, i) => el.classList.toggle("is-active", i === active));
+      };
+      tick();
+      document.addEventListener("astro:before-swap", () => cancelAnimationFrame(raf), { once: true });
+    }
+    document.addEventListener("astro:page-load", armAtlas);
+  </script>
 </PublicLayout>
 
 <style>
+  section h2 {
+    font-size: var(--text-xl);
+  }
+
   .ch-arrival {
-    min-height: 160vh;
+    min-height: 150vh;
     padding-top: var(--space-stage);
   }
   .grid {
@@ -74,13 +229,13 @@ import Poster from "~/components/public/Poster.astro";
   }
   h1 {
     font-size: var(--text-display);
-    margin-block: var(--space-2) var(--space-2);
+    margin-block: var(--space-2);
     max-width: 15ch;
   }
   .support {
     color: var(--ink-2);
     font-size: var(--text-lg);
-    max-width: 44ch;
+    max-width: 46ch;
   }
   .actions {
     display: flex;
@@ -92,36 +247,28 @@ import Poster from "~/components/public/Poster.astro";
     min-height: 56vh;
     position: sticky;
     top: 12vh;
-    display: grid; /* stretches the frame device to the full stage height */
+    display: grid;
   }
 
+  /* Ch.2 — chamber: scene renders the darkness; dark text tokens apply */
   .ch-problem {
-    /* The chamber's darkness is rendered by the engine (scene clear color
-       ramps in). Tier C / no-JS / failed-engine visitors get a solid ground. */
     background: transparent;
-    color: var(--ink);
-    min-height: 240vh;
+    color: #f2f3f8;
+    min-height: 220vh;
     padding-block: var(--space-5);
+  }
+  .ch-problem .chapter-mark {
+    color: #9da4b3;
   }
   :global(html[data-tier="C"]) .ch-problem,
   :global(html:not([data-tier])) .ch-problem,
   :global(html[data-engine="failed"]) .ch-problem {
     background: #030407 url("/media/hf01-chamber.webp") center / cover no-repeat fixed;
   }
-  @media (max-width: 700px) {
-    :global(html[data-tier="C"]) .ch-problem,
-    :global(html:not([data-tier])) .ch-problem,
-    :global(html[data-engine="failed"]) .ch-problem {
-      background: #030407 url("/media/hf01-chamber-mobile.webp") center / cover no-repeat;
-    }
-  }
-  .chapter-mark {
-    margin-bottom: var(--space-4);
-  }
   .manifesto {
     display: grid;
-    gap: 38vh;
-    padding-block: 10vh 30vh;
+    gap: 34vh;
+    padding-block: 8vh 24vh;
   }
   .manifesto .line {
     font-family: var(--font-display);
@@ -134,24 +281,255 @@ import Poster from "~/components/public/Poster.astro";
     margin-left: clamp(0px, 18vw, 320px);
   }
 
-  .ch-next {
-    padding-block: var(--space-5);
+  /* Ch.3 — atlas: one pin, ≤4 viewport heights (MOTION-MATRIX) */
+  .ch-system {
+    height: 480vh;
   }
-  .ch-next h2 {
+  .pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+  .atlas {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: var(--space-3);
+    width: 100%;
+  }
+  .atlas-head h2 {
     font-size: var(--text-xl);
     margin-block: var(--space-2);
+    max-width: 14ch;
   }
-  .ch-next .support {
-    margin-bottom: var(--space-3);
+  .counter {
+    margin-top: var(--space-3);
+    font-size: 1rem;
+  }
+  .atlas-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 2px;
+    align-content: center;
+    max-height: 88vh;
+  }
+  .atlas-list a {
+    display: grid;
+    grid-template-columns: 2.4rem 1fr;
+    gap: 0 var(--space-2);
+    text-decoration: none;
+    padding: 0.34rem 0.6rem;
+    border-left: 2px solid transparent;
+    transition: border-color var(--dur-micro) var(--ease-out-fast);
+  }
+  .atlas-list .name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+    letter-spacing: var(--tracking-display);
+  }
+  .atlas-list .outcome {
+    grid-column: 2;
+    color: var(--ink-2);
+    font-size: var(--text-sm);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 300ms var(--ease-out-fast);
+  }
+  .atlas-list li.is-active a {
+    border-left-color: var(--accent-electric);
+  }
+  .atlas-list li.is-active .outcome {
+    max-height: 3.2em;
+  }
+
+  /* Ch.4 */
+  .ch-founders {
+    min-height: 160vh;
+    padding-block: var(--space-5);
+  }
+  .ch-founders h2 {
+    margin-block: var(--space-2);
+    max-width: 20ch;
+  }
+  .belief {
+    color: var(--ink-2);
+    font-size: var(--text-lg);
+    max-width: 40ch;
+    margin-bottom: var(--space-4);
+  }
+  .founder-steps {
+    list-style: none;
+    margin: 0 0 var(--space-4);
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+    max-width: 900px;
+  }
+  .founder-steps h3 {
+    font-size: var(--text-base);
+    margin-top: var(--space-1);
+  }
+
+  /* Ch.5 — split: scene renders the divide's darkness */
+  .ch-transform {
+    background: transparent;
+    color: #f2f3f8;
+    min-height: 180vh;
+    padding-block: var(--space-5);
+  }
+  .ch-transform .chapter-mark,
+  .ch-transform .support {
+    color: #9da4b3;
+  }
+  :global(html[data-tier="C"]) .ch-transform,
+  :global(html:not([data-tier])) .ch-transform,
+  :global(html[data-engine="failed"]) .ch-transform {
+    background: #090b10;
+  }
+  .ch-transform h2 {
+    max-width: 26ch;
+    margin-block: var(--space-2) var(--space-4);
+  }
+  .pairs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-2) var(--space-4);
+    margin: 0 0 var(--space-3);
+    max-width: 860px;
+  }
+  .pair {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: var(--space-2);
+    border-top: 1px solid rgba(242, 243, 248, 0.12);
+    padding-top: 0.6rem;
+  }
+  .pair dt {
+    color: #9da4b3;
+  }
+  .pair dd {
+    margin: 0;
+    color: #d2ff65;
+  }
+
+  /* Ch.6 */
+  .ch-work {
+    min-height: 120vh;
+    padding-block: var(--space-5);
+  }
+  .ch-work h2 {
+    margin-block: var(--space-2);
+  }
+  .work-card {
+    display: grid;
+    gap: 0.5rem;
+    max-width: 620px;
+    margin-top: var(--space-3);
+    padding: var(--space-3);
+    border: 1px solid var(--hairline);
+    text-decoration: none;
+    background: var(--raised);
+    transition: transform var(--dur-micro) var(--ease-out-fast);
+  }
+  .work-card:hover {
+    transform: translateY(-3px);
+  }
+  .work-card .name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--text-xl);
+    letter-spacing: var(--tracking-display);
+  }
+  .work-card .outcome {
+    color: var(--ink-2);
+  }
+  .work-card .go {
+    color: var(--accent-electric);
+  }
+
+  /* Ch.8 people */
+  .ch-people {
+    padding-block: var(--space-5);
+    min-height: 120vh;
+  }
+  .ch-people h2 {
+    margin-block: var(--space-2) var(--space-3);
+  }
+  .statements {
+    display: grid;
+    gap: var(--space-2);
+    max-width: 46ch;
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-4);
+  }
+  .method ol {
+    list-style: none;
+    margin: var(--space-2) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-2);
+    max-width: 980px;
+  }
+  .method li {
+    border-top: 1px solid var(--hairline);
+    padding-top: 0.6rem;
+    font-size: var(--text-sm);
+    color: var(--ink-2);
+  }
+  .method b {
+    color: var(--ink);
+    display: block;
+    font-family: var(--font-display);
+  }
+
+  /* Ch.9 — resolution: scene renders warm dark ground */
+  .ch-resolution {
+    background: transparent;
+    color: #f2f3f8;
+    min-height: 140vh;
+    padding-block: var(--space-5);
+    display: flex;
+    align-items: center;
+  }
+  .ch-resolution .support {
+    color: #9da4b3;
+  }
+  :global(html[data-tier="C"]) .ch-resolution,
+  :global(html:not([data-tier])) .ch-resolution,
+  :global(html[data-engine="failed"]) .ch-resolution {
+    background: #160e05 url("/media/hf02-resolution.webp") center / cover no-repeat fixed;
+  }
+  .ch-resolution h2 {
+    font-size: var(--text-display);
+    margin-block: var(--space-2);
+  }
+  .cta--ghost {
+    border-color: rgba(242, 243, 248, 0.4);
+    color: #f2f3f8;
+  }
+  .risk {
+    margin-top: var(--space-3);
+    color: #9da4b3;
   }
 
   @media (max-width: 860px) {
-    .grid {
+    .grid,
+    .atlas,
+    .founder-steps,
+    .pairs,
+    .method ol {
       grid-template-columns: 1fr;
     }
     .stage {
       position: static;
-      min-height: 48vh;
+      min-height: 46vh;
       order: -1;
     }
     .ch-arrival {
@@ -159,13 +537,30 @@ import Poster from "~/components/public/Poster.astro";
       padding-bottom: var(--space-4);
     }
     .manifesto {
-      gap: 24vh;
+      gap: 22vh;
     }
     .manifesto .line:nth-child(2) {
       margin-left: 0;
     }
-    .ch-problem {
-      min-height: 160vh;
+    /* No pin on mobile: the atlas reads as a normal editorial index. */
+    .ch-system {
+      height: auto;
+      padding-block: var(--space-4);
+    }
+    .pin {
+      position: static;
+      height: auto;
+      overflow: visible;
+    }
+    .atlas-list {
+      max-height: none;
+    }
+    .atlas-list .outcome {
+      max-height: none;
+    }
+    .pair {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
     }
   }
 </style>

@@ -10,7 +10,13 @@ const envSchema = z.object({
   FIREBASE_PROJECT_ID: z.string().min(1).optional(),
   FIREBASE_CLIENT_EMAIL: z.email().optional(),
   FIREBASE_PRIVATE_KEY: z.string().min(1).optional(),
-  FIRESTORE_COLLECTION_PREFIX: z.string().optional(),
+  // v3_ default isolates the new app's data from the legacy site's collections
+  // until Phase 7 migration flips it deliberately (docs/migration). The shared
+  // .env.local sets this to "" for the legacy app — treat empty as unset here.
+  FIRESTORE_COLLECTION_PREFIX: z
+    .string()
+    .optional()
+    .transform((v) => (v ? v : "v3_")),
   PUBLIC_SITE_URL: z.url().default("https://aigenvora.com"),
 });
 

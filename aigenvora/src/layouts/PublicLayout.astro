@@ -11,9 +11,10 @@ interface Props {
   /** Optional per-route scene config forwarded to the engine. */
   accent?: string;
   moduleIndex?: number;
+  sceneMode?: "atlas" | "dormant" | "build" | "decompose" | "rest";
 }
 
-const { title, description, accent, moduleIndex } = Astro.props;
+const { title, description, accent, moduleIndex, sceneMode } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -33,6 +34,19 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       type="font/woff2"
       crossorigin
     />
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        name: "Aigenvora",
+        url: "https://aigenvora.com",
+        description:
+          "AI-powered software development: agents, products, data systems and custom platforms.",
+        email: "hello@aigenvora.com",
+      })}
+    />
     <ClientRouter />
   </head>
   <body>
@@ -44,6 +58,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       data-engine-root
       data-accent={accent}
       data-module-index={moduleIndex}
+      data-scene-mode={sceneMode}
     >
       <canvas data-engine-canvas aria-hidden="true"></canvas>
     </div>

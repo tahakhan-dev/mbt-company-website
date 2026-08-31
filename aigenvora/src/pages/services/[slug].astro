@@ -2,49 +2,51 @@
 import PublicLayout from "~/layouts/PublicLayout.astro";
 import FrameStage from "~/components/public/FrameStage.astro";
 import Poster from "~/components/public/Poster.astro";
+import { getService, getServices } from "~/lib/content/queries";
+import { PROCESS } from "~/lib/content/defaults";
 
-const useCases = [
-  {
-    head: "Inbox that answers itself",
-    body: "Customer and supplier messages triaged, drafted and — where you allow it — sent, with your tone and your rules.",
-  },
-  {
-    head: "Documents that file themselves",
-    body: "Invoices, contracts and forms read, validated and pushed into the systems that need them, with a human review lane.",
-  },
-  {
-    head: "Operations that run the routine",
-    body: "Bookings confirmed, records reconciled, reports assembled overnight — agents that finish tasks, not demos that start them.",
-  },
-];
+const { slug } = Astro.params;
+const service = slug ? await getService(slug) : undefined;
+if (!service) {
+  return new Response(null, { status: 404, statusText: "Not Found" });
+}
+const all = await getServices();
+const next = all.find((s) => s.order === (service.order % 12) + 1);
 
-const process = [
-  { step: "01", name: "Map the workflow", body: "We sit in the real process and find where hours actually go." },
-  { step: "02", name: "Design the agent's job", body: "Narrow scope, explicit rules, human checkpoints where risk lives." },
-  { step: "03", name: "Build and rehearse", body: "The agent runs shadow mode against real cases before it touches anything." },
-  { step: "04", name: "Operate and improve", body: "Monitoring, escalation paths and monthly reviews of what it handled." },
-];
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: service.faq.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
 ---
 
 <PublicLayout
-  title="AI Agents & Business Automation"
-  description="Hand your repetitive workflows to agents that actually finish them. Aigenvora designs, builds and operates business automation with human checkpoints."
-  moduleIndex={0}
+  title={service.name}
+  description={service.outcome}
+  moduleIndex={service.order - 1}
 >
   <article>
     <header class="hero" data-chapter="service-hero">
       <div class="container grid">
         <div class="copy">
-          <p class="mono-label" data-reveal>Service 01 / 12 · AI Agents &amp; Business Automation</p>
-          <h1 data-reveal>Hand your repetitive workflows to agents that actually finish them.</h1>
-          <p class="support" data-reveal>
-            Not chat widgets. Working software that reads, decides, acts and reports — inside the
-            tools your company already runs, with people in control of the risky parts.
+          <p class="mono-label" data-reveal>
+            Service {String(service.order).padStart(2, "0")} / 12 · {service.name}
           </p>
+          <h1 data-reveal>{service.outcome}</h1>
+          <p class="support" data-reveal>{service.intro}</p>
         </div>
         <div class="stage">
-          <FrameStage tl="MODULE 01" tr="STATE: ACTIVE" bl="AUTOMATION" br="FIG. 01">
-            <Poster state="focus" label="Module 01 isolated under studio light" />
+          <FrameStage
+            tl={`MODULE ${String(service.order).padStart(2, "0")}`}
+            tr="STATE: ACTIVE"
+            bl={service.name.toUpperCase().slice(0, 24)}
+            br="FIG. 01"
+          >
+            <Poster state="focus" label={`Module ${service.order} isolated under studio light`} />
           </FrameStage>
         </div>
       </div>
@@ -54,7 +56,7 @@ const process = [
       <p class="mono-label" data-reveal>What it looks like in a real business</p>
       <div class="cases">
         {
-          useCases.map((c, i) => (
+          service.useCases.map((c, i) => (
             <div class="case" data-reveal>
               <p class="mono-label">{String(i + 1).padStart(2, "0")}</p>
               <h2>{c.head}</h2>
@@ -65,11 +67,18 @@ const process = [
       </div>
     </section>
 
+    <section class="deliver container" data-reveal>
+      <p class="mono-label">What the engagement delivers</p>
+      <ul>
+        {service.deliverables.map((d) => <li>{d}</li>)}
+      </ul>
+    </section>
+
     <section class="process container" data-chapter="service-process">
       <p class="mono-label" data-reveal>How we get there</p>
       <ol>
         {
-          process.map((p) => (
+          PROCESS.map((p) => (
             <li data-reveal>
               <span class="mono-label">{p.step}</span>
               <h2>{p.name}</h2>
@@ -80,14 +89,34 @@ const process = [
       </ol>
     </section>
 
+    <section class="faq container">
+      <p class="mono-label" data-reveal>Asked before every engagement</p>
+      {
+        service.faq.map((f) => (
+          <details data-reveal>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))
+      }
+    </section>
+
     <section class="endcap container" data-chapter="service-end">
       <h2 data-reveal>Which workflow costs you the most hours?</h2>
       <div class="actions" data-reveal>
         <a class="cta cta--warm" href="/contact">Build with Aigenvora</a>
-        <a class="cta" href="/">Back to the system</a>
+        {
+          next && (
+            <a class="cta" href={`/services/${next.slug}`}>
+              Next · {String(next.order).padStart(2, "0")} {next.name}
+            </a>
+          )
+        }
       </div>
     </section>
   </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} is:inline />
 </PublicLayout>
 
 <style>
@@ -112,6 +141,7 @@ const process = [
   }
   .stage {
     min-height: 52vh;
+    display: grid;
   }
 
   .usecases {
@@ -131,12 +161,30 @@ const process = [
   .case p:last-child {
     color: var(--ink-2);
   }
-  /* Editorial rhythm — not three identical centered columns. */
   .case:nth-child(2) {
     margin-top: var(--space-4);
   }
   .case:nth-child(3) {
     margin-top: var(--space-2);
+  }
+
+  .deliver {
+    padding-block: var(--space-3);
+    border-top: 1px solid var(--hairline-soft);
+  }
+  .deliver ul {
+    list-style: none;
+    margin: var(--space-2) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-1) var(--space-3);
+    max-width: 860px;
+  }
+  .deliver li {
+    border-left: 2px solid var(--accent-electric);
+    padding-left: 0.8rem;
+    color: var(--ink-2);
   }
 
   .process {
@@ -160,6 +208,33 @@ const process = [
     font-size: var(--text-sm);
   }
 
+  .faq {
+    padding-block: var(--space-4);
+    border-top: 1px solid var(--hairline-soft);
+    max-width: calc(var(--grid-max) );
+  }
+  details {
+    border-top: 1px solid var(--hairline);
+    max-width: 70ch;
+  }
+  details:last-of-type {
+    border-bottom: 1px solid var(--hairline);
+  }
+  summary {
+    font-family: var(--font-display);
+    font-weight: 600;
+    padding: 0.9rem 0.2rem;
+    cursor: pointer;
+  }
+  summary:hover {
+    color: var(--accent-electric);
+  }
+  details p {
+    color: var(--ink-2);
+    padding: 0 0.2rem 1rem;
+    max-width: 62ch;
+  }
+
   .endcap {
     padding-block: var(--space-5);
   }
@@ -177,7 +252,8 @@ const process = [
   @media (max-width: 900px) {
     .grid,
     .cases,
-    .process ol {
+    .process ol,
+    .deliver ul {
       grid-template-columns: 1fr;
     }
     .stage {

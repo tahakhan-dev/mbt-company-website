@@ -11,9 +11,10 @@ import { EffectComposer, EffectPass, RenderPass, SMAAEffect } from "postprocessi
 import type { Capabilities, MasterState, SceneModule } from "./types";
 import { chapterProgress, measureChapters, pageProgress, type ChapterRange } from "./scroll";
 import { damp } from "./timeline";
-import { ArrivalScene } from "./scenes/arrival";
+import { HomeScene } from "./scenes/home";
 import { ServiceDetailScene } from "./scenes/service-detail";
 import { CaseStudyScene } from "./scenes/case-study";
+import { AmbientScene } from "./scenes/ambient";
 
 /**
  * EngineRuntime — one persistent renderer for the whole public site
@@ -24,8 +25,12 @@ import { CaseStudyScene } from "./scenes/case-study";
 
 const SCENE_REGISTRY: Array<{ match: (path: string) => boolean; create: () => SceneModule }> = [
   { match: (p) => p.startsWith("/services/"), create: () => new ServiceDetailScene() },
-  { match: (p) => p.startsWith("/work/"), create: () => new CaseStudyScene() },
-  { match: (p) => p === "/", create: () => new ArrivalScene() },
+  { match: (p) => p.startsWith("/work/") && p !== "/work/", create: () => new CaseStudyScene() },
+  { match: (p) => p === "/", create: () => new HomeScene() },
+  {
+    match: (p) => ["/services", "/work", "/mvps", "/about", "/contact"].includes(p.replace(/\/$/, "")),
+    create: () => new AmbientScene(),
+  },
 ];
 
 export class EngineRuntime {

@@ -1,0 +1,269 @@
+---
+import PublicLayout from "~/layouts/PublicLayout.astro";
+import { getSettings } from "~/lib/content/queries";
+
+const site = await getSettings();
+const sent = Astro.url.searchParams.get("sent") === "1";
+---
+
+<PublicLayout
+  title="Contact"
+  description="Tell us what's slow, stuck or still an idea. A senior engineer reads every message; we reply within two working days."
+  sceneMode="rest"
+>
+  <section class="contact" data-chapter="contact">
+    <div class="container grid">
+      <header class="intro">
+        <p class="mono-label" data-reveal>Contact · STATE: RESOLVED</p>
+        <h1 data-reveal>Tell us what should move.</h1>
+        <p class="support" data-reveal>
+          Share what's slow, stuck or still an idea. A senior engineer reads every message.
+        </p>
+        <p class="mono-label expectation" data-reveal>{site.responseExpectation}</p>
+        <p class="support alt" data-reveal>
+          Prefer email? <a href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>
+        </p>
+      </header>
+
+      {
+        sent ? (
+          <div class="success" role="status">
+            <p class="mono-label">Received</p>
+            <h2>Got it. You'll hear from a person, not a pipeline, within two working days.</h2>
+            <a class="cta" href="/">Back to the system →</a>
+          </div>
+        ) : (
+          <form method="post" action="/api/lead" data-lead-form>
+            <input type="hidden" name="startedAt" value={Date.now()} data-started-at />
+            <p class="trap" aria-hidden="true">
+              <label>Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+            </p>
+
+            <div class="row two">
+              <label>
+                <span>Name</span>
+                <input name="name" type="text" required autocomplete="name" maxlength="200" />
+              </label>
+              <label>
+                <span>Work email</span>
+                <input name="email" type="email" required autocomplete="email" maxlength="320" />
+              </label>
+            </div>
+            <div class="row two">
+              <label>
+                <span>Company <em>optional</em></span>
+                <input name="company" type="text" autocomplete="organization" maxlength="200" />
+              </label>
+              <label>
+                <span>Your role <em>optional</em></span>
+                <input name="role" type="text" autocomplete="organization-title" maxlength="120" />
+              </label>
+            </div>
+            <div class="row two">
+              <label>
+                <span>What are we building? <em>optional</em></span>
+                <select name="projectType">
+                  <option value="">Choose…</option>
+                  <option value="mvp">An MVP for a startup</option>
+                  <option value="automation">AI agents / automation</option>
+                  <option value="ai-product">An AI product or feature</option>
+                  <option value="platform">A platform / web / mobile app</option>
+                  <option value="modernization">Modernizing an existing system</option>
+                  <option value="other">Something else</option>
+                </select>
+              </label>
+              <label>
+                <span>Budget range <em>optional</em></span>
+                <select name="budget">
+                  <option value="">Choose…</option>
+                  <option value="lt10k">Under $10k</option>
+                  <option value="10-25k">$10–25k</option>
+                  <option value="25-75k">$25–75k</option>
+                  <option value="75k+">$75k+</option>
+                  <option value="undisclosed">Rather not say yet</option>
+                </select>
+              </label>
+            </div>
+            <label class="row">
+              <span>What's slow, stuck or still an idea?</span>
+              <textarea name="message" rows="6" required maxlength="5000"></textarea>
+            </label>
+            <label class="row">
+              <span>Product or brief URL <em>optional</em></span>
+              <input name="productUrl" type="url" maxlength="500" placeholder="https://" />
+            </label>
+
+            <button class="cta cta--warm" type="submit">Send it</button>
+            <p class="error mono-label" data-lead-error hidden></p>
+          </form>
+        )
+      }
+    </div>
+  </section>
+
+  <script>
+    // Progressive enhancement: fetch submit with inline success; the plain
+    // form POST works without JS (303 → /contact?sent=1).
+    function armLeadForm(): void {
+      const form = document.querySelector<HTMLFormElement>("[data-lead-form]");
+      if (!form) return;
+      const started = form.querySelector<HTMLInputElement>("[data-started-at]");
+      if (started) started.value = String(Date.now());
+      const errorEl = form.querySelector<HTMLElement>("[data-lead-error]");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const button = form.querySelector<HTMLButtonElement>("button[type=submit]");
+        if (button) button.disabled = true;
+        try {
+          const data = Object.fromEntries(new FormData(form).entries());
+          const res = await fetch("/api/lead", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ ...data, referrer: document.referrer }),
+          });
+          const out = (await res.json()) as { ok: boolean; error?: string };
+          if (out.ok) {
+            window.location.assign("/contact?sent=1");
+            return;
+          }
+          if (errorEl) {
+            errorEl.textContent = out.error ?? "Something went wrong — please try again.";
+            errorEl.hidden = false;
+          }
+        } catch {
+          if (errorEl) {
+            errorEl.textContent = "Network hiccup — please try again, or email us directly.";
+            errorEl.hidden = false;
+          }
+        } finally {
+          if (button) button.disabled = false;
+        }
+      });
+    }
+    document.addEventListener("astro:page-load", armLeadForm);
+  </script>
+</PublicLayout>
+
+<style>
+  .contact {
+    background: transparent;
+    color: #f2f3f8;
+    min-height: 100vh;
+    padding-block: var(--space-stage) var(--space-5);
+  }
+  :global(html[data-tier="C"]) .contact,
+  :global(html:not([data-tier])) .contact,
+  :global(html[data-engine="failed"]) .contact {
+    background: #160e05 url("/media/hf02-resolution.webp") center / cover no-repeat fixed;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 5fr 6fr;
+    gap: var(--space-4);
+    align-items: start;
+  }
+  h1 {
+    font-size: var(--text-display);
+    margin-block: var(--space-2);
+    max-width: 12ch;
+  }
+  .support {
+    color: #9da4b3;
+    font-size: var(--text-lg);
+    max-width: 38ch;
+  }
+  .support a {
+    color: var(--accent-warm);
+  }
+  .expectation {
+    margin-top: var(--space-3);
+    color: var(--accent-warm);
+  }
+  .alt {
+    margin-top: var(--space-2);
+    font-size: var(--text-base);
+  }
+
+  form {
+    display: grid;
+    gap: var(--space-2);
+    background: rgba(9, 11, 16, 0.55);
+    border: 1px solid rgba(242, 243, 248, 0.14);
+    padding: var(--space-3);
+    backdrop-filter: blur(8px);
+  }
+  .row {
+    display: grid;
+    gap: var(--space-2);
+  }
+  .row.two {
+    grid-template-columns: 1fr 1fr;
+  }
+  label {
+    display: grid;
+    gap: 0.35rem;
+  }
+  label span {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-mono);
+    text-transform: uppercase;
+    color: #9da4b3;
+  }
+  label em {
+    font-style: normal;
+    opacity: 0.6;
+    text-transform: none;
+  }
+  input,
+  select,
+  textarea {
+    background: rgba(3, 4, 7, 0.6);
+    border: 1px solid rgba(242, 243, 248, 0.18);
+    color: #f2f3f8;
+    padding: 0.65rem 0.8rem;
+    font: inherit;
+    border-radius: 0;
+  }
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--accent-warm);
+    outline-offset: 2px;
+  }
+  button.cta {
+    justify-self: start;
+    border: 0;
+    cursor: pointer;
+  }
+  button.cta:disabled {
+    opacity: 0.6;
+  }
+  .error {
+    color: #ff8d7e;
+  }
+  .trap {
+    position: absolute;
+    left: -9999px;
+    height: 0;
+    overflow: hidden;
+    margin: 0;
+  }
+
+  .success h2 {
+    font-size: var(--text-xl);
+    max-width: 24ch;
+    margin-block: var(--space-2) var(--space-3);
+  }
+  .success .cta {
+    border-color: rgba(242, 243, 248, 0.4);
+    color: #f2f3f8;
+  }
+
+  @media (max-width: 860px) {
+    .grid,
+    .row.two {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

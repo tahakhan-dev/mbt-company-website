@@ -1,0 +1,108 @@
+---
+import PublicLayout from "~/layouts/PublicLayout.astro";
+
+/**
+ * Verified case studies publish here through the admin (ownershipVerified +
+ * clientPermission gates). Until the owner clears engagements, the index
+ * shows the truthful pending state plus the labeled format prototype —
+ * never invented work (integrity rule, master prompt §14.1).
+ */
+---
+
+<PublicLayout
+  title="Work"
+  description="Aigenvora case studies — published only after each engagement is verified with its client, with roles stated plainly and metrics sourced."
+  sceneMode="dormant"
+>
+  <header class="hero container">
+    <p class="mono-label" data-reveal>Work · proof over polish</p>
+    <h1 data-reveal>WORK</h1>
+    <p class="support" data-reveal>
+      Every case study here goes through the same gate: the engagement verified with the client,
+      our role stated plainly, and every metric carrying its source and date. The first verified
+      studies are in that pipeline now.
+    </p>
+  </header>
+
+  <section class="list container">
+    <a class="entry" href="/work/signal-desk" data-reveal>
+      <span class="mono-label tag">Format prototype · sample narrative</span>
+      <span class="name">Signal Desk</span>
+      <span class="outcome">A message-routing operations desk that reads, sorts and answers — the case-study experience, shown with sample content.</span>
+      <span class="mono-label go">Open →</span>
+    </a>
+
+    <div class="pending" data-reveal>
+      <p class="mono-label">In verification</p>
+      <p>
+        Thirteen shipped products are being cleared for publication — AI automation, document
+        processing, booking, CRM, monitoring and security tools. Each appears the moment its
+        client signs off.
+      </p>
+      <a class="cta" href="/contact">Ask about relevant work →</a>
+    </div>
+  </section>
+</PublicLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-stage) var(--space-4);
+  }
+  h1 {
+    font-size: clamp(4rem, 18vw, 15rem);
+    line-height: 0.9;
+  }
+  .support {
+    color: var(--ink-2);
+    font-size: var(--text-lg);
+    max-width: 52ch;
+    margin-top: var(--space-3);
+  }
+
+  .list {
+    padding-block: var(--space-3) var(--space-5);
+    display: grid;
+    gap: var(--space-3);
+    max-width: 900px;
+  }
+  .entry {
+    display: grid;
+    gap: 0.5rem;
+    padding: var(--space-3);
+    border: 1px solid var(--hairline);
+    background: var(--raised);
+    text-decoration: none;
+    transition: transform var(--dur-micro) var(--ease-out-fast);
+  }
+  .entry:hover {
+    transform: translateY(-3px);
+  }
+  .tag {
+    color: var(--accent-violet);
+  }
+  .name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--text-display);
+    letter-spacing: var(--tracking-display);
+  }
+  .outcome {
+    color: var(--ink-2);
+    max-width: 52ch;
+  }
+  .go {
+    color: var(--accent-electric);
+  }
+
+  .pending {
+    border-top: 1px solid var(--hairline);
+    padding-top: var(--space-3);
+    display: grid;
+    gap: var(--space-2);
+    justify-items: start;
+  }
+  .pending p:not(.mono-label) {
+    color: var(--ink-2);
+    max-width: 56ch;
+  }
+</style>

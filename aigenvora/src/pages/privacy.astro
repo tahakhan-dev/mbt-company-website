@@ -1,0 +1,68 @@
+---
+import PublicLayout from "~/layouts/PublicLayout.astro";
+---
+
+<PublicLayout
+  title="Privacy"
+  description="What Aigenvora collects, why, and how long it's kept — in plain language."
+>
+  <article class="container legal">
+    <p class="mono-label">Privacy · plain language</p>
+    <h1>What we collect, and why.</h1>
+
+    <h2>Browsing this site</h2>
+    <p>
+      This site sets no cookies, runs no third-party analytics and does no fingerprinting. Pages
+      are served with standard web server logs (IP address, user agent, requested page) kept for
+      operational security and rotated automatically. If we later add first-party visit counting,
+      this page will describe exactly what it stores before it goes live.
+    </p>
+
+    <h2>The contact form</h2>
+    <p>
+      When you write to us we store what you submit — name, email, company, and your message —
+      plus the page you sent it from and, when your browser passes them, campaign parameters. We
+      use it to reply and to keep track of the conversation. We don't sell it, share it, or add
+      you to a mailing list you didn't ask for.
+    </p>
+
+    <h2>Retention and deletion</h2>
+    <p>
+      Lead records are kept while a conversation or engagement is live and deleted on request —
+      write to <a href="mailto:hello@aigenvora.com">hello@aigenvora.com</a> and we'll confirm
+      removal within a week.
+    </p>
+
+    <h2>Where data lives</h2>
+    <p>
+      Submissions are stored in Google Cloud Firestore under access controls limited to Aigenvora.
+      Nothing you send through this site is used to train AI models.
+    </p>
+
+    <p class="mono-label updated">Last updated 2026-09-01</p>
+  </article>
+</PublicLayout>
+
+<style>
+  .legal {
+    padding-block: var(--space-stage) var(--space-5);
+    max-width: 72ch;
+  }
+  h1 {
+    font-size: var(--text-display);
+    margin-block: var(--space-2) var(--space-3);
+  }
+  h2 {
+    font-size: var(--text-lg);
+    margin-block: var(--space-3) var(--space-1);
+  }
+  p {
+    color: var(--ink-2);
+  }
+  a {
+    color: var(--accent-electric);
+  }
+  .updated {
+    margin-top: var(--space-4);
+  }
+</style>

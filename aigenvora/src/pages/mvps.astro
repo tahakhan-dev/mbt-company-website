@@ -1,0 +1,195 @@
+---
+import PublicLayout from "~/layouts/PublicLayout.astro";
+import { MVP_FAQ, MVP_STEPS } from "~/lib/content/defaults";
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: MVP_FAQ.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+---
+
+<PublicLayout
+  title="MVPs for Startups"
+  description="From first sketch to an investable MVP: validation, product definition, UX, engineering, responsible AI and launch — built by one senior team."
+  sceneMode="build"
+>
+  <header class="hero container" data-chapter="mvp-hero">
+    <p class="mono-label" data-reveal>MVPs for startups</p>
+    <h1 data-reveal>Your MVP, built like it has to survive investors and users.</h1>
+    <p class="support" data-reveal>
+      It's the smallest product that proves your business. It is not a throwaway prototype, and
+      not a two-year platform in disguise.
+    </p>
+    <a class="cta cta--warm" href="/contact" data-reveal>Plan your MVP</a>
+  </header>
+
+  <section class="who container" data-reveal>
+    <p class="mono-label">Who this is for</p>
+    <p class="big">
+      Founders who need a product people can use, investors can judge, and a team can build on —
+      without hiring a CTO first.
+    </p>
+  </section>
+
+  <ol class="steps container" data-chapter="mvp-steps">
+    {
+      MVP_STEPS.map((s, i) => (
+        <li data-reveal>
+          <span class="mono-label">{String(i + 1).padStart(2, "0")}</span>
+          <h2>{s.name}</h2>
+          <p>{s.body}</p>
+        </li>
+      ))
+    }
+  </ol>
+
+  <section class="includes container" data-reveal>
+    <p class="mono-label">Every MVP ships with</p>
+    <ul>
+      <li>Auth, billing and analytics wired from day one</li>
+      <li>An admin panel your team can actually operate</li>
+      <li>Deployment, monitoring and backups in your accounts</li>
+      <li>Documented handover — code, infra and roadmap are yours</li>
+    </ul>
+  </section>
+
+  <section class="faq container">
+    <p class="mono-label" data-reveal>Founder questions</p>
+    {
+      MVP_FAQ.map((f) => (
+        <details data-reveal>
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))
+    }
+  </section>
+
+  <section class="endcap container">
+    <h2 data-reveal>The product people can finally use starts with one conversation.</h2>
+    <a class="cta cta--warm" href="/contact" data-reveal>Plan your MVP</a>
+  </section>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} is:inline />
+</PublicLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-stage) var(--space-4);
+    min-height: 90vh;
+  }
+  h1 {
+    font-size: var(--text-display);
+    margin-block: var(--space-2);
+    max-width: 18ch;
+  }
+  .support {
+    color: var(--ink-2);
+    font-size: var(--text-lg);
+    max-width: 44ch;
+    margin-bottom: var(--space-3);
+  }
+
+  .who {
+    padding-block: var(--space-4);
+    border-top: 1px solid var(--hairline-soft);
+  }
+  .big {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-xl);
+    letter-spacing: var(--tracking-display);
+    max-width: 30ch;
+    margin-top: var(--space-2);
+  }
+
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding-block: var(--space-4);
+    display: grid;
+    gap: var(--space-4);
+    max-width: 760px;
+  }
+  .steps li {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 0 var(--space-2);
+  }
+  .steps h2 {
+    font-size: var(--text-xl);
+  }
+  .steps p {
+    grid-column: 2;
+    color: var(--ink-2);
+    margin-top: var(--space-1);
+  }
+  .steps li:nth-child(even) {
+    margin-left: clamp(0px, 10vw, 180px);
+  }
+
+  .includes {
+    padding-block: var(--space-3);
+    border-top: 1px solid var(--hairline-soft);
+  }
+  .includes ul {
+    list-style: none;
+    margin: var(--space-2) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-1) var(--space-3);
+    max-width: 860px;
+  }
+  .includes li {
+    border-left: 2px solid var(--accent-warm);
+    padding-left: 0.8rem;
+    color: var(--ink-2);
+  }
+
+  .faq {
+    padding-block: var(--space-4);
+    border-top: 1px solid var(--hairline-soft);
+  }
+  details {
+    border-top: 1px solid var(--hairline);
+    max-width: 70ch;
+  }
+  details:last-of-type {
+    border-bottom: 1px solid var(--hairline);
+  }
+  summary {
+    font-family: var(--font-display);
+    font-weight: 600;
+    padding: 0.9rem 0.2rem;
+    cursor: pointer;
+  }
+  details p {
+    color: var(--ink-2);
+    padding: 0 0.2rem 1rem;
+    max-width: 62ch;
+  }
+
+  .endcap {
+    padding-block: var(--space-5);
+  }
+  .endcap h2 {
+    font-size: var(--text-xl);
+    max-width: 28ch;
+    margin-bottom: var(--space-3);
+  }
+
+  @media (max-width: 700px) {
+    .steps li:nth-child(even) {
+      margin-left: 0;
+    }
+    .includes ul {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

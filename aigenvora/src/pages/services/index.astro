@@ -1,0 +1,132 @@
+---
+import PublicLayout from "~/layouts/PublicLayout.astro";
+import { getServices } from "~/lib/content/queries";
+
+const services = await getServices();
+---
+
+<PublicLayout
+  title="Services"
+  description="Twelve ways to make software move: AI agents, integration, products, data, modernization, platforms, mobile, integration, cloud, security and managed AI."
+  sceneMode="atlas"
+>
+  <header class="hero container">
+    <p class="mono-label" data-reveal>Services · the atlas</p>
+    <h1 data-reveal>Twelve ways to make software move.</h1>
+    <p class="support" data-reveal>
+      One senior team across AI, product, infrastructure and operations. Scroll the atlas —
+      every module is a service, every service ends in software your business runs on.
+    </p>
+  </header>
+
+  <ol class="atlas container">
+    {
+      services.map((s) => (
+        <li data-reveal>
+          <a href={`/services/${s.slug}`}>
+            <span class="num" aria-hidden="true">{String(s.order).padStart(2, "0")}</span>
+            <span class="body">
+              <span class="name">{s.name}</span>
+              <span class="outcome">{s.outcome}</span>
+            </span>
+            <span class="mono-label go">Open →</span>
+          </a>
+        </li>
+      ))
+    }
+  </ol>
+
+  <section class="endcap container">
+    <h2 data-reveal>Building a product from zero?</h2>
+    <p class="support" data-reveal>Founders get a dedicated path from idea to investable MVP.</p>
+    <div class="actions" data-reveal>
+      <a class="cta cta--warm" href="/mvps">Plan your MVP</a>
+      <a class="cta" href="/contact">Talk to us</a>
+    </div>
+  </section>
+</PublicLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-stage) var(--space-4);
+  }
+  h1 {
+    font-size: var(--text-mega);
+    margin-block: var(--space-2);
+  }
+  .support {
+    color: var(--ink-2);
+    font-size: var(--text-lg);
+    max-width: 52ch;
+  }
+
+  .atlas {
+    list-style: none;
+    margin: 0;
+    padding-block: var(--space-3) var(--space-5);
+    display: grid;
+    gap: 0;
+  }
+  .atlas a {
+    display: grid;
+    grid-template-columns: minmax(4rem, 10vw) 1fr auto;
+    align-items: baseline;
+    gap: var(--space-2);
+    padding: 1.1rem 0.4rem;
+    border-top: 1px solid var(--hairline);
+    text-decoration: none;
+    transition: background var(--dur-micro) var(--ease-out-fast);
+  }
+  .atlas li:last-child a {
+    border-bottom: 1px solid var(--hairline);
+  }
+  .atlas a:hover {
+    background: var(--raised);
+  }
+  .num {
+    font-family: var(--font-mono);
+    font-size: clamp(1.4rem, 4vw, 2.6rem);
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .name {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    letter-spacing: var(--tracking-display);
+  }
+  .outcome {
+    display: block;
+    color: var(--ink-2);
+    max-width: 60ch;
+    margin-top: 0.2rem;
+  }
+  .go {
+    color: var(--accent-electric);
+  }
+
+  .endcap {
+    padding-block: var(--space-4) var(--space-5);
+  }
+  .endcap h2 {
+    font-size: var(--text-xl);
+  }
+  .endcap .support {
+    margin-block: var(--space-2) var(--space-3);
+  }
+  .actions {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 700px) {
+    .atlas a {
+      grid-template-columns: 3rem 1fr;
+    }
+    .go {
+      display: none;
+    }
+  }
+</style>

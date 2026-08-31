@@ -1,0 +1,182 @@
+---
+import PublicLayout from "~/layouts/PublicLayout.astro";
+import { PRINCIPLES } from "~/lib/content/defaults";
+
+/**
+ * Team portraits are owner-supplied per the rights ledger; the people section
+ * ships its layout and copy now and receives photography when cleared —
+ * no generic initials, no invented faces.
+ */
+---
+
+<PublicLayout
+  title="About"
+  description="Why Aigenvora exists: AI should improve real workflows, not decorate products. Senior-team delivery across product, design, AI, data, cloud and security."
+  sceneMode="decompose"
+>
+  <!-- Opens dark: the one route that does (storyboard route map) -->
+  <header class="opening" data-chapter="about-opening">
+    <div class="container">
+      <p class="mono-label" data-reveal>About Aigenvora</p>
+      <h1 data-reveal>Software should remove work.</h1>
+      <p class="support" data-reveal>
+        We started Aigenvora because too much of it adds work instead. We design, build and
+        operate AI-powered software that removes repetitive work, connects fragmented systems
+        and turns product ideas into scalable businesses.
+      </p>
+    </div>
+  </header>
+
+  <section class="belief container" data-chapter="about-belief">
+    <p class="mono-label" data-reveal>What we believe</p>
+    <p class="statement" data-reveal>
+      AI belongs inside real workflows, not on top of them as decoration.
+    </p>
+  </section>
+
+  <section class="principles container" data-chapter="about-principles">
+    <p class="mono-label" data-reveal>Principles</p>
+    <div class="grid">
+      {
+        PRINCIPLES.map((p, i) => (
+          <div class="principle" data-reveal>
+            <span class="mono-label">{String(i + 1).padStart(2, "0")}</span>
+            <h2>{p.name}</h2>
+            <p>{p.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="how container" data-chapter="about-how">
+    <p class="mono-label" data-reveal>How the disciplines work together</p>
+    <p class="statement" data-reveal>
+      Product, design, AI, data, cloud and security aren't departments here — they're one loop.
+      The person who scopes your system helps build it; the person who builds it helps run it.
+    </p>
+    <div class="model" data-reveal>
+      <p><b>Senior delivery.</b> No hand-off to a junior bench after the sales call.</p>
+      <p><b>One channel.</b> Short loops, working software every week, decisions in writing.</p>
+      <p><b>Global by default.</b> Remote-first delivery for startups and SMEs across markets.</p>
+    </div>
+  </section>
+
+  <section class="team container" data-chapter="about-team">
+    <p class="mono-label" data-reveal>People</p>
+    <p class="statement" data-reveal>
+      A small senior team — engineers, designers and operators who have shipped and run
+      production systems across AI, SaaS, mobile and infrastructure.
+    </p>
+    <p class="support" data-reveal>
+      Portraits and bios are published as each teammate approves them — real people, no stock
+      faces, no invented headcount.
+    </p>
+  </section>
+
+  <section class="endcap container">
+    <h2 data-reveal>See the system in action.</h2>
+    <div class="actions" data-reveal>
+      <a class="cta cta--warm" href="/contact">Build with Aigenvora</a>
+      <a class="cta" href="/work">Explore our work</a>
+    </div>
+  </section>
+</PublicLayout>
+
+<style>
+  .opening {
+    background: transparent;
+    color: #f2f3f8;
+    min-height: 150vh;
+    display: flex;
+    align-items: center;
+    padding-block: var(--space-stage);
+  }
+  :global(html[data-tier="C"]) .opening,
+  :global(html:not([data-tier])) .opening,
+  :global(html[data-engine="failed"]) .opening {
+    background: #030407;
+  }
+  .opening .mono-label,
+  .opening .support {
+    color: #9da4b3;
+  }
+  h1 {
+    font-size: clamp(3rem, 14vw, 11rem);
+    max-width: 12ch;
+    margin-block: var(--space-2);
+  }
+  .support {
+    color: var(--ink-2);
+    font-size: var(--text-lg);
+    max-width: 52ch;
+  }
+
+  section:not(.opening) {
+    padding-block: var(--space-4);
+  }
+  .statement {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: var(--text-xl);
+    letter-spacing: var(--tracking-display);
+    max-width: 32ch;
+    margin-top: var(--space-2);
+  }
+
+  .principles .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+  }
+  .principle h2 {
+    font-size: var(--text-lg);
+    margin-block: var(--space-1);
+  }
+  .principle p:last-child {
+    color: var(--ink-2);
+    font-size: var(--text-sm);
+  }
+  .principle:nth-child(2) {
+    margin-top: var(--space-3);
+  }
+  .principle:nth-child(5) {
+    margin-top: var(--space-3);
+  }
+
+  .model {
+    display: grid;
+    gap: var(--space-1);
+    margin-top: var(--space-3);
+    max-width: 56ch;
+    color: var(--ink-2);
+  }
+  .model b {
+    color: var(--ink);
+  }
+
+  .team .support {
+    margin-top: var(--space-2);
+  }
+
+  .endcap h2 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-3);
+  }
+  .actions {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 800px) {
+    .principles .grid {
+      grid-template-columns: 1fr;
+    }
+    .principle:nth-child(2),
+    .principle:nth-child(5) {
+      margin-top: 0;
+    }
+  }
+</style>
