@@ -207,6 +207,10 @@ export class EngineRuntime {
   }
 
   private tick(): void {
+    // The document can be transiently detached mid view-transition swap;
+    // skip the frame rather than throw every rAF.
+    const doc = document.documentElement;
+    if (!doc) return;
     const dt = Math.min(this.clock.getDelta(), 0.05);
     this.state.elapsed += dt;
 
@@ -216,7 +220,7 @@ export class EngineRuntime {
     for (const ch of this.chapters) {
       this.progressTargets[ch.name] = chapterProgress(ch, scrollY, vh);
     }
-    this.pageTarget = pageProgress(scrollY, document.documentElement.scrollHeight, vh);
+    this.pageTarget = pageProgress(scrollY, doc.scrollHeight, vh);
 
     const smooth = 9; // damping response — MOTION-MATRIX "damped interpolation"
     for (const [name, target] of Object.entries(this.progressTargets)) {

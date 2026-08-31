@@ -28,7 +28,7 @@ import {
  */
 
 /** Service accents (storyboard: blue/violet/lime family rotation; warm reserved). */
-const MODULE_ACCENTS = [
+export const MODULE_ACCENTS = [
   "#4a63ff", "#a18aff", "#d2ff65", "#4a63ff", "#a18aff", "#d2ff65",
   "#4a63ff", "#a18aff", "#d2ff65", "#4a63ff", "#a18aff", "#d2ff65",
 ] as const;

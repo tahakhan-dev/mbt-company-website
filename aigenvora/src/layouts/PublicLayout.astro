@@ -2,6 +2,7 @@
 import { ClientRouter } from "astro:transitions";
 import Nav from "~/components/public/Nav.astro";
 import Footer from "~/components/public/Footer.astro";
+import Logo from "~/components/public/Logo.astro";
 import "~/styles/tokens.css";
 import "~/styles/base.css";
 
@@ -29,6 +30,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link
       rel="preload"
+      href="/fonts/ClashDisplay-Variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
       href="/fonts/GeneralSans-Variable.woff2"
       as="font"
       type="font/woff2"
@@ -47,10 +55,28 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         email: "hello@aigenvora.com",
       })}
     />
+    <script is:inline>
+      // Loader eligibility, decided synchronously to avoid any flash:
+      // first view this session, motion allowed, JS present.
+      try {
+        if (
+          !sessionStorage.getItem("agv-loaded") &&
+          !matchMedia("(prefers-reduced-motion: reduce)").matches
+        ) {
+          document.documentElement.dataset.loader = "1";
+        }
+      } catch (e) {}
+    </script>
     <ClientRouter />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="loader" data-loader-el aria-hidden="true">
+      <div class="loader-mark"><Logo variant="mark" size={84} /></div>
+      <p class="loader-line">AI-powered software development</p>
+      <p class="loader-count"><span data-loader-count>00</span></p>
+    </div>
 
     <div
       transition:persist="engine-stage"
@@ -73,8 +99,19 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
 
     <script>
       import { bootEngine } from "~/engine/boot";
+      import { armChoreo } from "~/engine/text-choreo";
 
       bootEngine();
+
+      let disarmChoreo: (() => void) | null = null;
+      document.addEventListener("astro:page-load", () => {
+        disarmChoreo?.();
+        disarmChoreo = armChoreo();
+      });
+      document.addEventListener("astro:before-swap", () => {
+        disarmChoreo?.();
+        disarmChoreo = null;
+      });
 
       // Masked reveals: IntersectionObserver, disabled under reduced motion.
       function armReveals(): void {
@@ -98,9 +135,137 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         els.forEach((el) => io.observe(el));
       }
       document.addEventListener("astro:page-load", armReveals);
+
+      // Hero entrance: fires once the loader is gone (or immediately without one).
+      function armEntrance(): void {
+        const go = (): void => document.documentElement.classList.add("is-entered");
+        if (document.documentElement.dataset["loader"] !== "1") {
+          setTimeout(go, 80);
+          return;
+        }
+        const poll = window.setInterval(() => {
+          if (!document.querySelector("[data-loader-el]")) {
+            clearInterval(poll);
+            go();
+          }
+        }, 90);
+        setTimeout(() => {
+          clearInterval(poll);
+          go();
+        }, 4000);
+      }
+      document.addEventListener("astro:page-load", armEntrance);
+
+      // Preloader: counter runs ~1.6s; exits on engine-live or the 2.4s cap.
+      (function runLoader(): void {
+        if (document.documentElement.dataset["loader"] !== "1") return;
+        const el = document.querySelector<HTMLElement>("[data-loader-el]");
+        const count = document.querySelector<HTMLElement>("[data-loader-count]");
+        if (!el || !count) return;
+        document.documentElement.style.overflow = "hidden";
+        const t0 = performance.now();
+        let done = false;
+        const finish = (): void => {
+          if (done) return;
+          done = true;
+          try {
+            sessionStorage.setItem("agv-loaded", "1");
+          } catch {}
+          el.classList.add("is-done");
+          document.documentElement.style.overflow = "";
+          setTimeout(() => {
+            el.remove();
+            delete document.documentElement.dataset["loader"];
+          }, 700);
+        };
+        const tick = (): void => {
+          if (done) return;
+          const t = performance.now() - t0;
+          const engineLive = document
+            .querySelector("canvas[data-engine-canvas]")
+            ?.classList.contains("engine-live");
+          const p = Math.min(1, t / 1600);
+          count.textContent = String(Math.floor(p * 100)).padStart(2, "0");
+          if ((p >= 1 && engineLive) || t > 2400) {
+            count.textContent = "100";
+            setTimeout(finish, 150);
+            return;
+          }
+          requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      })();
     </script>
 
     <style is:global>
+      /* ---- Preloader ---- */
+      .loader {
+        display: none;
+      }
+      html[data-loader="1"] .loader {
+        position: fixed;
+        inset: 0;
+        z-index: 60;
+        background: var(--paper);
+        display: grid;
+        place-items: center;
+        transition: clip-path 650ms var(--ease-mech);
+        clip-path: inset(0 0 0 0);
+      }
+      html[data-loader="1"] .loader.is-done {
+        clip-path: inset(0 0 100% 0);
+      }
+      .loader-mark {
+        color: var(--ink);
+      }
+      .loader-mark [data-logo-ring],
+      .loader-mark [data-logo-a] {
+        stroke-dasharray: 200;
+        stroke-dashoffset: 200;
+        animation: logo-draw 1.3s var(--ease-mech) forwards;
+      }
+      .loader-mark [data-logo-a] {
+        animation-delay: 0.25s;
+      }
+      .loader-mark [data-logo-bar],
+      .loader-mark [data-logo-core] {
+        opacity: 0;
+        animation: logo-pop 0.4s var(--ease-out-fast) 1.15s forwards;
+      }
+      @keyframes logo-draw {
+        to {
+          stroke-dashoffset: 0;
+        }
+      }
+      @keyframes logo-pop {
+        to {
+          opacity: 1;
+        }
+      }
+      .loader-line {
+        position: absolute;
+        top: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: var(--font-mono);
+        font-size: var(--text-xs);
+        letter-spacing: var(--tracking-mono);
+        text-transform: uppercase;
+        color: var(--ink-2);
+        margin: 0;
+        white-space: nowrap;
+      }
+      .loader-count {
+        position: absolute;
+        bottom: 1.6rem;
+        right: 2rem;
+        font-family: var(--font-mono);
+        font-size: 2rem;
+        color: var(--ink);
+        margin: 0;
+        font-variant-numeric: tabular-nums;
+      }
+
       .engine-stage {
         position: fixed;
         inset: 0;
@@ -123,14 +288,73 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         display: none;
       }
 
-      /* Designed Tier C posters: visible by default (no JS), hidden once the
-         engine tier is A/B, restored on permanent failure. */
-      html[data-tier="A"] [data-poster],
-      html[data-tier="B"] [data-poster] {
-        display: none;
+      /* Designed posters: visible until the engine has actually rendered a
+         frame (fixes "figure never shows" on slow boots), then crossfade out.
+         Restored permanently on engine failure. */
+      [data-poster] {
+        transition: opacity 700ms var(--ease-drift);
+      }
+      html[data-engine="live"] [data-poster] {
+        opacity: 0;
+        visibility: hidden;
+        transition:
+          opacity 700ms var(--ease-drift),
+          visibility 0s 700ms;
       }
       html[data-engine="failed"] [data-poster] {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      /* ---- Entrance (post-loader) ---- */
+      [data-entrance] {
+        opacity: 0;
+        transform: translateY(1.4rem);
+      }
+      html.is-entered [data-entrance] {
+        animation: entrance 750ms var(--ease-out-fast) forwards;
+        animation-delay: var(--ent-delay, 0s);
+      }
+      @keyframes entrance {
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        [data-entrance] {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      /* ---- Choreography primitives ---- */
+      .choreo-mask {
+        display: inline-block;
+        overflow: hidden;
+        vertical-align: bottom;
+      }
+      .choreo-mask--block {
         display: block;
+      }
+      .choreo-part {
+        display: inline-block;
+        will-change: transform;
+      }
+      .choreo-mask--block .choreo-part {
+        display: block;
+      }
+      /* Readability law: copy over animated dark ground sits on a scrim. */
+      .scrim {
+        position: relative;
+      }
+      .scrim::before {
+        content: "";
+        position: absolute;
+        inset: -1.4rem -1.8rem;
+        background: radial-gradient(ellipse at 30% 50%, rgba(3, 4, 7, 0.78), rgba(3, 4, 7, 0) 78%);
+        z-index: -1;
+        pointer-events: none;
       }
 
       [data-reveal] {

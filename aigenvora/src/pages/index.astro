@@ -22,24 +22,35 @@ const transformPairs = [
   title="AI-Powered Software Development"
   description="Aigenvora designs, builds and operates AI-powered software: agents, products, data systems and custom platforms built by one senior team."
 >
-  <!-- Ch.1 — Arrival (Unresolved) -->
+  <!-- Ch.1 — Arrival (state: Unresolved) -->
   <section class="ch-arrival" data-chapter="arrival">
     <div class="container grid">
       <div class="copy">
-        <p class="mono-label" data-reveal>{site.descriptor}</p>
-        <h1 data-reveal>We turn ambitious ideas and broken workflows into software that moves.</h1>
-        <p class="support" data-reveal>
+        <p class="mono-label" data-entrance style="--ent-delay:.1s">{site.descriptor}</p>
+        <h1>
+          <span data-entrance style="--ent-delay:.25s">We turn ambitious ideas</span>
+          <span data-entrance style="--ent-delay:.37s">and broken workflows</span>
+          <span data-entrance style="--ent-delay:.49s">into software that moves.</span>
+        </h1>
+        <p class="support" data-entrance style="--ent-delay:.62s">
           AI agents, products, data systems and custom platforms — built by one senior team.
         </p>
-        <div class="actions" data-reveal>
+        <div class="actions" data-entrance style="--ent-delay:.74s">
           <a class="cta cta--warm" href="/contact">{site.cta}</a>
           <a class="cta" href="/work">Explore our work</a>
         </div>
       </div>
-      <div class="stage">
-        <FrameStage tl="AIGENVORA ENGINE" tr="STATE: UNRESOLVED" bl="MODULES 00/12" br="FIG. 01">
+      <div class="stage" data-entrance style="--ent-delay:.4s">
+        <FrameStage tl="AIGENVORA ENGINE" tr="" bl="" br="FIG. 01">
+          <span slot="tr-live" class="visually-hidden"></span>
           <Poster state="unresolved" label="The Aigenvora Engine — twelve modules, unresolved" />
         </FrameStage>
+        <p class="readout readout--tr mono-label" aria-hidden="true">
+          STATE: <span data-readout-state>UNRESOLVED</span>
+        </p>
+        <p class="readout readout--bl mono-label" aria-hidden="true">
+          MODULES <span data-readout-modules>00</span>/12
+        </p>
       </div>
     </div>
   </section>
@@ -47,78 +58,120 @@ const transformPairs = [
   <!-- Ch.2 — The problem (chamber) -->
   <section class="ch-problem" data-chapter="problem">
     <div class="container">
-      <p class="mono-label chapter-mark" data-reveal>02 · The problem</p>
+      <p class="mono-label chapter-mark" data-choreo data-choreo-start="0.12" data-choreo-end="0.18">
+        02 · The problem
+      </p>
       <div class="manifesto">
-        {MANIFESTO.map((line) => <p class="line" data-reveal>{line}</p>)}
-      </div>
-    </div>
-  </section>
-
-  <!-- Ch.3 — The system (service atlas, pinned on desktop) -->
-  <section class="ch-system" data-chapter="system" id="system">
-    <div class="pin">
-      <div class="container atlas">
-        <div class="atlas-head">
-          <p class="mono-label">03 · The system</p>
-          <h2>Twelve ways to make software move.</h2>
-          <p class="support">One team, one system, no hand-offs.</p>
-          <p class="mono-label counter" aria-hidden="true">
-            MODULES <span data-atlas-counter>01</span>/12
-          </p>
-        </div>
-        <ol class="atlas-list" data-atlas-list>
-          {
-            services.map((s, i) => (
-              <li data-atlas-item={i}>
-                <a href={`/services/${s.slug}`}>
-                  <span class="mono-label num">{String(s.order).padStart(2, "0")}</span>
-                  <span class="name">{s.name}</span>
-                  <span class="outcome">{s.outcome}</span>
-                </a>
-              </li>
-            ))
-          }
-        </ol>
-      </div>
-    </div>
-  </section>
-
-  <!-- Ch.4 — For founders -->
-  <section class="ch-founders" data-chapter="founders">
-    <div class="container">
-      <p class="mono-label" data-reveal>04 · For founders</p>
-      <h2 data-reveal>From first sketch to a product people can finally use.</h2>
-      <p class="belief" data-reveal>An MVP is not a demo. It's the first honest version of your business.</p>
-      <ol class="founder-steps">
         {
-          MVP_STEPS.map((s, i) => (
-            <li data-reveal>
-              <span class="mono-label">{String(i + 1).padStart(2, "0")}</span>
-              <h3>{s.name}</h3>
-            </li>
+          MANIFESTO.map((line, i) => (
+            <p
+              class="line scrim"
+              data-choreo="words"
+              data-choreo-start={String(0.2 + i * 0.2)}
+              data-choreo-end={String(0.3 + i * 0.2)}
+            >
+              {line}
+            </p>
           ))
         }
-      </ol>
-      <a class="cta cta--warm" href="/mvps" data-reveal>Plan your MVP</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ch.3 — The system: one service per act, full stage -->
+  <section class="ch-system" data-chapter="system" id="system">
+    <div class="pin">
+      <div class="container sys-stage">
+        <p class="mono-label sys-eyebrow">03 · The system — twelve ways to make software move</p>
+        <div class="acts" data-step-stage="system" data-step-count="12">
+          {
+            services.map((s, i) => (
+              <div class="act" data-step={i}>
+                <span class="act-num" aria-hidden="true">{String(s.order).padStart(2, "0")}</span>
+                <h3 class="act-name">
+                  <span class="mask"><span class="part">{s.name}</span></span>
+                </h3>
+                <p class="act-outcome">
+                  <span class="mask"><span class="part">{s.outcome}</span></span>
+                </p>
+                <a class="act-link mono-label" href={`/services/${s.slug}`}>Explore the service →</a>
+              </div>
+            ))
+          }
+        </div>
+        <div class="sys-progress mono-label" aria-hidden="true">
+          <span data-step-counter>01</span>/12
+          <span class="bar"><span class="fill" data-step-bar></span></span>
+        </div>
+      </div>
+    </div>
+    <!-- Mobile / reduced-motion index -->
+    <ol class="sys-index container">
+      {
+        services.map((s) => (
+          <li>
+            <a href={`/services/${s.slug}`}>
+              <span class="mono-label">{String(s.order).padStart(2, "0")}</span>
+              <span class="name">{s.name}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <!-- Ch.4 — For founders: the staged build -->
+  <section class="ch-founders" data-chapter="founders">
+    <div class="pin">
+      <div class="container founders-stage">
+        <p class="mono-label founders-eyebrow" data-choreo data-choreo-start="0.02" data-choreo-end="0.08">
+          04 · For founders
+        </p>
+        <h2 class="founders-h2" data-choreo data-choreo-start="0.04" data-choreo-end="0.12">
+          From first sketch to a product people can finally use.
+        </h2>
+        <div class="beats" data-step-stage="founders" data-step-count="6">
+          {
+            MVP_STEPS.map((s, i) => (
+              <div class="beat" data-step={i}>
+                <span class="act-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+                <h3><span class="mask"><span class="part">{s.name}</span></span></h3>
+                <p class="beat-body"><span class="mask"><span class="part">{s.body}</span></span></p>
+              </div>
+            ))
+          }
+        </div>
+        <p class="belief mono-label">An MVP is not a demo. It's the first honest version of your business.</p>
+        <a class="cta cta--warm founders-cta" href="/mvps">Plan your MVP</a>
+      </div>
     </div>
   </section>
 
   <!-- Ch.5 — Transformation -->
   <section class="ch-transform" data-chapter="transformation">
     <div class="container">
-      <p class="mono-label chapter-mark" data-reveal>05 · Before / after</p>
-      <h2 data-reveal>Before: six tools and a person in the middle.<br />After: one system that runs the routine.</h2>
+      <p class="mono-label chapter-mark" data-choreo data-choreo-start="0.1" data-choreo-end="0.16">
+        05 · Before / after
+      </p>
+      <h2 class="scrim" data-choreo data-choreo-start="0.14" data-choreo-end="0.24">
+        Before: six tools and a person in the middle.<br />After: one system that runs the routine.
+      </h2>
       <dl class="pairs">
         {
-          transformPairs.map(([before, after]) => (
-            <div class="pair" data-reveal>
+          transformPairs.map(([before, after], i) => (
+            <div
+              class="pair"
+              data-choreo
+              data-choreo-start={String(0.26 + i * 0.05)}
+              data-choreo-end={String(0.34 + i * 0.05)}
+            >
               <dt>{before}</dt>
               <dd>{after}</dd>
             </div>
           ))
         }
       </dl>
-      <p class="support" data-reveal>
+      <p class="support scrim" data-choreo data-choreo-start="0.6" data-choreo-end="0.7">
         While your team does the work only people can do.
       </p>
     </div>
@@ -127,33 +180,31 @@ const transformPairs = [
   <!-- Ch.6 — Work (proof) -->
   <section class="ch-work" data-chapter="work">
     <div class="container">
-      <p class="mono-label" data-reveal>06 · Work</p>
-      <h2 data-reveal>Systems in the world.</h2>
-      <p class="support" data-reveal>
-        Case studies publish here as each engagement is verified with its client — role stated
-        plainly, metrics sourced and dated, nothing inflated. The experience prototype shows the
-        format:
+      <p class="mono-label" data-choreo data-choreo-start="0.12" data-choreo-end="0.2">06 · Work</p>
+      <h2 data-choreo data-choreo-start="0.16" data-choreo-end="0.26">Systems in the world.</h2>
+      <p class="support" data-choreo data-choreo-start="0.22" data-choreo-end="0.3">
+        Thirteen products our team has built and operated — AI agents, document processing,
+        booking, CRM, monitoring, security. Each one is a working business, not a mockup.
       </p>
-      <a class="work-card" href="/work/signal-desk" data-reveal>
-        <span class="mono-label">Prototype · Operations software</span>
-        <span class="name">Signal Desk</span>
-        <span class="outcome">A message-routing desk that reads, sorts and answers — so a five-person team stops living in their inbox.</span>
-        <span class="mono-label go">View the case study format →</span>
+      <a class="cta" href="/work" data-choreo data-choreo-start="0.28" data-choreo-end="0.36">
+        Explore the portfolio →
       </a>
     </div>
   </section>
 
-  <!-- Ch.8 — People and method (Ch.7 voices renders when verified testimonials exist) -->
+  <!-- Ch.7 — People and method -->
   <section class="ch-people" data-chapter="people">
     <div class="container">
-      <p class="mono-label" data-reveal>07 · People &amp; method</p>
-      <h2 data-reveal>Senior people, start to ship.</h2>
+      <p class="mono-label" data-choreo data-choreo-start="0.1" data-choreo-end="0.18">
+        07 · People &amp; method
+      </p>
+      <h2 data-choreo data-choreo-start="0.14" data-choreo-end="0.24">Senior people, start to ship.</h2>
       <div class="statements">
-        <p data-reveal>The people who scope your product are the people who build it.</p>
-        <p data-reveal>You get one channel, short loops and working software every week.</p>
-        <p data-reveal>You own the code, the infrastructure and the roadmap.</p>
+        <p data-choreo data-choreo-start="0.24" data-choreo-end="0.32">The people who scope your product are the people who build it.</p>
+        <p data-choreo data-choreo-start="0.3" data-choreo-end="0.38">You get one channel, short loops and working software every week.</p>
+        <p data-choreo data-choreo-start="0.36" data-choreo-end="0.44">You own the code, the infrastructure and the roadmap.</p>
       </div>
-      <div class="method" data-reveal>
+      <div class="method" data-choreo data-choreo-start="0.46" data-choreo-end="0.56">
         <p class="mono-label">Delivery method</p>
         <ol>
           <li><b>Map</b> — sit in the real process, find where hours go.</li>
@@ -165,57 +216,91 @@ const transformPairs = [
     </div>
   </section>
 
-  <!-- Ch.9 — Resolution -->
+  <!-- Ch.8 — Resolution -->
   <section class="ch-resolution" data-chapter="resolution">
     <div class="container">
-      <p class="mono-label" data-reveal>08 · Next</p>
-      <h2 data-reveal>Build what moves next.</h2>
-      <p class="support" data-reveal>
+      <p class="mono-label" data-choreo data-choreo-start="0.2" data-choreo-end="0.28">08 · Next</p>
+      <h2 class="scrim" data-choreo="words" data-choreo-start="0.26" data-choreo-end="0.4">
+        Build what moves next.
+      </h2>
+      <p class="support scrim" data-choreo data-choreo-start="0.38" data-choreo-end="0.46">
         Tell us what's slow, stuck or still an idea. We'll tell you what we'd build first.
       </p>
-      <div class="actions" data-reveal>
+      <div class="actions" data-choreo data-choreo-start="0.44" data-choreo-end="0.52">
         <a class="cta cta--warm" href="/contact">{site.cta}</a>
         <a class="cta cta--ghost" href={`mailto:${site.contactEmail}`}>{site.contactEmail}</a>
       </div>
-      <p class="mono-label risk" data-reveal>A first conversation costs nothing and usually saves a quarter.</p>
+      <p class="mono-label risk" data-choreo data-choreo-start="0.5" data-choreo-end="0.58">
+        A first conversation costs nothing and usually saves a quarter.
+      </p>
     </div>
   </section>
 
   <script>
-    // Atlas: active service + counter derive from the same scroll math the
-    // engine uses (chapterProgress), so DOM and scene stay in step.
-    import { chapterProgress, measureChapters } from "~/engine/scroll";
+    import { chapterProgress, measureChapters, type ChapterRange } from "~/engine/scroll";
 
-    function armAtlas(): void {
-      const counter = document.querySelector<HTMLElement>("[data-atlas-counter]");
-      const items = document.querySelectorAll<HTMLElement>("[data-atlas-item]");
-      if (!counter || items.length === 0) return;
-      let range = measureChapters().find((c) => c.name === "system");
+    /** Step stages (atlas acts, founder beats): active index derives from the
+     *  same chapter progress the engine reads. */
+    function armSteps(): () => void {
+      const stages = document.querySelectorAll<HTMLElement>("[data-step-stage]");
+      if (stages.length === 0) return () => {};
+      let chapters: ChapterRange[] = measureChapters();
       const remeasure = () => {
-        range = measureChapters().find((c) => c.name === "system");
+        chapters = measureChapters();
       };
       window.addEventListener("resize", remeasure, { passive: true });
+
       let raf = 0;
       const tick = (): void => {
         raf = requestAnimationFrame(tick);
-        if (!range) return;
-        const p = chapterProgress(range, window.scrollY, window.innerHeight);
-        const active = Math.min(11, Math.floor(p * 12));
-        counter.textContent = String(active + 1).padStart(2, "0");
-        items.forEach((el, i) => el.classList.toggle("is-active", i === active));
+        const scrollY = window.scrollY;
+        const vh = window.innerHeight;
+        stages.forEach((stage) => {
+          const name = stage.dataset["stepStage"]!;
+          const count = Number(stage.dataset["stepCount"] ?? "1");
+          const range = chapters.find((c) => c.name === name);
+          if (!range) return;
+          const p = chapterProgress(range, scrollY, vh);
+          // Steps occupy the middle band of the pin so entry/exit stay clean.
+          const band = Math.min(0.999, Math.max(0, (p - 0.12) / 0.76));
+          const active = Math.min(count - 1, Math.floor(band * count));
+          stage.querySelectorAll<HTMLElement>("[data-step]").forEach((el, i) => {
+            el.classList.toggle("is-active", i === active);
+            el.classList.toggle("is-past", i < active);
+          });
+          const section = stage.closest("section");
+          const counter = section?.querySelector<HTMLElement>("[data-step-counter]");
+          if (counter) counter.textContent = String(active + 1).padStart(2, "0");
+          const bar = section?.querySelector<HTMLElement>("[data-step-bar]");
+          if (bar) bar.style.width = `${((active + 1) / count) * 100}%`;
+        });
       };
       tick();
-      document.addEventListener("astro:before-swap", () => cancelAnimationFrame(raf), { once: true });
+      return () => {
+        cancelAnimationFrame(raf);
+        window.removeEventListener("resize", remeasure);
+      };
     }
-    document.addEventListener("astro:page-load", armAtlas);
+
+    let disarm: (() => void) | null = null;
+    document.addEventListener("astro:page-load", () => {
+      disarm?.();
+      disarm = armSteps();
+    });
+    document.addEventListener("astro:before-swap", () => {
+      disarm?.();
+      disarm = null;
+    });
   </script>
 </PublicLayout>
 
 <style>
   section h2 {
     font-size: var(--text-xl);
+    font-weight: 600;
   }
 
+  /* ---- Ch.1 ---- */
   .ch-arrival {
     min-height: 150vh;
     padding-top: var(--space-stage);
@@ -228,9 +313,19 @@ const transformPairs = [
     min-height: 78vh;
   }
   h1 {
-    font-size: var(--text-display);
+    font-size: clamp(2.4rem, 5.4vw, 4.9rem);
     margin-block: var(--space-2);
-    max-width: 15ch;
+    font-weight: 600;
+    line-height: 1.02;
+  }
+  h1 span {
+    display: block;
+    white-space: nowrap;
+  }
+  @media (max-width: 860px) {
+    h1 span {
+      white-space: normal;
+    }
   }
   .support {
     color: var(--ink-2);
@@ -249,8 +344,21 @@ const transformPairs = [
     top: 12vh;
     display: grid;
   }
+  .readout {
+    position: absolute;
+    margin: 0;
+    font-size: 0.62rem;
+  }
+  .readout--tr {
+    top: 0.5rem;
+    right: 0.65rem;
+  }
+  .readout--bl {
+    bottom: 0.5rem;
+    left: 0.65rem;
+  }
 
-  /* Ch.2 — chamber: scene renders the darkness; dark text tokens apply */
+  /* ---- Ch.2 chamber ---- */
   .ch-problem {
     background: transparent;
     color: #f2f3f8;
@@ -267,23 +375,23 @@ const transformPairs = [
   }
   .manifesto {
     display: grid;
-    gap: 34vh;
-    padding-block: 8vh 24vh;
+    gap: 32vh;
+    padding-block: 12vh 24vh;
   }
   .manifesto .line {
     font-family: var(--font-display);
     font-size: var(--text-xl);
-    font-weight: 600;
+    font-weight: 500;
     letter-spacing: var(--tracking-display);
-    max-width: 30ch;
+    max-width: 28ch;
   }
   .manifesto .line:nth-child(2) {
     margin-left: clamp(0px, 18vw, 320px);
   }
 
-  /* Ch.3 — atlas: one pin, ≤4 viewport heights (MOTION-MATRIX) */
+  /* ---- Ch.3 acts ---- */
   .ch-system {
-    height: 480vh;
+    height: 400vh;
   }
   .pin {
     position: sticky;
@@ -293,90 +401,205 @@ const transformPairs = [
     align-items: center;
     overflow: hidden;
   }
-  .atlas {
-    display: grid;
-    grid-template-columns: 5fr 7fr;
-    gap: var(--space-3);
+  .sys-stage {
+    position: relative;
     width: 100%;
+    height: 100%;
   }
-  .atlas-head h2 {
-    font-size: var(--text-xl);
-    margin-block: var(--space-2);
-    max-width: 14ch;
+  .sys-eyebrow {
+    position: absolute;
+    top: 14vh;
+    left: var(--gutter);
   }
-  .counter {
-    margin-top: var(--space-3);
-    font-size: 1rem;
+  .acts {
+    position: absolute;
+    inset: 0;
   }
-  .atlas-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    gap: 2px;
-    align-content: center;
-    max-height: 88vh;
+  .act {
+    position: absolute;
+    left: var(--gutter);
+    top: 50%;
+    transform: translateY(-50%);
+    max-width: min(46vw, 560px);
+    pointer-events: none;
   }
-  .atlas-list a {
-    display: grid;
-    grid-template-columns: 2.4rem 1fr;
-    gap: 0 var(--space-2);
-    text-decoration: none;
-    padding: 0.34rem 0.6rem;
-    border-left: 2px solid transparent;
-    transition: border-color var(--dur-micro) var(--ease-out-fast);
-  }
-  .atlas-list .name {
+  .act-num {
+    position: absolute;
+    top: -22vh;
+    left: -0.04em;
     font-family: var(--font-display);
     font-weight: 600;
-    font-size: clamp(0.95rem, 1.5vw, 1.15rem);
-    letter-spacing: var(--tracking-display);
+    font-size: clamp(6rem, 17vh, 11rem);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--hairline);
+    opacity: 0;
+    transform: translateY(0.25em);
+    transition:
+      opacity 500ms var(--ease-out-fast),
+      transform 500ms var(--ease-out-fast);
   }
-  .atlas-list .outcome {
-    grid-column: 2;
-    color: var(--ink-2);
-    font-size: var(--text-sm);
-    max-height: 0;
+  .act .mask {
+    display: block;
     overflow: hidden;
-    transition: max-height 300ms var(--ease-out-fast);
   }
-  .atlas-list li.is-active a {
-    border-left-color: var(--accent-electric);
+  .act .part {
+    display: block;
+    transform: translateY(110%);
+    transition: transform 520ms var(--ease-mech);
   }
-  .atlas-list li.is-active .outcome {
-    max-height: 3.2em;
+  .act-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.8rem, 3.6vw, 3.2rem);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.05;
+    margin: 0 0 0.6rem;
   }
-
-  /* Ch.4 */
-  .ch-founders {
-    min-height: 160vh;
-    padding-block: var(--space-5);
-  }
-  .ch-founders h2 {
-    margin-block: var(--space-2);
-    max-width: 20ch;
-  }
-  .belief {
+  .act-outcome {
     color: var(--ink-2);
     font-size: var(--text-lg);
-    max-width: 40ch;
-    margin-bottom: var(--space-4);
+    max-width: 38ch;
+    margin: 0 0 1.1rem;
   }
-  .founder-steps {
-    list-style: none;
-    margin: 0 0 var(--space-4);
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-3);
-    max-width: 900px;
+  .act-outcome .part {
+    transition-delay: 70ms;
   }
-  .founder-steps h3 {
-    font-size: var(--text-base);
-    margin-top: var(--space-1);
+  .act-link {
+    color: var(--accent-electric);
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 400ms var(--ease-out-fast) 160ms;
+  }
+  .act.is-active {
+    pointer-events: auto;
+  }
+  .act.is-active .part {
+    transform: translateY(0);
+  }
+  .act.is-active .act-num {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .act.is-active .act-link {
+    opacity: 1;
+  }
+  .act.is-past .part {
+    transform: translateY(-110%);
+  }
+  .sys-progress {
+    position: absolute;
+    bottom: 10vh;
+    left: var(--gutter);
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-variant-numeric: tabular-nums;
+  }
+  .bar {
+    display: inline-block;
+    width: 140px;
+    height: 1px;
+    background: var(--hairline);
+    position: relative;
+  }
+  .fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    background: var(--accent-electric);
+    width: 0;
+    transition: width 400ms var(--ease-mech);
+  }
+  .sys-index {
+    display: none;
   }
 
-  /* Ch.5 — split: scene renders the divide's darkness */
+  /* ---- Ch.4 founders build ---- */
+  .ch-founders {
+    height: 320vh;
+  }
+  .founders-stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  .founders-eyebrow {
+    position: absolute;
+    top: 10vh;
+    left: var(--gutter);
+  }
+  .founders-h2 {
+    position: absolute;
+    top: 14vh;
+    left: var(--gutter);
+    max-width: 26ch;
+    font-size: clamp(1.3rem, 2.2vw, 1.9rem);
+  }
+  .beats {
+    position: absolute;
+    inset: 0;
+  }
+  .beat {
+    position: absolute;
+    left: var(--gutter);
+    top: 58%;
+    transform: translateY(-50%);
+    max-width: min(38vw, 440px);
+  }
+  .beat h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.5rem, 2.8vw, 2.4rem);
+    letter-spacing: var(--tracking-display);
+    margin: 0 0 0.5rem;
+  }
+  .beat .mask {
+    display: block;
+    overflow: hidden;
+  }
+  .beat .part {
+    display: block;
+    transform: translateY(110%);
+    transition: transform 500ms var(--ease-mech);
+  }
+  .beat-body {
+    color: var(--ink-2);
+    max-width: 40ch;
+    margin: 0;
+  }
+  .beat-body .part {
+    transition-delay: 70ms;
+  }
+  .beat .act-num {
+    top: -13vh;
+    font-size: clamp(4.5rem, 12vh, 8rem);
+  }
+  .beat.is-active .part {
+    transform: translateY(0);
+  }
+  .beat.is-active .act-num {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .beat.is-past .part {
+    transform: translateY(-110%);
+  }
+  .belief {
+    position: absolute;
+    bottom: 15vh;
+    right: var(--gutter);
+    left: auto;
+    max-width: 34ch;
+    text-align: right;
+  }
+  .founders-cta {
+    position: absolute;
+    bottom: 7vh;
+    left: var(--gutter);
+  }
+
+  /* ---- Ch.5 ---- */
   .ch-transform {
     background: transparent;
     color: #f2f3f8;
@@ -418,42 +641,22 @@ const transformPairs = [
     color: #d2ff65;
   }
 
-  /* Ch.6 */
+  /* ---- Ch.6 / 7 / 8 ---- */
   .ch-work {
-    min-height: 120vh;
+    min-height: 110vh;
     padding-block: var(--space-5);
+    display: flex;
+    align-items: center;
   }
   .ch-work h2 {
+    font-size: var(--text-display);
     margin-block: var(--space-2);
   }
-  .work-card {
-    display: grid;
-    gap: 0.5rem;
-    max-width: 620px;
-    margin-top: var(--space-3);
-    padding: var(--space-3);
-    border: 1px solid var(--hairline);
-    text-decoration: none;
-    background: var(--raised);
-    transition: transform var(--dur-micro) var(--ease-out-fast);
-  }
-  .work-card:hover {
-    transform: translateY(-3px);
-  }
-  .work-card .name {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: var(--text-xl);
-    letter-spacing: var(--tracking-display);
-  }
-  .work-card .outcome {
-    color: var(--ink-2);
-  }
-  .work-card .go {
-    color: var(--accent-electric);
+  .ch-work .support {
+    margin-bottom: var(--space-3);
+    max-width: 52ch;
   }
 
-  /* Ch.8 people */
   .ch-people {
     padding-block: var(--space-5);
     min-height: 120vh;
@@ -489,7 +692,6 @@ const transformPairs = [
     font-family: var(--font-display);
   }
 
-  /* Ch.9 — resolution: scene renders warm dark ground */
   .ch-resolution {
     background: transparent;
     color: #f2f3f8;
@@ -519,10 +721,9 @@ const transformPairs = [
     color: #9da4b3;
   }
 
+  /* ---- Mobile: pins off, acts become the editorial index ---- */
   @media (max-width: 860px) {
     .grid,
-    .atlas,
-    .founder-steps,
     .pairs,
     .method ol {
       grid-template-columns: 1fr;
@@ -542,25 +743,109 @@ const transformPairs = [
     .manifesto .line:nth-child(2) {
       margin-left: 0;
     }
-    /* No pin on mobile: the atlas reads as a normal editorial index. */
     .ch-system {
       height: auto;
       padding-block: var(--space-4);
     }
-    .pin {
+    .ch-system .pin {
+      display: none;
+    }
+    .sys-index {
+      display: grid;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .sys-index a {
+      display: grid;
+      grid-template-columns: 2.6rem 1fr;
+      gap: var(--space-2);
+      align-items: baseline;
+      padding: 0.8rem 0.2rem;
+      border-top: 1px solid var(--hairline);
+      text-decoration: none;
+    }
+    .sys-index .name {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    .ch-founders {
+      height: auto;
+    }
+    .ch-founders .pin {
       position: static;
       height: auto;
       overflow: visible;
+      padding-block: var(--space-4);
     }
-    .atlas-list {
-      max-height: none;
+    .founders-stage > .mono-label,
+    .founders-stage > h2,
+    .belief,
+    .founders-cta {
+      position: static;
     }
-    .atlas-list .outcome {
-      max-height: none;
+    .founders-stage > h2 {
+      margin-block: var(--space-2) var(--space-3);
+    }
+    .beats {
+      position: static;
+      display: grid;
+      gap: var(--space-3);
+    }
+    .beat {
+      position: static;
+      transform: none;
+      max-width: none;
+    }
+    .beat .part {
+      transform: none;
+    }
+    .beat .act-num {
+      display: none;
+    }
+    .belief {
+      margin-block: var(--space-3) var(--space-2);
     }
     .pair {
       grid-template-columns: 1fr;
       gap: 0.2rem;
+    }
+  }
+  /* Reduced motion: acts index replaces the pin as well */
+  @media (prefers-reduced-motion: reduce) {
+    .ch-system .pin {
+      display: none;
+    }
+    .ch-system {
+      height: auto;
+      padding-block: var(--space-4);
+    }
+    .sys-index {
+      display: grid;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .ch-founders {
+      height: auto;
+    }
+    .ch-founders .pin {
+      position: static;
+      height: auto;
+    }
+    .beats {
+      position: static;
+      display: grid;
+      gap: var(--space-3);
+    }
+    .beat {
+      position: static;
+      transform: none;
+    }
+    .beat .part,
+    .act .part {
+      transform: none;
     }
   }
 </style>

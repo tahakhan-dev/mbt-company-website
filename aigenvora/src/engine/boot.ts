@@ -21,8 +21,23 @@ export function bootEngine(): void {
       const runtime = new EngineRuntime(canvas, caps);
       runtime.start();
       canvas.classList.add("engine-live");
+      // Two frames in, the first render is on screen — posters may crossfade.
+      requestAnimationFrame(() =>
+        requestAnimationFrame(() => {
+          if (document.documentElement.dataset["engine"] !== "failed") {
+            document.documentElement.dataset["engine"] = "live";
+          }
+        }),
+      );
     });
   };
+
+  // The preloader hides the page — boot immediately behind it so the engine
+  // is live the moment the curtain lifts.
+  if (document.documentElement.dataset["loader"] === "1") {
+    start();
+    return;
+  }
 
   // After load + idle, or on first intent (scroll/pointer), whichever first.
   const idle = (): void => {

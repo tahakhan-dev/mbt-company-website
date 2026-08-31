@@ -19,7 +19,7 @@
     --focus-ring: #1a39ff;
 
     /* ---- Type ---- */
-    --font-display: "General Sans", "Helvetica Neue", Arial, sans-serif;
+    --font-display: "Clash Display", "General Sans", "Helvetica Neue", Arial, sans-serif;
     --font-body: "General Sans", "Helvetica Neue", Arial, sans-serif;
     --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
 
@@ -27,9 +27,9 @@
     --text-sm: 0.875rem;
     --text-base: 1rem;
     --text-lg: 1.125rem;
-    --text-xl: clamp(1.4rem, 2.4vw, 1.9rem);
-    --text-display: clamp(2.6rem, 7vw, 5.8rem);
-    --text-mega: clamp(3.4rem, 13vw, 12rem);
+    --text-xl: clamp(1.5rem, 2.8vw, 2.2rem);
+    --text-display: clamp(2.8rem, 7.6vw, 6.6rem);
+    --text-mega: clamp(3.6rem, 14vw, 13rem);
 
     --leading-tight: 1.04;
     --leading-body: 1.6;

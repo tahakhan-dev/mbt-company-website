@@ -1,4 +1,5 @@
 ---
+import Logo from "./Logo.astro";
 const links = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Services" },
@@ -12,7 +13,7 @@ const current = Astro.url.pathname;
 
 <header class="site-nav" transition:persist="site-nav">
   <div class="bar container">
-    <a class="wordmark" href="/">AIGENVORA</a>
+    <a class="wordmark" href="/" aria-label="Aigenvora home"><Logo variant="lockup" size={26} /></a>
     <nav aria-label="Primary">
       <ul>
         {
@@ -47,11 +48,9 @@ const current = Astro.url.pathname;
     padding-block: 0.8rem;
   }
   .wordmark {
-    font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    font-size: 0.95rem;
     text-decoration: none;
+    color: var(--ink);
+    display: inline-flex;
   }
   nav ul {
     display: flex;

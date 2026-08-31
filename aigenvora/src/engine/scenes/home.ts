@@ -16,9 +16,9 @@ import {
   type Texture,
 } from "three";
 import type { MasterState, SceneContext, SceneModule } from "../types";
-import { buildEngine, type EngineModel } from "../engine-model";
+import { buildEngine, MODULE_ACCENTS, type EngineModel } from "../engine-model";
 import { clearColor } from "../color";
-import { easeMech, track, track3 } from "../timeline";
+import { damp, easeMech, track, track3 } from "../timeline";
 
 /**
  * Home — the full nine-chapter arc (storyboard §2). One engine, one camera,
@@ -75,6 +75,13 @@ export class HomeScene implements SceneModule {
   private seedGeo!: TetrahedronGeometry;
   private seedMat!: MeshPhysicalMaterial;
   private orbitCurrent = 0;
+  private moduleScales = new Array(12).fill(1) as number[];
+  private towerPos = new Vector3();
+  private accentColor = new Color();
+  private readoutModules: HTMLElement | null = null;
+  private readoutState: HTMLElement | null = null;
+  private lastModulesText = "";
+  private lastStateText = "";
   private plates: {
     mesh: Mesh | null;
     mat: MeshBasicMaterial | null;
@@ -118,6 +125,9 @@ export class HomeScene implements SceneModule {
 
     this.loadPlate("/media/hf01-chamber.webp", -9);
     this.loadPlate("/media/hf02-resolution.webp", -10);
+
+    this.readoutModules = document.querySelector("[data-readout-modules]");
+    this.readoutState = document.querySelector("[data-readout-state]");
   }
 
   private loadPlate(url: string, z: number): void {
@@ -156,40 +166,68 @@ export class HomeScene implements SceneModule {
     const pIntro = Math.min(1, p1 * 0.5 + p2 * 0.5);
     const assembly = Math.max(assembleTrack(pIntro), MathUtils.clamp(p3 * 4, 0, 1));
 
-    // ---- Ch.4: the ring parts for the founder's seed ----
-    const retract = MathUtils.smoothstep(p4, 0.05, 0.5) * (1 - MathUtils.smoothstep(p4, 0.85, 1));
+    // ---- Ch.3 act math (mirrors the DOM step driver in index.astro) ----
+    const band3 = Math.min(0.999, Math.max(0, (p3 - 0.12) / 0.76));
+    const activeIdx = Math.min(11, Math.floor(band3 * 12));
+    const stepFrac = band3 * 12 - activeIdx;
+    const atlasOn = p3 > 0.02 && p3 < 0.98;
+
+    // ---- Ch.4 build math (six beats, two modules per beat) ----
+    const band4 = Math.min(0.999, Math.max(0, (p4 - 0.12) / 0.76));
+    const buildOn = p4 > 0.02;
+    const ringReturn = MathUtils.smoothstep(p5, 0, 0.25);
 
     for (const mod of this.engine.modules) {
       const { group, scattered, aligned, index } = mod;
       const driftAmp = (1 - assembly) * 0.18;
-      const spread = 1 + retract * 0.9;
-      group.position.set(
-        MathUtils.lerp(scattered.x, aligned.x * spread, assembly) +
-          Math.sin(t * 0.4 + index * 1.7) * driftAmp,
-        MathUtils.lerp(scattered.y, aligned.y, assembly) +
-          Math.cos(t * 0.31 + index * 2.3) * driftAmp,
-        MathUtils.lerp(scattered.z, aligned.z * spread, assembly) +
-          Math.sin(t * 0.23 + index * 3.1) * driftAmp,
-      );
+      let px = MathUtils.lerp(scattered.x, aligned.x, assembly) + Math.sin(t * 0.4 + index * 1.7) * driftAmp;
+      let py = MathUtils.lerp(scattered.y, aligned.y, assembly) + Math.cos(t * 0.31 + index * 2.3) * driftAmp;
+      let pz = MathUtils.lerp(scattered.z, aligned.z, assembly) + Math.sin(t * 0.23 + index * 3.1) * driftAmp;
+
+      // Founders: pairs of modules leave the ring and stack into a small
+      // product tower around the seed, beat by beat; the ring reclaims them
+      // as Ch.5 begins.
+      if (buildOn) {
+        const pairIdx = Math.floor(index / 2);
+        const towerAmt =
+          MathUtils.smoothstep(MathUtils.clamp(band4 * 6 - pairIdx, 0, 1), 0.05, 0.85) *
+          (1 - ringReturn);
+        if (towerAmt > 0.001) {
+          const angle = pairIdx * 0.55 + (index % 2) * Math.PI;
+          this.towerPos.set(
+            Math.cos(angle) * 0.62,
+            -0.52 + pairIdx * 0.23,
+            Math.sin(angle) * 0.62,
+          );
+          px = MathUtils.lerp(px, this.towerPos.x, towerAmt);
+          py = MathUtils.lerp(py, this.towerPos.y, towerAmt);
+          pz = MathUtils.lerp(pz, this.towerPos.z, towerAmt);
+        }
+      }
+      group.position.set(px, py, pz);
+
       const wobble = (1 - assembly) * 0.5;
       group.rotation.set(
         Math.sin(index * 1.3) * wobble,
         Math.cos(index * 2.1) * wobble + assembly * ((index / 12) * Math.PI * 2),
         Math.sin(index * 0.7) * wobble,
       );
+
+      // Atlas emphasis: the act's module swells; the rest step back.
+      const scaleTarget = atlasOn && index === activeIdx ? 1.34 : 1;
+      this.moduleScales[index] = damp(this.moduleScales[index] ?? 1, scaleTarget, 10, dt);
+      group.scale.setScalar(this.moduleScales[index]!);
+
       const seatPoint = 0.75 + (index / 12) * 0.2;
       const activation = MathUtils.clamp((assembly - seatPoint) / 0.08, 0, 1);
-      // Ch.3 highlights the active service module; the rest idle at 0.35.
-      const activeIdx = Math.min(11, Math.floor(p3 * 12));
-      const focusBoost = p3 > 0.02 && p3 < 0.98 && index === activeIdx ? 1 : 0;
+      const focusBoost = atlasOn && index === activeIdx ? 1 : 0;
       mod.conduitUniforms.uActivation.value = Math.max(activation * 0.35, focusBoost);
       mod.conduitUniforms.uTime.value = t;
     }
 
-    // ---- Ch.3: orbit steps through the atlas ----
-    const activeIdx = Math.min(11, Math.floor(p3 * 12));
-    const orbitTarget = p3 > 0 ? -(activeIdx / 12) * Math.PI * 2 : 0;
-    this.orbitCurrent += (orbitTarget - this.orbitCurrent) * (1 - Math.exp(-6 * dt));
+    // ---- Ch.3: orbit steps; each act gets a dolly-in pulse and its accent ----
+    const orbitTarget = atlasOn ? -(activeIdx / 12) * Math.PI * 2 : 0;
+    this.orbitCurrent += (orbitTarget - this.orbitCurrent) * (1 - Math.exp(-8 * dt));
 
     // ---- Ch.4: seed grows into a small product ----
     const seedScale = MathUtils.smoothstep(p4, 0.1, 0.7) * (1 - MathUtils.smoothstep(p9, 0.6, 1));
@@ -216,8 +254,22 @@ export class HomeScene implements SceneModule {
     this.engine.coreLight.intensity =
       assembly * 0.8 + resolution * 2.2 + MathUtils.smoothstep(p4, 0.2, 0.8) * 0.8;
 
-    // Ch.6: project accent reflects onto the engine.
-    this.portal.intensity = MathUtils.smoothstep(p6, 0.1, 0.4) * (1 - MathUtils.smoothstep(p6, 0.8, 1)) * 2.2;
+    // Ch.3: the active service's accent light pulses on its module (the
+    // module orbits to world angle ~0 → screen right). Ch.6 reuses the same
+    // light as the violet proof accent.
+    const atlasGlow = atlasOn ? MathUtils.smoothstep(p3, 0.05, 0.15) * (1 - MathUtils.smoothstep(p3, 0.9, 1)) : 0;
+    const proofGlow = MathUtils.smoothstep(p6, 0.1, 0.4) * (1 - MathUtils.smoothstep(p6, 0.8, 1));
+    if (atlasGlow > proofGlow) {
+      this.accentColor.set(MODULE_ACCENTS[activeIdx] ?? "#4a63ff");
+      this.portal.color.copy(this.accentColor);
+      this.portal.position.set(1.55, 0.35, 0.85);
+      // Pulse on each docking: bright on arrival, easing off within the act.
+      this.portal.intensity = atlasGlow * (2.6 - Math.min(1, stepFrac * 2) * 1.1);
+    } else {
+      this.portal.color.set("#7957ff");
+      this.portal.position.set(0, 0.5, 1.5);
+      this.portal.intensity = proofGlow * 2.2;
+    }
 
     // ---- Rendered ground: chamber void / split dark / warm resolution ----
     const groundAlpha = Math.max(chamber, splitDark * 0.85, resolution);
@@ -239,14 +291,13 @@ export class HomeScene implements SceneModule {
 
     // ---- Rig placement ----
     const portrait = state.viewport.w < 700;
-    const inspectShift = MathUtils.smoothstep(p3, 0, 0.2) * (1 - MathUtils.smoothstep(p4, 0, 0.3));
-    // Atlas chapter: the list owns the right column, the engine moves left-low.
-    this.rig.position.x =
-      rigXTrack(pIntro) * (portrait ? 0.1 : 1) - inspectShift * (portrait ? 0 : 1.7);
+    // Acts own the left column in Ch.3; the orbit brings the active module to
+    // world +x, which reads screen-right of the copy — rig stays centered.
+    this.rig.position.x = rigXTrack(pIntro) * (portrait ? 0.1 : 1);
     // People: the engine recedes upward and shrinks; Resolution: settles back.
     const recede = human * (1 - resolution);
     this.rig.scale.setScalar(0.72 * (1 - recede * 0.45) * (1 - resolution * 0.12));
-    this.rig.position.y = recede * 1.6 - resolution * 0.2 - inspectShift * 0.5;
+    this.rig.position.y = recede * 1.6 - resolution * 0.2;
     this.rig.rotation.y = Math.sin(t * 0.05) * 0.03 + this.orbitCurrent;
 
     // ---- Camera ----
@@ -255,11 +306,12 @@ export class HomeScene implements SceneModule {
     let cx = this.posOut[0];
     let cy = this.posOut[1];
     let cz = this.posOut[2] + (portrait ? 1.1 : 0);
-    // Ch.3 inspection: settle to a steady atlas frame.
-    const inspect = MathUtils.smoothstep(p3, 0, 0.2);
-    cx = MathUtils.lerp(cx, 0.6, inspect);
-    cy = MathUtils.lerp(cy, 0.7, inspect);
-    cz = MathUtils.lerp(cz, portrait ? 6.2 : 5.0, inspect);
+    // Ch.3 inspection: steady atlas frame + a dolly kick as each act docks.
+    const inspect = MathUtils.smoothstep(p3, 0, 0.2) * (1 - MathUtils.smoothstep(p4, 0, 0.25));
+    const dollyKick = atlasOn ? Math.sin(Math.min(1, stepFrac * 1.6) * Math.PI) * 0.5 : 0;
+    cx = MathUtils.lerp(cx, 0.9, inspect);
+    cy = MathUtils.lerp(cy, 0.55, inspect);
+    cz = MathUtils.lerp(cz, (portrait ? 6.2 : 4.6) - dollyKick, inspect);
     // Ch.4 push-in on the seed.
     const push = MathUtils.smoothstep(p4, 0.15, 0.75) * (1 - MathUtils.smoothstep(p5, 0.1, 0.4));
     cz -= push * 1.6;
@@ -271,9 +323,44 @@ export class HomeScene implements SceneModule {
     cy += resolution * 0.3;
     cam.position.set(cx, cy, cz);
     this.lookTarget.set(this.rig.position.x * 0.35, this.rig.position.y * 0.6, 0);
+    // Acts and founder beats own the left column: bias the frame so the
+    // engine composition reads right-of-center during those chapters.
+    const buildFocus = MathUtils.smoothstep(p4, 0.05, 0.2) * (1 - ringReturn);
+    const rightBias = Math.max(inspect, buildFocus);
+    this.lookTarget.x = MathUtils.lerp(this.lookTarget.x, -0.95, rightBias);
+    this.lookTarget.y = MathUtils.lerp(this.lookTarget.y, -0.1, rightBias);
     cam.lookAt(this.lookTarget);
     cam.rotation.x += state.pointer.y * 0.02;
     cam.rotation.y += state.pointer.x * -0.026;
+
+    // ---- Live frame readouts (hero drafting frame) ----
+    if (this.readoutModules) {
+      const seated = String(Math.round(assembly * 12)).padStart(2, "0");
+      if (seated !== this.lastModulesText) {
+        this.lastModulesText = seated;
+        this.readoutModules.textContent = seated;
+      }
+    }
+    if (this.readoutState) {
+      const label =
+        resolution > 0.3
+          ? "RESOLUTION"
+          : human > 0.3
+            ? "HUMAN CONTROL"
+            : p6 > 0.2 && p6 < 0.9
+              ? "PROOF"
+              : buildOn && band4 > 0
+                ? "APPLICATION"
+                : assembly > 0.95
+                  ? "SYSTEM"
+                  : assembly > 0.2
+                    ? "ALIGNMENT"
+                    : "UNRESOLVED";
+      if (label !== this.lastStateText) {
+        this.lastStateText = label;
+        this.readoutState.textContent = label;
+      }
+    }
   }
 
   resize(): void {}
