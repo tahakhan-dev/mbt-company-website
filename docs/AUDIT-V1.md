@@ -13,9 +13,12 @@ Method: eyes-on scroll-through of the local prod build at 1440×900 (14-frame se
 **4× CPU throttle** (`tests/helpers/trace-scroll.mjs`, evidence in
 `docs/evidence/v1-home-scroll-4x.{trace,summary}.json`), bundle forensics against
 `.next` output, and a line-level pass over every public component with the
-`design-taste-frontend` / `high-end-visual-design` review checklists (the requested
-`taste-skill:redesign-existing-projects` skill does not exist in this session's roster;
-these two are the installed equivalents and were used instead).
+`design-taste-frontend` / `high-end-visual-design` review checklists (at audit time the
+real taste-skill plugin was not yet installed; a locally-authored equivalent was
+used and disclosed here. Mid-build the owner supplied github.com/leonxlnx/taste-skill,
+which was installed and whose `redesign-existing-projects` + pre-flight checklists
+were then applied retroactively; the resulting fixes are recorded in
+DESIGN-SPEC-V2 §1a and the compliance commit).
 
 ---
 

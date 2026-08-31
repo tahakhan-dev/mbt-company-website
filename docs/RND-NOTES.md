@@ -194,8 +194,14 @@ cuberto, locomotive, activetheory, unseen, apple, linear, stripe, vercel, higgsf
 - Pinterest boards: blocked and image-only, no secondary text route → substituted by
   the screenshot-driven taste audit in `AUDIT-V1.md` §4 plus the per-site studies
   above. This is the one mandated source with no live substitute.
-- The V2 brief references skills `taste-skill:redesign-existing-projects` and
-  `superpowers-chrome:browsing`; neither exists in this session. Used instead:
-  `taste-skill:design-taste-frontend`, `taste-skill:high-end-visual-design` (installed
-  equivalents) and the sandboxed Playwright/Chromium harness for all live-browser work
-  against our own site.
+- The V2 brief references `taste-skill:*` skills. At audit time only a locally
+  authored stand-in existed; mid-build the owner supplied the real repo
+  (github.com/leonxlnx/taste-skill) and it was installed as a proper plugin
+  (`claude plugin install taste-skill@taste-skill`). Its `design-taste-frontend`
+  pre-flight, `redesign-existing-projects` audit, and `full-output-enforcement`
+  laws were then applied to the build (see DESIGN-SPEC-V2 §1a). Its image-gen
+  skills (`imagegen-frontend-web`, `image-to-code`) require an image-generation
+  tool, which this sandbox does not have; the design-spec storyboard route was
+  used instead, as the brief allows. `superpowers-chrome:browsing` does not
+  exist in the installed superpowers version; the sandboxed Playwright/Chromium
+  harness covered all live-browser work against our own site.

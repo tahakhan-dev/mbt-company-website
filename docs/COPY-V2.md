@@ -1,8 +1,10 @@
 # COPY — V2 voice system
 
 **Voice:** plain, concrete, outcome-first; the promise is *five minutes to a plan*,
-never hype. Banned: "unlock", "supercharge", "cutting-edge", "empower", and any
-literal form of "the best five minutes of your life". Numbers are sample-content
+never hype. Banned: "unlock", "supercharge", "cutting-edge", "empower", any literal
+form of "the best five minutes of your life", and (taste-skill law) any em- or
+en-dash in visible copy: punctuate with periods, commas, colons, and middots;
+arrows (→) are reserved for before→after notation. Numbers are sample-content
 claims styled as such in case studies (fictional, replaceable via admin), and as
 *capability* claims ("40+ hours/month back") on the homepage transformation act —
 framed as what the systems are built to do, not fabricated client results.

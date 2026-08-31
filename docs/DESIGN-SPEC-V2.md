@@ -40,6 +40,34 @@ same narrative.
   Fixes the V1 double-warm violation (AUDIT §4).
 - **Icons:** existing ultra-light stroke set; no emojis; no new icon family.
 
+### 1a · Taste-skill pre-flight law (adopted mid-build when the real plugin landed)
+
+The owner installed github.com/leonxlnx/taste-skill; its pre-flight is binding on
+the public surface (admin/product UI is out of its scope). Amendments over the
+original spec:
+- **Zero em/en-dashes** in any visible string (prose punctuation: periods,
+  commas, colons, middots). Arrows (→) remain for before→after notation.
+- **Eyebrow restraint:** max one eyebrow per three sections; home keeps 3 of 7
+  (Acts 1, 5, 7); no decorative dot; no section-numbering eyebrows in content
+  (the act indicator owns wayfinding).
+- **Hero stack:** exactly eyebrow + headline (≤2 lines) + subtext (≤20 words) +
+  CTA pair. No scroll cue, no trust strip in the hero.
+- **One label per CTA intent** sitewide (portfolio intent = "See the work").
+- **Zigzag cap:** never three consecutive image/text splits; act 5's third row
+  is a full-bleed feature.
+- **Logo walls carry real vendored brand marks** (simple-icons, currentColor),
+  logos only, no category labels.
+- **Bidirectional motion contract (owner requirement):** every scroll-driven
+  animation plays forward on scroll-down and reverses on scroll-up. Scrubbed
+  acts are bidirectional by construction; entrance reveals play/reverse on
+  leave-back; counters reset and replay. `once` behavior is reserved for
+  load-in moments only.
+- **Documented deviations (owner mandate wins):** generated product-artifact
+  covers and the Act 4 before/after stage depict abstract product UI (the
+  brief demands these scenes; image-gen is unavailable; compositions use
+  abstract bars, never fake-precise text, and are replaceable via Cloudinary);
+  seeded metrics are fictional sample content flagged `sample: true`.
+
 ## 2 · Theme system
 
 Strategy: `next-themes` (`attribute="class"`, `defaultTheme="system"`,
