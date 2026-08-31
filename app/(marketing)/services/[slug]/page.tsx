@@ -261,7 +261,7 @@ export default async function ServiceDetailPage({
         ctaHref={ctaHref}
         contactEmail={settings.contactEmail}
         responsePromise={settings.responsePromise}
-        title={`Ready to scope your ${service.name.toLowerCase()} project?`}
+        title={`Ready to scope your ${service.name} project?`}
         lede="Bring the problem to the call. You'll leave with an honest feasibility read and a rough budget."
       />
     </>

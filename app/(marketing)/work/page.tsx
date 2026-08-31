@@ -26,7 +26,7 @@ export default async function WorkPage() {
           as="h1"
           eyebrow="Work"
           title="Shipped, measured, referenced."
-          lede="Sample case studies from engagements across fintech, AI, data, and SaaS. Filter by what you're planning."
+          lede="Case studies from engagements across fintech, AI, data, and SaaS. Filter by what you're planning."
         />
         <div className="mt-14">
           <WorkGrid

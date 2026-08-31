@@ -26,7 +26,10 @@ export function ActIndicator() {
   useGSAP(
     () => {
       if (reduced) return;
-      const sections = gsap.utils.toArray<HTMLElement>("[data-act]");
+      // Direct document query: this useGSAP context is scoped to rootRef (the
+      // rail itself), and scoped selector resolution can never see the act
+      // sections outside it — gsap.utils.toArray("[data-act]") returns [].
+      const sections = Array.from(document.querySelectorAll<HTMLElement>("[data-act]"));
       if (sections.length === 0) return;
       setActs(
         sections.map((el, i) => ({

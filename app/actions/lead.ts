@@ -9,7 +9,7 @@ import { leadInputSchema, type Lead } from "@/lib/schemas/lead";
 
 type LeadResult = { ok: true } | { ok: false; error: string };
 
-const GENERIC_ERROR = "Something went wrong — please try again or email us directly.";
+const GENERIC_ERROR = "Something went wrong. Please try again or email us directly.";
 
 /** Naive per-instance rate limit: 5 submissions / 10 min / IP. */
 const hits = new Map<string, number[]>();

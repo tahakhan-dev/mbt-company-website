@@ -9,11 +9,11 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${siteName} — AI Software House`,
-    template: `%s — ${siteName}`,
+    default: `${siteName} · AI Software House`,
+    template: `%s · ${siteName}`,
   },
   description:
-    "We design, engineer, and ship AI-powered products — LLM apps, data platforms, and fintech-grade software.",
+    "We design, engineer, and ship AI-powered products: LLM apps, data platforms, and fintech-grade software.",
 };
 
 export const viewport: Viewport = {
