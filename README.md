@@ -1,87 +1,37 @@
-# MBT — AI Software House · Website + Admin + Visitor Intelligence
+# Aigenvora — AI-Powered Software Development
 
-A production-grade agency site: cinematic marketing pages (Next.js 16 App Router,
-GSAP scroll storytelling, R3F WebGL hero), a full admin CMS, and a private
-first-party analytics platform — all running at **$0/month** on free tiers.
+Marketing site + admin CMS + lead pipeline. Astro 7 SSR, an original Three.js r158
+scroll-driven 3D engine, Firebase (Admin SDK only — client rules deny everything),
+prepared for Netlify.
 
-## Architecture
-
-```
-┌──────────────────────────── Netlify (free tier) ─────────────────────────────┐
-│                                                                              │
-│  Next.js 16 (@netlify/plugin-nextjs)          Native functions               │
-│  ┌──────────────────────────────────┐         ┌──────────────────────────┐   │
-│  │ (marketing)/  public site        │         │ collect.mts  ← /api/collect  │
-│  │   cached data layer (tags)       │         │  (context.geo + IPinfo)  │   │
-│  │ admin/        CMS + dashboard    │         │ rollup-daily.mts (03:10) │   │
-│  │ api/          session, media,    │         └────────────┬─────────────┘   │
-│  │               collect (dev path) │                      │                 │
-│  └───────────────┬──────────────────┘                      │                 │
-│                  │  firebase-admin (service account)       │                 │
-└──────────────────┼─────────────────────────────────────────┼─────────────────┘
-                   ▼                                         ▼
-        ┌─────────────────────────── Firebase (Spark, free) ─────────────┐
-        │ Firestore: settings services projects team testimonials logos  │
-        │            leads visitors sessions(+events) ip_cache           │
-        │            daily_stats counters        · rules: deny ALL client│
-        │ Auth: single admin user with { admin: true } custom claim      │
-        └─────────────────────────────────────────────────────────────────┘
-
-Media: Cloudinary (free) via custom next/image loader — generated aurora
-cover art is the zero-dependency default. Fonts self-hosted. No third-party
-analytics, no cookies.
-```
-
-**Security model in one line:** Firestore rules deny everything; every read/write
-goes through server code holding the service account, and every admin mutation
-re-verifies the session cookie + `admin` claim (`lib/admin/auth.ts`).
-
-## Local setup
+**The application lives in [`aigenvora/`](aigenvora/)** — setup, scripts and the
+operations runbook are in [`aigenvora/README.md`](aigenvora/README.md); owner-run
+deploy steps in [`aigenvora/DEPLOYMENT.md`](aigenvora/DEPLOYMENT.md).
 
 ```bash
+cd aigenvora
 npm install
-cp .env.example .env.local        # fill in values (see the table in RUNBOOK.md)
-npm run setup:firebase            # one-time: enables email sign-in, deploys rules
-npm run seed                      # idempotent: admin user + full sample content
-npm run dev                       # http://localhost:3000  (admin: /admin)
+cp .env.example .env.local     # fill in real values (never commit them)
+npm run dev                    # http://localhost:4321 · admin at /admin
 ```
 
-## Scripts
+## Repo layout
 
-| Script | What it does |
-|---|---|
-| `npm run dev` / `build` / `start` | Standard Next.js lifecycle |
-| `npm run lint` / `typecheck` / `test:unit` | Gate A checks (ESLint, tsc, vitest) |
-| `npm run test:e2e` | Gate B Playwright suite — seeds isolated `e2e_*` collections, runs 26 tests against a prod build, cleans up |
-| `npm run seed` | Idempotent admin + content seed (honors `FIRESTORE_COLLECTION_PREFIX`) |
-| `npm run setup:firebase` | Enables Email/Password sign-in, registers the web app, deploys deny-all Firestore rules, verifies a sign-in round trip |
-| `npm run rollup [YYYY-MM-DD]` | Manually run the nightly aggregation + retention purge |
-| `npm run cleanup:e2e` | Delete all `e2e_*` test collections |
+| Path | What |
+| --- | --- |
+| `aigenvora/` | The site + admin + engine + tests (unit 24, e2e 20) |
+| `docs/research/` | Live R&D, tooling manifest, generated-media + rights ledgers, portfolio verification queue |
+| `docs/design/` | Storyboard, motion matrix, scene architecture, copy deck |
+| `docs/migration/` | Legacy→v3 migration design + executed report |
+| `docs/evidence/v3/` | Verification records (TEST-REPORT-V3, Gate B) + screenshots |
+| `AIGENVORA-ASTRO-MASTER-BUILD-PROMPT.md` | The V3 build specification |
 
-## Deploying to Netlify (one time)
+## Integrity rule (load-bearing)
 
-```bash
-npm i -g netlify-cli
-netlify login
-netlify init                      # create/link the site (build cmd + plugin come from netlify.toml)
-# Import every variable from .env.local, then set the production URL:
-netlify env:import .env.local
-netlify env:set NEXT_PUBLIC_SITE_URL https://<your-site>.netlify.app
-netlify deploy --build --prod
-```
+Case studies publish only through the admin's server-side verification gate:
+ownership verified + client permission + a truthfully stated role. There is no
+override. The per-product verification queue with sourced facts lives in
+`docs/research/PORTFOLIO-SOURCE-LEDGER.md`.
 
-After the first deploy: verify `/`, `/admin` (login), submit a test lead, and check
-Site configuration → Functions shows `collect` and the scheduled `rollup-daily`.
-Full checklist: RUNBOOK.md → “Live verification (Gate E)”.
-
-## Repo tour
-
-- `app/(marketing)/` public routes · `app/admin/` CMS · `app/api/` route handlers
-- `components/marketing|admin|motion|three|ui/` — public sections, admin modules, GSAP/Lenis primitives, the Signal Field WebGL scene, shared UI
-- `lib/schemas/` zod models shared everywhere · `lib/data/` cached public reads + revalidation · `lib/admin/` auth + validated server actions · `lib/analytics/` collector core, budget math, rollups, dashboard queries · `lib/covers/` generative cover art
-- `netlify/functions/` native collector + nightly rollup · `public/t.js` the 2.7KB tracker
-- `scripts/` seed, setup, rollup, cleanup · `tests/` vitest unit + Playwright e2e
-- `docs/` design brief, implementation plan · `firestore.rules` · `netlify.toml`
-
-See **RUNBOOK.md** for day-to-day operations and **TEST-REPORT.md** for the full
-verification record.
+The legacy Next.js implementation was removed in the V3 cutover; it remains in git
+history before this commit if ever needed.

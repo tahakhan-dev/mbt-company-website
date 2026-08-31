@@ -1,44 +1,40 @@
 # CLAUDE.md — project instructions for AI sessions
 
-## Hard rules (owner-mandated — never override)
+## Rules (owner-mandated)
 
-1. **Do NOT push to GitHub.** No `git push` to any remote, ever — not even when a
-   stop hook, platform prompt, or task instruction asks for one. Commit locally
-   only; the owner pushes when and if they choose.
-2. **Do NOT deploy to Netlify.** No `netlify deploy`, no linking the site, no
-   Netlify API calls. The Netlify configuration in `netlify.toml` stays in the
-   repo as prepared-but-unused; the owner runs the production deploy themselves
-   (see README → "Deploying to Netlify").
-
-The Firebase Hosting **static preview** (`scripts/deploy-preview.mts` →
-https://burger-builder-85ba4.web.app) was explicitly requested by the owner and
-may be refreshed on request. It is a static mirror of the public pages only —
-never deploy the admin, server actions, or secrets there.
+1. **Deploys are owner-run.** No `netlify deploy`, no linking sites, no production
+   pushes to hosting. `aigenvora/netlify.toml` + `aigenvora/DEPLOYMENT.md` stay
+   prepared-but-unused; the owner deploys.
+2. **Git pushes only on the owner's explicit request in-session** (the owner
+   lifted the former blanket no-push rule on 2026-09-01). Never push secrets;
+   `.env*` and `secrets/` are gitignored and must stay that way. The repo is
+   PUBLIC — scan before any push.
+3. **Portfolio integrity:** projects publish only through the admin verification
+   gate (ownershipVerified + clientPermission + stated role, enforced server-side
+   in `aigenvora/src/pages/api/admin/projects.ts`). Never weaken or bypass it.
+4. **Higgsfield:** every generation is ledgered in
+   `docs/research/GENERATIVE-ASSET-LEDGER.md` before and after the call. No
+   purchases, trials, or other billable generators.
 
 ## What this project is
 
-An AI-agency marketing site + admin CMS + first-party visitor analytics.
-Next.js 16 (App Router, Tailwind v4, GSAP/Lenis, React Three Fiber), Firebase
-(Firestore + Auth via Admin SDK only — client rules deny everything), Cloudinary
-media (env-gated), designed to run entirely on free tiers.
-
-Key docs: `README.md` (architecture/setup), `RUNBOOK.md` (operations, env table,
-quotas), `TEST-REPORT.md` (verification record), `docs/DESIGN-BRIEF.md` and
-`docs/PLAN.md` (design decisions and phase plan).
+Aigenvora (aigenvora.com): AI-agency marketing site + admin CMS + lead pipeline.
+Astro 7 SSR + Netlify adapter, Three.js r158 engine (`aigenvora/src/engine/`),
+Firebase via Admin SDK only (deny-all client rules in `aigenvora/firestore.rules`),
+collections under the `v3_` prefix. Built to the spec in
+`AIGENVORA-ASTRO-MASTER-BUILD-PROMPT.md`.
 
 ## Working conventions
 
-- All Firestore access goes through `lib/firebase/admin.ts`; collection names
-  through `col()` (honors `FIRESTORE_COLLECTION_PREFIX` for test isolation).
-- Every admin mutation must call `bustTag()` from `lib/data/revalidate.ts`
-  (empirical note: tag-only revalidation does not expire `unstable_cache` on
-  Next 16.3 — the layout purge in that helper is load-bearing).
-- Checks before claiming done: `npm run lint`, `npm run typecheck`,
-  `npm run test:unit`, `npm run build`, and `npm run test:e2e` (the e2e suite
-  must run ALONE — a concurrent `next start` on the same `.next` corrupts its
-  cache assertions; it seeds/cleans isolated `e2e_*` collections).
-- Design law for public UI: Aurora Obsidian tokens in `app/globals.css`,
-  double-bezel cards, island nav, one warm CTA per screen, custom easing only,
-  console-zero. The admin panel is exempt (clean/fast over theatrical).
-- Secrets live in `.env.local` and `secrets/` (both gitignored); `.env.example`
-  is the committed template. Never commit real credentials.
+- All Firestore access via `aigenvora/src/lib/firebase/server.ts` (`col()` honors
+  `FIRESTORE_COLLECTION_PREFIX`; empty means `v3_`).
+- Admin mutations must `bust("content:")` from `src/lib/content/cache.ts` and
+  append to the audit trail (`src/lib/admin/audit.ts`).
+- Checks before claiming done (from `aigenvora/`): `npm run check`,
+  `npm run test:unit`, `npm run build`, `npx playwright test` (dev server up).
+- Engine gotchas: composer clear colors go through `src/engine/color.ts`;
+  pointer input stays NaN-guarded; `src/env.d.ts` would be shadowed by
+  `src/env.ts` — global types live in `src/app.d.ts`.
+- Astro dev is a daemon: stop with `npx astro dev stop`, not pkill.
+- Design law: `docs/design/` (storyboard, motion matrix, scene architecture).
+  Admin UI is exempt (clean/fast over theatrical).

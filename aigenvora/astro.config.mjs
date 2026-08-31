@@ -3,8 +3,11 @@ import { defineConfig } from "astro/config";
 import netlify from "@astrojs/netlify";
 import { config as loadEnv } from "dotenv";
 
-// Dev/build convenience: share the repo root .env.local (Netlify injects real env in prod).
+// Dev/build convenience: real env lives in the repo root .env.local (legacy
+// location) or aigenvora/.env.local — first value wins; Netlify injects env
+// in production.
 loadEnv({ path: "../.env.local" });
+loadEnv({ path: ".env.local" });
 
 // The Netlify adapter's local dev spins up a Deno edge-functions server that
 // isn't present on this machine; the adapter only matters for `astro build`.
