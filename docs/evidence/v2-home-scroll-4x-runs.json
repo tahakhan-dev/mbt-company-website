@@ -42,6 +42,21 @@
     "afterGrainScrollPause": {
       "dark": 5.9,
       "light": 9.1
+    },
+    "afterActIndicatorAndAct4Clip": {
+      "dark": 4.5,
+      "light": 3.1
+    }
+  },
+  "final": {
+    "note": "Final tree (after act-indicator fix + act4 stage clip). The clip also removed the off-stage translated layer from the document, improving both themes.",
+    "dark": {
+      "droppedPct": 4.5,
+      "longTasks": 0
+    },
+    "light": {
+      "droppedPct": 3.1,
+      "longTasks": 0
     }
   }
 }

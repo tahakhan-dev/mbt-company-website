@@ -295,7 +295,10 @@ export function Act4Transformation() {
 
         {/* The stage — sized so header + stage + claims fit one viewport */}
         <div className="relative mt-8 md:mx-auto md:mt-6 md:w-[min(84vw,880px)]">
-          <div className="relative aspect-[16/10] max-md:hidden">
+          {/* overflow-hidden: the after-window parks at xPercent 100 (fully
+              off-stage right) before the sweep — unclipped, that transform
+              widens the document and causes page-level horizontal scroll. */}
+          <div className="relative aspect-[16/10] overflow-hidden rounded-[1.75rem] max-md:hidden">
             <BeforePanel className="absolute inset-0" />
             <div ref={afterRef} className="absolute inset-0 overflow-hidden rounded-[1.75rem]">
               <div ref={afterInnerRef} className="h-full">

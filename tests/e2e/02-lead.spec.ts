@@ -42,7 +42,7 @@ test.describe("lead pipeline", () => {
     await page.getByLabel("About the project").fill("Instant submit attempt");
     await page.getByRole("button", { name: "Send inquiry" }).click();
     await expect(
-      page.getByText("Something went wrong — please try again or email us directly."),
+      page.getByText("Something went wrong. Please try again or email us directly."),
     ).toBeVisible();
   });
 

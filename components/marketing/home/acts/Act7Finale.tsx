@@ -28,7 +28,7 @@ export function Act7Finale({
     >
       {/* The field returns for the finale: serene poster inside the act
           (the live canvas overlays it on GPU machines via FieldStage). */}
-      <div className="absolute inset-0 -z-10 opacity-60" aria-hidden="true">
+      <div className="absolute inset-0 -z-10 overflow-hidden opacity-60" aria-hidden="true">
         <HeroPoster />
       </div>
       <div className="mx-auto max-w-4xl text-center">

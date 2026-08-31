@@ -8,9 +8,9 @@
   "longTasksTotalMs": 0,
   "worst": [],
   "frames": {
-    "sampled": 1013,
-    "avgIntervalMs": 19,
-    "droppedPct": 5.9,
+    "sampled": 1029,
+    "avgIntervalMs": 18.7,
+    "droppedPct": 4.5,
     "severePct": 0.4
   }
 }

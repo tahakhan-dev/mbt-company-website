@@ -119,7 +119,7 @@ export function Act1Signal({
       >
         {/* Constellation backdrop pins WITH the act (the live canvas, where
             the GPU is real, draws over it from the fixed FieldStage). */}
-        <div className="absolute inset-0 -z-10" aria-hidden="true">
+        <div className="absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
           <HeroPoster />
           <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-void/70" />
         </div>
