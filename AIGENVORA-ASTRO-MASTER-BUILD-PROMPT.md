@@ -27,12 +27,13 @@ Before implementation:
 
 1. Read this entire file.
 2. Read all repository instructions, especially CLAUDE.md or AGENTS.md.
-3. Inspect the current repository, current deployed preview and data model.
-4. Visit Lusion live and complete the required research in Section 3.
-5. Visit every portfolio source in Section 14 and complete the evidence ledger.
-6. Produce the research, storyboard and asset-rights deliverables.
-7. Stop at the creative approval gates explicitly marked in this prompt.
-8. After the owner approves the creative prototype, execute the remaining plan without repeatedly asking questions that this specification already answers.
+3. Enumerate the Claude plugins, skills and MCP tools that are actually available in the current session. Read the instructions and schemas for every capability selected for use; the names supplied in Section 3A are not substitutes for live tool discovery.
+4. Inspect the current repository, current deployed preview and data model.
+5. Visit Lusion live and complete the required research in Section 3.
+6. Visit every portfolio source in Section 14 and complete the evidence ledger.
+7. Produce the research, storyboard, tooling and asset-rights deliverables.
+8. Stop at the creative approval gates explicitly marked in this prompt.
+9. After the owner approves the creative prototype, execute the remaining plan without repeatedly asking questions that this specification already answers.
 
 Repository-local prohibitions on pushing to GitHub or deploying to Netlify remain binding unless the owner explicitly changes them. Prepare everything for production, but do not bypass those rules.
 
@@ -154,6 +155,8 @@ Create and commit:
 - docs/research/LUSION-LIVE-RND.md
 - docs/research/LUSION-SCREEN-CONTACT-SHEET.pdf or an equivalent image board
 - docs/research/CURRENT-SITE-AUDIT.md
+- docs/research/TOOLING-MANIFEST.md
+- docs/research/GENERATIVE-ASSET-LEDGER.md
 - docs/research/PORTFOLIO-SOURCE-LEDGER.md
 - docs/research/ASSET-RIGHTS-LEDGER.md
 - docs/design/AIGENVORA-STORYBOARD.md
@@ -188,6 +191,135 @@ Before building the complete website, present:
 - an asset acquisition and generation plan.
 
 Wait for owner approval at this gate.
+
+---
+
+## 3A. CLAUDE EXECUTION ENVIRONMENT, PLUGINS AND HIGGSFIELD BUDGET
+
+The owner has prepared a Claude environment with specialist plugins, skills and connected MCP servers. Use that environment deliberately. Installed does not mean mandatory, and connected does not authorize an architecture change, a purchase, a remote write, or disclosure of private data.
+
+The tool list below is the expected starting environment. It is advisory until confirmed in the live Claude session because plugin names, commands, permissions and MCP schemas can change.
+
+### 3A.1 Mandatory capability discovery
+
+Before research or code changes:
+
+1. Enumerate the plugins, skills, MCP servers and commands that are actually available.
+2. Read the current instructions for each capability you intend to use.
+3. Record availability, purpose, access level, side effects and selected/not-selected status in `docs/research/TOOLING-MANIFEST.md`.
+4. Prefer the smallest set of tools that covers the task. Do not invoke multiple tools merely because they overlap.
+5. Prefer purpose-built tools and primary documentation over guesses or remembered APIs.
+6. Never send credentials, unpublished client data, lead data, private repository content or unapproved client media to an external MCP or generation service.
+7. Ask for owner authorization before any purchase, paid overage, deployment, remote write, destructive action or architectural change not already authorized by this prompt.
+8. Keep an auditable note of material external tool calls, generated outputs and costs.
+
+If an expected tool is missing or its instructions cannot be read, log the limitation and continue with the safest in-scope alternative. Do not invent a tool interface.
+
+### 3A.2 Higgsfield MCP — required controlled use
+
+The Higgsfield MCP is connected and authenticated. The owner reports a current balance of **10 credits**. Higgsfield is the primary generative-media service for this build and must be used after Creative Gate A for selected original Aigenvora motion or cinematic media, provided its live commercial terms, capabilities and credit cost are suitable.
+
+The ten credits are a **hard total ceiling**, not a spending target. Never exceed the confirmed balance, buy more credits, enable an automatic top-up or start an unbounded retry loop. Preserve quality by spending credits only on frames or motion plates that have an approved role in the storyboard.
+
+Before the first paid generation:
+
+- inspect the live Higgsfield MCP schema and current balance;
+- confirm how credits are charged; never assume one request equals one credit;
+- inspect supported models, duration, aspect ratio, resolution, seed/reference controls and output rights;
+- confirm commercial-use terms and retention/privacy behavior;
+- complete the visual storyboard, shot list, target crops and prompt drafts without spending credits;
+- obtain Creative Gate A approval;
+- create `docs/research/GENERATIVE-ASSET-LEDGER.md` and record the original ten-credit ceiling.
+
+Use this provisional allocation, then adapt it to the actual price shown by the live MCP without exceeding the ceiling:
+
+| Purpose | Maximum allocation | Rule |
+| --- | ---: | --- |
+| Direction tests | 2 credits | Up to two tightly scoped low-cost tests after storyboard approval; compare composition and motion, not random styles. |
+| Final signature media | 5 credits | Hero, Aigenvora Engine reveal or route-transition plates that materially improve the experience. |
+| Supporting route/mobile media | 2 credits | At most one secondary Work, MVP, About or mobile-specific asset when the approved storyboard proves the need. |
+| Correction reserve | 1 credit | Hold until final visual QA for one repair or regeneration. Leave it unspent if no correction is needed. |
+
+If live pricing makes this allocation impossible, preserve the priority order: signature media, one necessary supporting asset, then correction reserve. Do not spend credits during open-ended ideation.
+
+Before every Higgsfield request, write a ledger entry containing:
+
+- storyboard shot ID and intended route/scene;
+- reason code-native Three.js, licensed footage or an existing asset is insufficient;
+- exact prompt and negative constraints;
+- model, settings, seed/reference inputs, aspect ratio and duration;
+- expected credit cost and confirmed pre-call balance;
+- source-media ownership and permission status.
+
+After every request, add:
+
+- generation/job ID;
+- actual credits consumed and remaining balance;
+- output URL and local/Cloudinary destination;
+- review decision: approved, revise without generation, regenerate or reject;
+- artifact, fake-text, logo, lighting, crop and rights review;
+- routes and breakpoints where the asset may appear.
+
+Higgsfield may create:
+
+- original cinematic background plates;
+- abstract material transformations tied to the Aigenvora Engine;
+- short transition media;
+- atmospheric loops that remain subordinate to readable content;
+- an approved mobile derivative when a desktop crop does not work.
+
+Higgsfield must not create:
+
+- the Aigenvora logo, core UI, readable product screenshots or case-study evidence;
+- fake client interfaces, testimonials, people, metrics or project outcomes;
+- replicas of Lusion scenes, geometry, branding, camera paths or media;
+- derivatives of copyrighted or confidential client assets without written permission;
+- essential information that disappears when video is unavailable.
+
+Every approved output must be downloaded, reviewed, optimized, assigned a poster and mobile crop where relevant, uploaded through the approved Cloudinary workflow, and entered in the asset-rights ledger. Do not hotlink a temporary MCP output. The WebGL and HTML experiences must remain coherent when generated video is blocked, paused, reduced, or unavailable.
+
+If Higgsfield is unavailable, the balance is lower than reported, commercial rights are unsuitable, or generation repeatedly fails, stop spending and document the evidence. Use original Three.js/GLSL, owner-supplied media or commercially licensed media as the fallback. Do not silently switch to another billable generator.
+
+### 3A.3 Plugin, skill and MCP routing matrix
+
+Confirm the live command names before use. Route work as follows:
+
+| Capability | Intended use | Guardrail |
+| --- | --- | --- |
+| `superpowers` | Brainstorming, written plans, test-driven work, systematic debugging, verification and review checkpoints. | Follow the applicable workflow; do not turn process artifacts into a substitute for the required product evidence. |
+| `superpowers-chrome` + Chrome MCP | Eyes-on Lusion research, current-site inspection, screenshots and interactive visual QA. | Observe and document; never extract or copy proprietary Lusion assets or source. |
+| Playwright MCP | Repeatable route, form, responsive, reduced-motion, admin and visual-regression checks. | Use stable local/preview targets and save evidence; do not claim a pass from screenshots alone. |
+| `context7` + Context7 MCP | Current official Astro, adapter, Three.js, Firebase, Cloudinary and package documentation. | Prefer official/primary documentation and confirm versions; do not let summaries override repository evidence. |
+| `serena` plugin + Serena MCP | Semantic repository discovery, dependency tracing and migration analysis. | Inspect before editing and preserve unrelated work. |
+| `frontend-design`, `ui-ux-pro-max`, `motion`, `senior-frontend` | Public visual system, motion grammar, responsive behavior, CSS, WebGL integration and frontend critique. | The Aigenvora visual language remains custom; resolve conflicting advice through this specification and the approved storyboard. |
+| `senior-fullstack`, `backend-development`, `api-scaffolding`, `javascript-typescript` | Astro endpoints, Firebase server boundaries, schemas, CMS, lead pipeline, TypeScript and API tests. | Keep the locked Astro/Firebase architecture unless the owner explicitly approves a change. |
+| `code-review`, `comprehensive-review` | Focused per-phase review and final cross-system review. | Verify findings against code and tests before changing behavior. |
+| `elements-of-style` | Tighten the copy deck, labels, admin help text and case-study prose. | Preserve the owner-approved positioning and never invent proof, results or testimonials. |
+| `aceternity-ui` | Admin/internal interaction reference or carefully adapted utility patterns. | Do not ship recognizable library-default public sections or let it determine the brand. |
+| `landing-page-generator` | Early information-architecture or copy ideation only. | Its output is input to art direction, not the final public website or source of generic sections. |
+| `graphify` | Architecture, content-flow and scene-lifecycle diagrams in documentation. | Use only where a diagram makes the system easier to understand. |
+| `thesys-generative-ui` | Optional exploration of structured admin or internal generative interfaces. | Do not add an AI UI feature unless it is in scope, secure and justified. |
+| `caveman`, `ponytail` | Use only after reading their current documentation and identifying a concrete, in-scope benefit. | Do not invoke unknown capabilities speculatively or allow them to override architecture, safety or design gates. |
+| Runway API plugin | Optional media fallback only if Higgsfield cannot meet an approved shot and the owner explicitly authorizes any billable use. | No automatic use, purchase or spend. Log provenance and cost exactly as for Higgsfield. |
+| GitHub MCP | Read-only source/documentation research when useful. | Repository rules prohibit pushing to GitHub; do not mutate the remote unless the owner explicitly changes that rule. |
+| MongoDB MCP | Available integration surface, not the selected application database. | Do not introduce MongoDB merely because it is connected. Firebase/Firestore remains authoritative. |
+| Redis MCP | Available integration surface, not an approved dependency. | Use neither hosted Redis nor paid infrastructure without an evidenced need and owner-approved architecture change. |
+| `private-journal-mcp` | Not required for this product build. | Never place project secrets, client data or lead information into it unless the owner explicitly requests a defined use. |
+
+`accesslint` and `impeccable` were listed as marketplace capabilities, not confirmed installed plugins. If they are discoverable in the live session, `accesslint` may support accessibility review and `impeccable` may support visual critique after their instructions are read. Do not claim or depend on them when unavailable.
+
+The listed marketplace origins — `accesslint/claude-marketplace`, `JuliusBrussee/caveman`, `anthropics/claude-code`, `claude-code-workflows` (`wshobson/agents`), `anthropics/claude-plugins-official`, `pbakaus/impeccable`, `DietrichGebert/ponytail`, `obra/superpowers-marketplace` and `nextlevelbuilder/ui-ux-pro-max-skill` — are provenance and discovery references, not permission to install, upgrade or enable more software. Use the already-enabled versions. Any installation or upgrade requires owner authorization and a compatibility check.
+
+### 3A.4 Tool conflict and authority rules
+
+- This specification, repository instructions and owner approvals outrank generic plugin defaults.
+- Firebase remains the data store; Cloudinary remains the media store; Astro remains the application framework.
+- No plugin may add Next.js, a second CMS, MongoDB, Redis, Tailwind, GSAP, Spline or another runtime merely because its template prefers it.
+- One system owns each animated property. Do not let a motion skill introduce competing timelines against the custom scene tween system.
+- Public components must be original Aigenvora components even when a UI library or generator informs the exploration.
+- External services receive the minimum data needed for the call.
+- Any tool result that changes business claims, rights, architecture, cost or external state requires human-verifiable evidence.
+- Record every material deviation from this matrix in the tooling manifest with the reason and owner approval.
 
 ---
 
@@ -1714,6 +1846,8 @@ Test light, dark, project-colored and transitional frames for contrast.
 
 Use image or video generation when it materially improves the experience. Generate original Aigenvora scenes, product abstractions, texture plates and transitions. Do not prompt a generator to reproduce Lusion’s branded scene or a client’s copyrighted interface.
 
+Use the authenticated Higgsfield MCP as the primary generation workflow under the ten-credit ceiling and ledger rules in Section 3A. Do not begin paid generations before Creative Gate A. Do not use Runway or another billable generator as an unapproved fallback. Generated media supports the real-time scene system; it does not replace the Aigenvora Engine, factual project media or accessible HTML content.
+
 Review every generated asset for:
 
 - artifacts;
@@ -1722,7 +1856,9 @@ Review every generated asset for:
 - inconsistent lighting;
 - licensing;
 - cultural or demographic bias;
-- mobile crop.
+- mobile crop;
+- reduced-motion and no-video fallback;
+- actual credit cost and provenance.
 
 ### 26.4 Fonts
 
@@ -1736,6 +1872,9 @@ Record licenses. Never ship a font copied from another website.
 
 - Read repository rules.
 - Capture status and existing changes.
+- Inventory the live Claude plugins, skills and MCP servers.
+- Read the selected capability instructions and create the tooling manifest.
+- Confirm Higgsfield connectivity, commercial-use terms and the reported ten-credit ceiling without generating media.
 - Back up data.
 - Audit Next application, admin, Firebase, analytics and deployment.
 - Identify reusable logic without preserving the framework.
@@ -1749,6 +1888,7 @@ Record licenses. Never ship a font copied from another website.
 - Complete portfolio source study.
 - Complete rights ledger.
 - Complete visual benchmark matrix.
+- Complete Higgsfield shot list, prompt drafts and proposed credit allocation without paid generations.
 
 **Creative Gate A:** owner approves research and storyboards.
 
@@ -1771,6 +1911,8 @@ Record licenses. Never ship a font copied from another website.
 - custom timeline.
 - engine geometry.
 - materials and lighting.
+- Execute only the Creative-Gate-approved Higgsfield direction tests and signature-media generations.
+- Record each request, cost, output, decision and remaining balance in the generative asset ledger.
 - homepage arrival.
 - one route transition.
 - reduced-motion poster.
@@ -1830,6 +1972,8 @@ Verify each route before starting the next route family.
 - SEO;
 - security;
 - quota;
+- generated-media rights, poster, mobile crop and fallback review;
+- Higgsfield credit reconciliation with the correction reserve protected until final visual QA;
 - error handling;
 - cross-browser.
 
@@ -1838,6 +1982,7 @@ Verify each route before starting the next route family.
 - full test suite;
 - screenshot and video evidence;
 - owner-run deployment instructions if deployment remains prohibited;
+- final tooling manifest and generated-asset ledger, including credits used and remaining;
 - aigenvora.com DNS and environment checklist;
 - rollback;
 - handover.
@@ -2099,6 +2244,8 @@ Deliver:
 - CONTENT-MODEL.md;
 - SCENE-GUIDE.md;
 - MEDIA-RIGHTS.md;
+- TOOLING-MANIFEST.md;
+- GENERATIVE-ASSET-LEDGER.md;
 - PORTFOLIO-SOURCE-LEDGER.md;
 - MIGRATION-REPORT.md;
 - TEST-REPORT.md;
@@ -2120,6 +2267,8 @@ Runbook must explain:
 - rotating credentials;
 - disabling analytics;
 - changing a scene preset safely;
+- reviewing, replacing and tracing a generated asset;
+- checking the remaining Higgsfield balance without exposing credentials;
 - rebuilding and deploying;
 - rollback.
 
@@ -2186,8 +2335,13 @@ Runbook must explain:
 ### Research and rights
 
 - [ ] Live Lusion R&D complete.
+- [ ] Live Claude capability inventory and tooling manifest complete.
 - [ ] Portfolio sources re-verified.
 - [ ] Rights ledger complete.
+- [ ] Higgsfield was used only after Creative Gate A for approved original media, or an evidenced blocker is documented.
+- [ ] Every generation has prompt, settings, ID, cost, balance, provenance, rights and approval status in the generative asset ledger.
+- [ ] Total Higgsfield use does not exceed the confirmed ten-credit ceiling; no unapproved Runway or other paid generation occurred.
+- [ ] Generated video has optimized delivery, poster, mobile crop and reduced/no-video fallback.
 - [ ] No Lusion assets copied.
 - [ ] No unlicensed font.
 - [ ] No invented project role, stack, metric or testimonial.
@@ -2221,8 +2375,10 @@ The final response must provide:
 11. unresolved owner verification or media-rights items;
 12. deployment status;
 13. credential setup location without exposing values;
-14. known limitations;
-15. next owner action, if any.
+14. plugin/skill/MCP usage summary and material deviations from the tooling matrix;
+15. Higgsfield generation ledger location, credits used, credits remaining and approved output locations;
+16. known limitations;
+17. next owner action, if any.
 
 Never claim deployed, verified, licensed, client-approved or complete without evidence.
 
@@ -2233,13 +2389,15 @@ Never claim deployed, verified, licensed, client-approved or complete without ev
 Begin with:
 
 1. repository and instruction audit;
-2. current-site visual audit;
-3. live Lusion research;
-4. portfolio source and ownership ledger;
-5. Aigenvora Engine storyboard;
-6. Next-to-Astro migration design;
-7. desktop/mobile/reduced-motion visual frames;
-8. Creative Gate A presentation.
+2. live capability inventory, selected-tool documentation and tooling manifest;
+3. Higgsfield balance/terms check without spending credits;
+4. current-site visual audit;
+5. live Lusion research;
+6. portfolio source and ownership ledger;
+7. Aigenvora Engine storyboard and Higgsfield shot plan;
+8. Next-to-Astro migration design;
+9. desktop/mobile/reduced-motion visual frames;
+10. Creative Gate A presentation.
 
 Do not write the production component system before Creative Gate A is approved. After Gate A, build the engine and representative inner-page prototypes. Do not mass-produce the remaining pages before Creative Gate B proves the visual system in working code.
 

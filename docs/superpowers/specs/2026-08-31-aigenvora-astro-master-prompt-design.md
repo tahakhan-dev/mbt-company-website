@@ -22,6 +22,29 @@ The owner selected a full Astro rebuild rather than preserving the current Next.
 - CSS and custom properties for the public design system; Motion/Framer Motion only for small React-island interactions.
 - A fast, conventional admin interface at `/admin`; public theatrical effects do not enter the admin.
 
+## Approved Claude Execution Environment
+
+The owner has connected Higgsfield MCP and reports an authenticated balance of ten credits. The build prompt treats those credits as a hard ceiling rather than a target. Higgsfield becomes the primary generative-media workflow after Creative Gate A, when the storyboard and shot list are approved. No credits are spent during open-ended research or ideation.
+
+The provisional budget is two credits for tightly scoped direction tests, five for final signature media, two for one supporting route or mobile asset, and one held for correction. The executing Claude must first inspect the live charging model, capabilities, balance, commercial-use terms and privacy behavior because one request must not be assumed to equal one credit. If live pricing differs, it preserves the same priority order without exceeding the balance. It does not buy credits, enable automatic top-ups, batch-generate blindly or switch to a billable Runway workflow without owner authorization.
+
+Every generation is governed by `docs/research/GENERATIVE-ASSET-LEDGER.md`. The ledger records the shot ID, prompt, negative constraints, model/settings, seed or reference inputs, expected and actual cost, generation ID, remaining balance, rights, review status, local/Cloudinary location, intended route and breakpoint fallbacks. Approved outputs are downloaded and optimized rather than hotlinked. Higgsfield may provide original cinematic plates, material transformations and short transitions, but not logos, UI, fake client evidence, fake testimonials or replicas of Lusion.
+
+The expected Claude environment also includes:
+
+- Superpowers workflows for discovery, planning, test-driven implementation, debugging, verification and reviews.
+- Chrome and superpowers-chrome for eyes-on R&D and visual QA; Playwright MCP for repeatable functional and responsive evidence.
+- Context7 for current primary documentation; Serena for semantic repository analysis.
+- frontend-design, ui-ux-pro-max, motion and senior-frontend for the public visual/motion system.
+- senior-fullstack, backend-development, api-scaffolding and javascript-typescript for the Astro/Firebase implementation.
+- code-review and comprehensive-review for evidence-based phase and release reviews; elements-of-style for truthful copy refinement.
+- aceternity-ui, landing-page-generator, graphify and thesys-generative-ui only where their documented capability has a specific in-scope benefit.
+- caveman and ponytail only after inspecting their current instructions; their names alone are not enough to justify use.
+- GitHub MCP for read-only research because repository rules prohibit pushes. MongoDB and Redis remain unused unless the owner separately approves an evidenced architecture change; Firebase remains authoritative.
+- private-journal-mcp is outside the normal build flow and never receives secrets, client records or lead data.
+
+Accesslint and Impeccable were listed as marketplace capabilities rather than confirmed installed tools. They may be used only if live discovery confirms them and their instructions are read. The executing Claude must create `docs/research/TOOLING-MANIFEST.md` showing which capabilities actually exist, which were selected, their side effects, and why unused capabilities were not needed. Installed does not mean mandatory, and no plugin may override the locked Astro/Firebase/Cloudinary architecture or the repository’s safety rules.
+
 ## Approved Creative Direction
 
 The signature visual system is **The Aigenvora Engine**: an original illuminated mechanism built from twelve modules. It begins fragmented, assembles as the visitor scrolls, exposes its internal systems when services are discussed, becomes a set of portals when work is shown, and resolves into a calm, complete object at the final call to action.
@@ -61,12 +84,17 @@ The prompt uses creative gates because code-level acceptance lists did not preve
 - Page-completion gate: every public route receives a screenshot sequence and short interaction recording.
 - Production gate: performance, accessibility, fallback, CMS, lead, security, and responsive tests.
 - Fresh-eyes gate: an independent reviewer must understand Aigenvora’s offer, startup MVP service, proof, people, and next action from the scroll sequence alone.
+- Tooling gate: the live capability inventory, selected plugin instructions, external side effects and Higgsfield credit balance are documented before tool-dependent work.
+- Generative-media gate: no paid generation occurs before storyboard approval; every output passes provenance, rights, artifact, crop, poster and fallback review.
 
 ## Safety and Rights
 
 - Never include credentials in prompts, source control, screenshots, logs, or fixtures.
 - Never download or reuse Lusion’s geometry, shaders, source code, fonts, project media, or audio.
 - Generated and licensed assets require a provenance record and commercial-use rights.
+- Higgsfield use is capped at the confirmed ten-credit balance, with one correction credit reserved until final visual QA when pricing permits.
+- Runway and other billable generation services require separate owner authorization.
+- Connected MongoDB, Redis and GitHub tools do not authorize stack changes or remote writes.
 - Aeonik and other commercial fonts may be used only when the owner supplies a valid license; otherwise use the specified licensed fallback.
 - Existing credentials exposed in earlier prompt text must be rotated outside this deliverable.
 - Repository-local instructions prohibiting GitHub pushes and Netlify deployment remain controlling unless the owner explicitly changes them.
@@ -78,6 +106,7 @@ The master prompt will contain:
 - mission and operating contract;
 - failure diagnosis and anti-template rules;
 - mandatory live R&D outputs;
+- Claude capability routing, Higgsfield credit controls, tooling manifest and generative-asset ledger;
 - brand, audience, positioning, and copy direction;
 - exact technical architecture and migration boundaries;
 - visual system, motion grammar, lighting, audio, and responsive behavior;
@@ -98,5 +127,6 @@ The master prompt will contain:
 - Inner pages, mobile behavior, lighting, camera, motion, and 3D are explicit requirements.
 - Ownership and time-sensitive proof are handled without fabricating claims.
 - Secrets are explicitly excluded.
+- The authenticated Higgsfield balance is budgeted and auditable without requiring all ten credits to be spent.
+- Installed plugins and connected MCPs are routed by purpose, with Firebase and Cloudinary preserved as the approved data and media architecture.
 - The prompt requires visual evidence and owner approval before full implementation.
-
