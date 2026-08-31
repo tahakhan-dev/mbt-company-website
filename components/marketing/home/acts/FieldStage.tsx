@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { gsap, ScrollTrigger, useGSAP } from "@/lib/gsap";
 import { useReducedMotion } from "@/components/motion/MotionProvider";
-import { HeroPoster } from "@/components/three/HeroVisual";
 import { cn } from "@/lib/utils/format";
 
 const SignalField = dynamic(() => import("@/components/three/SignalField"), {
@@ -68,7 +67,11 @@ export function FieldStage() {
     return () => document.removeEventListener("visibilitychange", onVisibility);
   }, []);
 
-  // Act-keyed intensity: 1 → 0.12 across Act 2's entry; 0.12 → 0.5 into Act 7.
+  // Act-keyed intensity: the field owns Acts 1 and 7 and fully EXITS the
+  // compositor between them (autoAlpha → visibility:hidden at 0). A fixed
+  // full-viewport layer costs ~12ms/frame in software raster even when
+  // dimmed to a whisper (Gate S bisect); mid-acts, depth belongs to the
+  // surfaces (act-2 panel, blueprint grids, seams) instead.
   useGSAP(
     () => {
       if (reduced || !rootRef.current) return;
@@ -103,9 +106,9 @@ export function FieldStage() {
       if (act2) {
         gsap.fromTo(
           stage,
-          { opacity: 1 },
+          { autoAlpha: 1 },
           {
-            opacity: 0.12,
+            autoAlpha: 0,
             ease: "none",
             scrollTrigger: { trigger: act2, start: "top 90%", end: "top 30%", scrub: 0.6 },
           },
@@ -114,9 +117,9 @@ export function FieldStage() {
       if (act7) {
         gsap.fromTo(
           stage,
-          { opacity: 0.12 },
+          { autoAlpha: 0 },
           {
-            opacity: 0.5,
+            autoAlpha: 0.5,
             ease: "none",
             immediateRender: false,
             scrollTrigger: { trigger: act7, start: "top 70%", end: "top 15%", scrub: 0.6 },
@@ -134,23 +137,20 @@ export function FieldStage() {
   );
 
   return (
+    // Canvas-only carrier: the static posters live INSIDE acts 1 and 7 so
+    // they scroll/pin with their act instead of blending as a fixed layer
+    // under the whole page every frame (Gate S: ~4% of dropped frames).
     <div
       ref={rootRef}
       className="pointer-events-none fixed inset-0 z-0"
       aria-hidden="true"
       data-field-stage
     >
-      <HeroPoster
-        className={cn(
-          "transition-opacity duration-1000 ease-swift",
-          canvasReady ? "opacity-35" : "opacity-100",
-        )}
-      />
       {enabled && (
         <div
           className={cn(
             // visibility rides the opacity transition so the GL layer leaves
-            // the compositor entirely mid-acts (the poster carries the dim
+            // the compositor entirely mid-acts (the acts' posters carry the
             // backdrop); it fades back in for Act 7's wake-up.
             "absolute inset-0 transition-[opacity,visibility] duration-1000 ease-swift",
             canvasReady && fieldLive ? "visible opacity-100" : "invisible opacity-0",
@@ -163,8 +163,6 @@ export function FieldStage() {
           />
         </div>
       )}
-      {/* Soft floor so the field never hard-clips against the fold. */}
-      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-void/70" />
     </div>
   );
 }

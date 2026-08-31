@@ -26,12 +26,15 @@ export function ParallaxMedia({
   useGSAP(
     () => {
       if (reduced || !outerRef.current || !innerRef.current) return;
+      // Translate-only drift: a continuous scale scrub forces the compositor
+      // to re-rasterize the (large, SVG-heavy) layer every frame for
+      // crispness — measured as the act-5 frame tax in Gate S. yPercent
+      // alone moves the cached raster for free.
       gsap.fromTo(
         innerRef.current,
-        { yPercent: -amount / 2, scale: 1.06 },
+        { yPercent: -amount / 2 },
         {
           yPercent: amount / 2,
-          scale: 1,
           ease: "none",
           scrollTrigger: {
             trigger: outerRef.current,

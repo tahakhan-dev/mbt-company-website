@@ -23,7 +23,7 @@ export function DeferredExtras({ ctaHref }: { ctaHref: string }) {
     let quietTimer = 0;
     const scheduleQuiet = () => {
       window.clearTimeout(quietTimer);
-      quietTimer = window.setTimeout(() => setReady(true), 1_600);
+      quietTimer = window.setTimeout(() => setReady(true), 3_000);
     };
     const minDelay = window.setTimeout(() => {
       armed = true;

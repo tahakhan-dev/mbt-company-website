@@ -2,6 +2,7 @@ import type { SiteSettings } from "@/lib/schemas/settings";
 import { Reveal } from "@/components/motion/Reveal";
 import { Button } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { HeroPoster } from "@/components/three/HeroVisual";
 
 /**
  * ACT 7 — FIVE MINUTES (07/07): the payoff. The field re-brightens to its
@@ -23,8 +24,13 @@ export function Act7Finale({
       data-act="7"
       data-act-label="Five minutes"
       aria-label="Book a 5-minute growth call"
-      className="relative z-10 px-5 pb-28 pt-32 md:px-10 md:pb-36 md:pt-48 lg:px-16"
+      className="relative isolate z-10 px-5 pb-28 pt-32 md:px-10 md:pb-36 md:pt-48 lg:px-16"
     >
+      {/* The field returns for the finale: serene poster inside the act
+          (the live canvas overlays it on GPU machines via FieldStage). */}
+      <div className="absolute inset-0 -z-10 opacity-60" aria-hidden="true">
+        <HeroPoster />
+      </div>
       <div className="mx-auto max-w-4xl text-center">
         <Reveal>
           <Eyebrow className="justify-center">The next step</Eyebrow>

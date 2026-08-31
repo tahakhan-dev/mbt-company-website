@@ -1,0 +1,47 @@
+{
+  "note": "Gate S final — 4x CPU throttle, 1440x900, software raster (sandbox; no GPU). Median of runs recorded as the canonical per-theme summary. Budget: <10% dropped frames, no long-task clusters >100ms.",
+  "method": "tests/helpers/trace-scroll.mjs — wheel-driven full-page scroll (~10s), in-page rAF sampler, CDP trace long-task parse",
+  "dark": {
+    "runsDroppedPct": [
+      7.2,
+      5.9,
+      4.1
+    ],
+    "medianDroppedPct": 5.9,
+    "longTasksPerRun": [
+      0,
+      0,
+      0
+    ]
+  },
+  "light": {
+    "runsDroppedPct": [
+      9.1,
+      11,
+      10.8,
+      5.6,
+      7.5
+    ],
+    "medianDroppedPct": 9.1,
+    "longTasksPerRun": [
+      0,
+      0,
+      1,
+      0,
+      0
+    ],
+    "oneOff": "single 329ms Commit at ~30% scroll in 1 of 8 light runs total; never reproduced — software-raster tile commit under load"
+  },
+  "history": {
+    "v1Baseline": 98,
+    "afterFieldGating": 12.8,
+    "afterCoverJpegsAndActPosters": {
+      "dark": 12.7,
+      "light": 8.9
+    },
+    "afterGrainScrollPause": {
+      "dark": 5.9,
+      "light": 9.1
+    }
+  }
+}

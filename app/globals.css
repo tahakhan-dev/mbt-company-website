@@ -309,20 +309,30 @@
   opacity: var(--grain-opacity);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size: 160px 160px;
+  transition:
+    opacity 0.4s linear,
+    visibility 0.4s;
 }
 
-/* Aurora orb building block (backgrounds/CTA band). Softness is baked into
-   the radial gradient itself — a filter here would force continuous
-   re-raster while the orb drifts (AUDIT-V1 §1 class of cost). Callers pass
-   `background: radial-gradient(circle, <tint>, transparent 65%)`; the mask
-   below feathers the edge. */
+/* Grain leaves the compositor while the page scrolls (MotionProvider toggles
+   the class): a fixed translucent layer over moving content re-blends the
+   whole viewport every frame in software raster, and grain is imperceptible
+   in motion. It fades back the moment the scroll settles. */
+html.is-scrolling .noise-overlay {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Aurora orb building block (backgrounds/CTA band). Softness comes ONLY from
+   the caller's radial gradient (`radial-gradient(circle, <tint>,
+   transparent 65%)`) — a filter OR mask here forces continuous re-raster
+   while the orb drifts (both measured as a page-wide ~10ms/frame tax at 4×;
+   AUDIT-V1 §1 class of cost). Keep this rule paint-free. */
 .aurora-orb {
   position: absolute;
   border-radius: 9999px;
   pointer-events: none;
   will-change: transform;
-  -webkit-mask-image: radial-gradient(circle, black 30%, transparent 72%);
-  mask-image: radial-gradient(circle, black 30%, transparent 72%);
 }
 
 /* SplitText line masking */

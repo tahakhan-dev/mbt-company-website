@@ -194,6 +194,7 @@ function AfterPanel({ className }: { className?: string }) {
 export function Act4Transformation() {
   const sectionRef = useRef<HTMLElement>(null);
   const afterRef = useRef<HTMLDivElement>(null);
+  const afterInnerRef = useRef<HTMLDivElement>(null);
   const seamRef = useRef<HTMLDivElement>(null);
   const captionBeforeRef = useRef<HTMLParagraphElement>(null);
   const captionAfterRef = useRef<HTMLParagraphElement>(null);
@@ -206,7 +207,13 @@ export function Act4Transformation() {
 
       mm.add("(min-width: 768px)", () => {
         const claims = gsap.utils.toArray<HTMLElement>("[data-claim]", sectionRef.current!);
-        gsap.set(afterRef.current, { clipPath: "inset(0% 100% 0% 0%)" });
+        // Transform-only sweep: the WINDOW slides open (x 100→0) while the
+        // panel inside counter-translates (x -100→0), so the dashboard stays
+        // put as the reveal edge travels. A clip-path inset scrub here forced
+        // per-frame re-raster of the whole layer in software compositing
+        // (Gate S: reproducible 40-55ms Commit cluster).
+        gsap.set(afterRef.current, { xPercent: 100 });
+        gsap.set(afterInnerRef.current, { xPercent: -100 });
         gsap.set(seamRef.current, { xPercent: 0, autoAlpha: 0 });
         gsap.set(claims, { autoAlpha: 0, y: 26 });
         gsap.set(captionAfterRef.current, { autoAlpha: 0 });
@@ -221,9 +228,10 @@ export function Act4Transformation() {
           },
         });
 
-        // The sweep (clip-path) + traveling seam (transform)
+        // The sweep (paired transforms) + traveling seam (transform)
         tl.to(seamRef.current, { autoAlpha: 1, duration: 0.03 }, 0.1)
-          .to(afterRef.current, { clipPath: "inset(0% 0% 0% 0%)", duration: 0.62 }, 0.12)
+          .to(afterRef.current, { xPercent: 0, duration: 0.62 }, 0.12)
+          .to(afterInnerRef.current, { xPercent: 0, duration: 0.62 }, 0.12)
           .to(seamRef.current, { xPercent: 100 * 0.98, duration: 0.62 }, 0.12)
           .to(seamRef.current, { autoAlpha: 0, duration: 0.04 }, 0.74)
           // captions swap
@@ -289,8 +297,10 @@ export function Act4Transformation() {
         <div className="relative mt-8 md:mx-auto md:mt-6 md:w-[min(84vw,880px)]">
           <div className="relative aspect-[16/10] max-md:hidden">
             <BeforePanel className="absolute inset-0" />
-            <div ref={afterRef} className="absolute inset-0">
-              <AfterPanel className="h-full" />
+            <div ref={afterRef} className="absolute inset-0 overflow-hidden rounded-[1.75rem]">
+              <div ref={afterInnerRef} className="h-full">
+                <AfterPanel className="h-full" />
+              </div>
             </div>
             {/* Traveling seam — xPercent on a full-width wrapper so the
                 transform spans the stage, not the 2px line */}

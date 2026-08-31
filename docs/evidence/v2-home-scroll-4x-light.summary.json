@@ -3,14 +3,14 @@
   "theme": "light",
   "cpuThrottle": "4x",
   "viewport": "1440x900",
-  "scrolledToPx": 16523,
+  "scrolledToPx": 17266,
   "longTaskCount": 0,
   "longTasksTotalMs": 0,
   "worst": [],
   "frames": {
-    "sampled": 974,
-    "avgIntervalMs": 19.2,
-    "droppedPct": 8,
-    "severePct": 0.4
+    "sampled": 1003,
+    "avgIntervalMs": 19.6,
+    "droppedPct": 9.1,
+    "severePct": 0.6
   }
 }

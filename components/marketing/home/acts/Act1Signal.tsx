@@ -6,6 +6,7 @@ import { useReducedMotion } from "@/components/motion/MotionProvider";
 import { fieldState } from "@/lib/three/field-state";
 import { Button } from "@/components/ui/Button";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { HeroPoster } from "@/components/three/HeroVisual";
 import { cn } from "@/lib/utils/format";
 
 /**
@@ -112,10 +113,17 @@ export function Act1Signal({
     >
       <div
         className={cn(
-          "relative flex min-h-[100dvh] flex-col justify-between px-5 pb-8 pt-32 md:px-10 md:pt-36 lg:px-16",
+          "relative isolate flex min-h-[100dvh] flex-col justify-between px-5 pb-8 pt-32 md:px-10 md:pt-36 lg:px-16",
           !reduced && "md:sticky md:top-0 md:h-[100dvh]",
         )}
       >
+        {/* Constellation backdrop pins WITH the act (the live canvas, where
+            the GPU is real, draws over it from the fixed FieldStage). */}
+        <div className="absolute inset-0 -z-10" aria-hidden="true">
+          <HeroPoster />
+          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-void/70" />
+        </div>
+
         {/* Intro block */}
         <div>
           <Eyebrow>{eyebrow}</Eyebrow>

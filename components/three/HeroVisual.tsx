@@ -10,7 +10,9 @@ const SignalField = dynamic(() => import("@/components/three/SignalField"), {
   ssr: false,
 });
 
-/** Static constellation poster — always rendered under (or instead of) WebGL. */
+/** Static constellation poster (orbs deliberately still: an infinite
+ * transform on a full-page fixed layer costs ~5ms/frame in software raster;
+ * the live canvas carries motion where the GPU is real). */
 export function HeroPoster({ className }: { className?: string }) {
   const dots = Array.from({ length: 46 }, (_, i) => {
     const n = hashSeed(`poster:${i}`);
@@ -24,12 +26,8 @@ export function HeroPoster({ className }: { className?: string }) {
   return (
     <div className={cn("absolute inset-0 overflow-hidden", className)} aria-hidden="true">
       <div
-        className="aurora-orb animate-aurora left-[30%] top-[8%] h-[46rem] w-[46rem]"
+        className="aurora-orb left-[30%] top-[8%] h-[46rem] w-[46rem]"
         style={{ background: "radial-gradient(circle, rgba(34,211,238,0.13), transparent 65%)" }}
-      />
-      <div
-        className="aurora-orb animate-orb right-[-6%] top-[30%] h-[38rem] w-[38rem]"
-        style={{ background: "radial-gradient(circle, rgba(129,140,248,0.14), transparent 65%)" }}
       />
       <svg className="absolute inset-0 h-full w-full opacity-70" aria-hidden="true">
         {dots.slice(0, 20).map((d, i) => {

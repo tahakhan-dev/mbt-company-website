@@ -111,7 +111,7 @@ export function Act5Proof({
             // Third row breaks the zigzag: full-bleed cover, text row beneath.
             if (i === 2) {
               return (
-                <Reveal key={project.id} y={60}>
+                <Reveal key={project.id} y={60} className="will-change-transform">
                   {coverEl}
                   <div className="mt-8 grid gap-6 md:grid-cols-[1.4fr_1fr] md:items-end">
                     <div>
@@ -132,7 +132,7 @@ export function Act5Proof({
             return (
               <Reveal
                 key={project.id}
-                className="grid items-center gap-8 md:grid-cols-12 md:gap-10"
+                className="grid items-center gap-8 will-change-transform md:grid-cols-12 md:gap-10"
                 y={60}
               >
                 <div className={cn("md:col-span-7", flip && "md:order-2")}>{coverEl}</div>

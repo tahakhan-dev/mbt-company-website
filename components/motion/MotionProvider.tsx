@@ -107,6 +107,17 @@ export function MotionProvider({ children }: { children: ReactNode }) {
     };
     document.addEventListener("click", onClick);
 
+    // Film-grain pause: .noise-overlay is a fixed full-viewport translucent
+    // layer, and compositing it over moving content costs a whole-viewport
+    // blend per scrolled frame on software rasterizers (~6% of the Gate S
+    // frame budget). Grain reads as noise while things move anyway, so it
+    // fades out on scrollStart and returns once the scroll settles.
+    const root = document.documentElement;
+    const onScrollStart = () => root.classList.add("is-scrolling");
+    const onScrollEnd = () => root.classList.remove("is-scrolling");
+    ScrollTrigger.addEventListener("scrollStart", onScrollStart);
+    ScrollTrigger.addEventListener("scrollEnd", onScrollEnd);
+
     // Fluid type + font swaps change layout — re-measure every trigger once
     // the real faces are in (V2 §7 refresh-after-fonts).
     let fontsCancelled = false;
@@ -117,6 +128,9 @@ export function MotionProvider({ children }: { children: ReactNode }) {
     return () => {
       fontsCancelled = true;
       document.removeEventListener("click", onClick);
+      ScrollTrigger.removeEventListener("scrollStart", onScrollStart);
+      ScrollTrigger.removeEventListener("scrollEnd", onScrollEnd);
+      root.classList.remove("is-scrolling");
       gsap.ticker.remove(raf);
       lenis.destroy();
       lenisRef.current = null;
