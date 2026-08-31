@@ -74,7 +74,7 @@ export default async function AboutPage() {
       </div>
 
       <section className="mx-auto w-full max-w-7xl px-4 py-16 md:px-8" aria-label="Values">
-        <SectionHeading eyebrow="How we operate" title="Three rules we never trade away." />
+        <SectionHeading title="Three rules we never trade away." />
         <Reveal stagger={0.1} className="mt-12 grid gap-5 md:grid-cols-3">
           {VALUES.map((value) => (
             <Bezel key={value.title} glow innerClassName="h-full p-8">

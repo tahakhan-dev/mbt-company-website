@@ -51,7 +51,7 @@ function Chapter({
   return (
     <Reveal className="grid gap-6 md:grid-cols-12">
       <div className="md:col-span-3">
-        <Eyebrow>{eyebrow}</Eyebrow>
+        <h2 className="font-display text-lg font-medium text-ink">{eyebrow}</h2>
       </div>
       <div
         className="rich-text md:col-span-8 md:col-start-5"
